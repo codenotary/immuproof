@@ -17,7 +17,9 @@ package cmd
 
 import (
 	"fmt"
+	"github.com/codenotary/immuproof/meta"
 	"os"
+	"strings"
 
 	"github.com/spf13/cobra"
 	"github.com/spf13/viper"
@@ -52,37 +54,52 @@ func Execute() {
 func init() {
 	cobra.OnInitialize(initConfig)
 
-	// Here you will define your flags and configuration settings.
-	// Cobra supports persistent flags, which, if defined here,
-	// will be global for your application.
+	rootCmd.PersistentFlags().StringVar(&cfgFile, "config", "", fmt.Sprintf("config file (default is %s/.immuproof.yaml)", meta.DefaultConfigFolder))
+	rootCmd.PersistentFlags().IntP("port", "p", meta.DefaultCNCPort, "Codenotary Cloud server port number")
+	rootCmd.PersistentFlags().StringP("address", "a", meta.DefaultCNCHost, "Codenotary Cloud server host address")
+	rootCmd.PersistentFlags().String("api-key", "", "cnc api-key")
+	rootCmd.PersistentFlags().String("lc-cert", "", "local or absolute path to a certificate file needed to set up tls connection to a Codenotary Cloud server")
+	rootCmd.PersistentFlags().Bool("skip-tls-verify", false, "disables tls certificate verification when connecting to a Codenotary Cloud server")
+	rootCmd.PersistentFlags().Bool("no-tls", false, "allow insecure connections when connecting to a Codenotary Cloud server")
 
-	rootCmd.PersistentFlags().StringVar(&cfgFile, "config", "", "config file (default is $HOME/.immuproof.yaml)")
+	viper.BindPFlags(rootCmd.PersistentFlags())
 
-	// Cobra also supports local flags, which will only run
-	// when this action is called directly.
-	rootCmd.Flags().BoolP("toggle", "t", false, "Help message for toggle")
+	viper.SetDefault("port", meta.DefaultCNCPort)
+	viper.SetDefault("address", meta.DefaultCNCHost)
 }
 
 // initConfig reads in config file and ENV variables if set.
 func initConfig() {
+	err := ensureDir()
+	cobra.CheckErr(err)
+
 	if cfgFile != "" {
 		// Use config file from the flag.
 		viper.SetConfigFile(cfgFile)
 	} else {
-		// Find home directory.
-		home, err := os.UserHomeDir()
-		cobra.CheckErr(err)
-
 		// Search config in home directory with name ".immuproof" (without extension).
-		viper.AddConfigPath(home)
+		viper.AddConfigPath(meta.DefaultConfigFolder)
 		viper.SetConfigType("yaml")
 		viper.SetConfigName(".immuproof")
 	}
-
+	viper.SetEnvPrefix(strings.ToUpper(meta.AppName))
+	viper.SetEnvKeyReplacer(strings.NewReplacer("-", "_"))
 	viper.AutomaticEnv() // read in environment variables that match
 
 	// If a config file is found, read it in.
 	if err := viper.ReadInConfig(); err == nil {
 		fmt.Fprintln(os.Stderr, "Using config file:", viper.ConfigFileUsed())
 	}
+}
+
+func ensureDir() error {
+	err := os.MkdirAll(meta.DefaultConfigFolder, 0755)
+	if err != nil {
+		return err
+	}
+	err = os.MkdirAll(meta.DefaultStateFolder, 0755)
+	if err != nil {
+		return err
+	}
+	return nil
 }
