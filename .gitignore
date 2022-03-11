@@ -1,0 +1,51 @@
+# Binaries for programs and plugins
+*.exe
+*.exe~
+*.dll
+*.so
+*.dylib
+
+# Test binary, built with `go test -c`
+*.test
+
+# Output of the go coverage tool, specifically when used with LiteIDE
+*.out
+coverage.txt
+
+# Dependency directories
+
+# Editor
+.vscode
+.idea
+*.iml
+*.swp
+
+# Local .env files
+.env.*.local
+
+# MacOS-specific files
+.DS_Store
+._.DS_Store
+**/.DS_Store
+**/._.DS_Store
+
+# Logs
+**/logs
+
+# Encryption keys
+*_key
+
+# Precommit
+.golangci.yml
+.pre-commit-config.yaml
+
+# Autogen files not desired
+API-docs.md
+
+# VS Code workspace settings files
+*.code-workspace
+
+# Eclipse python settings files
+/.pydevproject
+
+# client static dir
