@@ -16,9 +16,12 @@ limitations under the License.
 package cmd
 
 import (
-	"fmt"
+	"github.com/codenotary/immuproof/audit"
 	"github.com/codenotary/immuproof/cnc"
+	"github.com/codenotary/immuproof/rest"
+	"github.com/codenotary/immuproof/status"
 	"github.com/spf13/cobra"
+	"github.com/spf13/viper"
 )
 
 // serveCmd represents the serve command
@@ -32,8 +35,8 @@ Cobra is a CLI library for Go that empowers applications.
 This application is a tool to generate the needed files
 to quickly create a Cobra application.`,
 	RunE: func(cmd *cobra.Command, args []string) error {
-		fmt.Println("serve called")
-		return Audit()
+
+		return ServeAndAudit()
 	},
 	Args: func(cmd *cobra.Command, args []string) error {
 		//todo: check args
@@ -55,8 +58,33 @@ func init() {
 	// serveCmd.Flags().BoolP("toggle", "t", false, "Help message for toggle")
 }
 
-func Audit() error {
+func ServeAndAudit() error {
 
-	cnc.NewCNCClient()
+	done := make(chan bool)
+
+	client, err := cnc.NewCNCClient(
+		viper.GetString("api-key"),
+		viper.GetString("host"),
+		viper.GetString("port"),
+		viper.GetString("lc-cert"),
+		viper.GetBool("lc-skip-tls-verify"),
+		viper.GetBool("no-tls"),
+	)
+	if err != nil {
+		return err
+	}
+	err = client.Connect()
+	if err != nil {
+		return err
+	}
+
+	statusReportMap := status.NewStatusReportMap()
+	simpleAuditor := audit.NewSimpleAuditor(client, statusReportMap)
+	restServer := rest.NewRestServer(statusReportMap, "8080")
+
+	go restServer.Serve()
+	go simpleAuditor.Audit()
+
+	<-done
 	return nil
 }

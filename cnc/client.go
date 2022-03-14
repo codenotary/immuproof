@@ -1,7 +1,6 @@
 package cnc
 
 import (
-	"crypto/ecdsa"
 	"crypto/tls"
 	"crypto/x509"
 	"errors"
@@ -15,7 +14,7 @@ import (
 	"strconv"
 )
 
-func NewCNCClient(lcApiKey, lcLedger, host, port, lcCertPath string, skipTlsVerify, noTls bool, signingPubKey *ecdsa.PublicKey) (*sdk.LcClient, error) {
+func NewCNCClient(lcApiKey, host, port, lcCertPath string, skipTlsVerify, noTls bool) (*sdk.LcClient, error) {
 	if skipTlsVerify && noTls {
 		return nil, errors.New("illegal parameters submitted: skip-tls-verify and no-tls arguments are both provided")
 	}
@@ -33,13 +32,12 @@ func NewCNCClient(lcApiKey, lcLedger, host, port, lcCertPath string, skipTlsVeri
 	return sdk.NewLcClient(
 		sdk.ApiKey(lcApiKey),
 		sdk.MetadataPairs([]string{
-			meta.LedgerHeaderName, lcLedger,
+			"version", "immuproof/0.1",
 		}),
 		sdk.Host(host),
 		sdk.Port(p),
 		sdk.Dir(meta.DefaultStateFolder),
 		sdk.DialOptions(currentOptions),
-		sdk.ServerSigningPubKey(signingPubKey),
 	), nil
 }
 
