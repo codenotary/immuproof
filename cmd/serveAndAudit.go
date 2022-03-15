@@ -16,6 +16,7 @@ limitations under the License.
 package cmd
 
 import (
+	"fmt"
 	"github.com/codenotary/immuproof/audit"
 	"github.com/codenotary/immuproof/cnc"
 	"github.com/codenotary/immuproof/rest"
@@ -27,13 +28,10 @@ import (
 // serveCmd represents the serve command
 var serveCmd = &cobra.Command{
 	Use:   "serve",
-	Short: "A brief description of your command",
-	Long: `A longer description that spans multiple lines and likely contains examples
-and usage of using your command. For example:
+	Short: "Audit a ledger and launch an HTTP rest server to show audit results",
+	Long: `Audit a ledger and launch an HTTP rest server to show audit results:
 
-Cobra is a CLI library for Go that empowers applications.
-This application is a tool to generate the needed files
-to quickly create a Cobra application.`,
+more detailed expl.`,
 	RunE: func(cmd *cobra.Command, args []string) error {
 
 		return ServeAndAudit()
@@ -46,24 +44,18 @@ to quickly create a Cobra application.`,
 
 func init() {
 	rootCmd.AddCommand(serveCmd)
-
-	// Here you will define your flags and configuration settings.
-
-	// Cobra supports Persistent Flags which will work for this command
-	// and all subcommands, e.g.:
-	// serveCmd.PersistentFlags().String("foo", "", "A help for foo")
-
-	// Cobra supports local flags which will only run when this command
-	// is called directly, e.g.:
-	// serveCmd.Flags().BoolP("toggle", "t", false, "Help message for toggle")
 }
 
 func ServeAndAudit() error {
 
 	done := make(chan bool)
 
+	aks := viper.GetStringSlice("api-key")
+	if len(aks) == 0 {
+		return fmt.Errorf("no api-key provided")
+	}
 	client, err := cnc.NewCNCClient(
-		viper.GetString("api-key"),
+		aks[0],
 		viper.GetString("host"),
 		viper.GetString("port"),
 		viper.GetString("lc-cert"),
@@ -80,6 +72,9 @@ func ServeAndAudit() error {
 
 	statusReportMap := status.NewStatusReportMap()
 	simpleAuditor := audit.NewSimpleAuditor(client, statusReportMap)
+	for _, a := range aks {
+		simpleAuditor.AddApiKey(a)
+	}
 	restServer := rest.NewRestServer(statusReportMap, "8080")
 
 	go restServer.Serve()

@@ -30,16 +30,14 @@ var cfgFile string
 // rootCmd represents the base command when called without any subcommands
 var rootCmd = &cobra.Command{
 	Use:   "immuproof",
-	Short: "A brief description of your application",
-	Long: `A longer description that spans multiple lines and likely contains
-examples and usage of using your application. For example:
+	Short: "Simple audit tool for CAS and CodeNotaryCloud services",
+	Long: `Simple audit tool for CAS and CodeNotaryCloud services:
 
-Cobra is a CLI library for Go that empowers applications.
-This application is a tool to generate the needed files
-to quickly create a Cobra application.`,
-	// Uncomment the following line if your bare application
-	// has an action associated with it:
-	// Run: func(cmd *cobra.Command, args []string) { },
+When immuproof is launched it fetches a fresh status from CodeNotaryCloud or CAS backed by immudb and it verifies the integrity compared to an older one stored locally.
+The idea is to check if previous state is "included" in the new one.
+A rest service is also provided to allow the user to query the status of the audit.
+A simple web UI is also provided to visualize data.
+`,
 }
 
 // Execute adds all child commands to the root command and sets flags appropriately.
@@ -55,12 +53,12 @@ func init() {
 	cobra.OnInitialize(initConfig)
 
 	rootCmd.PersistentFlags().StringVar(&cfgFile, "config", "", fmt.Sprintf("config file (default is %s/.immuproof.yaml)", meta.DefaultConfigFolder))
-	rootCmd.PersistentFlags().IntP("port", "p", meta.DefaultCNCPort, "Codenotary Cloud server port number")
-	rootCmd.PersistentFlags().StringP("address", "a", meta.DefaultCNCHost, "Codenotary Cloud server host address")
-	rootCmd.PersistentFlags().String("api-key", "", "cnc api-key")
-	rootCmd.PersistentFlags().String("lc-cert", "", "local or absolute path to a certificate file needed to set up tls connection to a Codenotary Cloud server")
-	rootCmd.PersistentFlags().Bool("skip-tls-verify", false, "disables tls certificate verification when connecting to a Codenotary Cloud server")
-	rootCmd.PersistentFlags().Bool("no-tls", false, "allow insecure connections when connecting to a Codenotary Cloud server")
+	rootCmd.PersistentFlags().IntP("port", "p", meta.DefaultCNCPort, "Codenotary Cloud/CAS server port number")
+	rootCmd.PersistentFlags().StringP("address", "a", meta.DefaultCNCHost, "Codenotary Cloud/CAS server host address")
+	rootCmd.PersistentFlags().StringSlice("api-key", nil, "Codenotary Cloud/CAS api-keys. Can be specified multiple times. First key is used for signing. For each key provided related ledger is audit. If no key is provided, no audit is performed")
+	rootCmd.PersistentFlags().String("lc-cert", "", "local or absolute path to a certificate file needed to set up tls connection to a Codenotary Cloud/CAS server")
+	rootCmd.PersistentFlags().Bool("skip-tls-verify", false, "disables tls certificate verification when connecting to a Codenotary Cloud/CAS server")
+	rootCmd.PersistentFlags().Bool("no-tls", false, "allow insecure connections when connecting to a Codenotary Cloud/CAS server")
 
 	viper.BindPFlags(rootCmd.PersistentFlags())
 
@@ -95,11 +93,11 @@ func initConfig() {
 func ensureDir() error {
 	err := os.MkdirAll(meta.DefaultConfigFolder, 0755)
 	if err != nil {
-		return err
+		return fmt.Errorf("failed to create config folder: %w", err)
 	}
 	err = os.MkdirAll(meta.DefaultStateFolder, 0755)
 	if err != nil {
-		return err
+		return fmt.Errorf("failed to create config folder: %w", err)
 	}
 	return nil
 }

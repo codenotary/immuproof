@@ -5,6 +5,7 @@ import (
 	"errors"
 	"github.com/codenotary/immuproof/status"
 	"github.com/vchain-us/ledger-compliance-go/grpcclient"
+	"google.golang.org/grpc/metadata"
 	"log"
 	"strings"
 	"time"
@@ -14,54 +15,60 @@ type simpleAuditor struct {
 	done      chan struct{}
 	client    grpcclient.LcClientIf
 	statusMap *status.StatusReportMap
+	apiKeys   []string
 }
 
 func NewSimpleAuditor(client grpcclient.LcClientIf, statusMap *status.StatusReportMap) *simpleAuditor {
-	return &simpleAuditor{client: client, statusMap: statusMap, done: make(chan struct{})}
+	if client == nil || client.IsConnected() == false {
+		log.Fatal("client is nil or not connected")
+	}
+	return &simpleAuditor{client: client, statusMap: statusMap, done: make(chan struct{}), apiKeys: []string{}}
+}
+
+func (a *simpleAuditor) AddApiKey(apiKey string) {
+	a.apiKeys = append(a.apiKeys, apiKey)
 }
 
 func (a *simpleAuditor) Audit() error {
-	ticker := time.NewTicker(500 * time.Millisecond)
-	signerID, err := GetSignerIDFromApiKey(a.client.(*grpcclient.LcClient).ApiKey)
-	if err != nil {
-		return err
-	}
+	ticker := time.NewTicker(1000 * time.Millisecond)
 	go func() {
 		for {
-			select {
-			case <-a.done:
-				return
-			case <-ticker.C:
-				untrustedState, err := a.client.CurrentState(context.TODO())
+			var i int
+			for i = 0; i < len(a.apiKeys); i++ {
+				ak := a.apiKeys[i]
+
+				signerID, err := GetSignerIDFromApiKey(ak)
 				if err != nil {
-					log.Printf("error getting untrusted state: %v", err)
+					log.Printf("failed to get signer id from api key: %s", ak)
+					continue
 				}
-				err = a.client.ConsistencyCheck(context.TODO(), untrustedState)
-				if err != nil {
-					if strings.Contains(err.Error(), "corrupted data") {
-						statusReport := status.StatusReport{
-							SignerID: signerID,
-							Status:   status.Status_CORRUPTED_DATA,
-							Time:     time.Now(),
+
+				select {
+				case <-a.done:
+					return
+				case <-ticker.C:
+					statusReport := status.StatusReport{
+						SignerID: signerID,
+						Time:     time.Now(),
+					}
+
+					ctx := metadata.AppendToOutgoingContext(context.TODO(), "lc-api-key", ak)
+					err = a.client.ConsistencyCheck(ctx)
+					if err != nil {
+						if strings.Contains(err.Error(), "corrupted data") {
+							statusReport.Status = status.Status_CORRUPTED_DATA
+							a.statusMap.Add(statusReport)
 						}
+						statusReport.Status = err.Error()
+						a.statusMap.Add(statusReport)
+						log.Printf("error checking consistency: %v", err)
+					} else {
+						statusReport.Status = status.Status_NORMAL
 						a.statusMap.Add(statusReport)
 					}
-					statusReport := status.StatusReport{
-						SignerID: signerID,
-						Status:   err.Error(),
-						Time:     time.Now(),
-					}
-					a.statusMap.Add(statusReport)
-					log.Printf("error checking consistency: %v", err)
-				} else {
-					statusReport := status.StatusReport{
-						SignerID: signerID,
-						Status:   status.Status_NORMAL,
-						Time:     time.Now(),
-					}
-					a.statusMap.Add(statusReport)
 				}
 			}
+			i = 0
 		}
 	}()
 
