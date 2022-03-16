@@ -54,7 +54,7 @@ func init() {
 
 	rootCmd.PersistentFlags().StringVar(&cfgFile, "config", "", fmt.Sprintf("config file (default is %s/.immuproof.yaml)", meta.DefaultConfigFolder))
 	rootCmd.PersistentFlags().IntP("port", "p", meta.DefaultCNCPort, "Codenotary Cloud/CAS server port number")
-	rootCmd.PersistentFlags().StringP("address", "a", meta.DefaultCNCHost, "Codenotary Cloud/CAS server host address")
+	rootCmd.PersistentFlags().StringP("host", "a", meta.DefaultCNCHost, "Codenotary Cloud/CAS server host address")
 	rootCmd.PersistentFlags().StringSlice("api-key", nil, "Codenotary Cloud/CAS api-keys. Can be specified multiple times. First key is used for signing. For each key provided related ledger is audit. If no key is provided, no audit is performed")
 	rootCmd.PersistentFlags().String("lc-cert", "", "local or absolute path to a certificate file needed to set up tls connection to a Codenotary Cloud/CAS server")
 	rootCmd.PersistentFlags().Bool("skip-tls-verify", false, "disables tls certificate verification when connecting to a Codenotary Cloud/CAS server")
@@ -63,7 +63,7 @@ func init() {
 	viper.BindPFlags(rootCmd.PersistentFlags())
 
 	viper.SetDefault("port", meta.DefaultCNCPort)
-	viper.SetDefault("address", meta.DefaultCNCHost)
+	viper.SetDefault("host", meta.DefaultCNCHost)
 }
 
 // initConfig reads in config file and ENV variables if set.
