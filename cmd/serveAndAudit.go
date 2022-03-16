@@ -37,13 +37,17 @@ more detailed expl.`,
 		return ServeAndAudit()
 	},
 	Args: func(cmd *cobra.Command, args []string) error {
-		//todo: check args
+		if viper.GetBool("lc-skip-tls-verify") && viper.GetBool("no-tls") {
+			return fmt.Errorf("--lc-skip-tls-verify and --no-tls are mutually exclusive")
+		}
 		return nil
 	},
 }
 
 func init() {
+	serveCmd.Flags().String("web-port", "8091", "rest server port")
 	rootCmd.AddCommand(serveCmd)
+	viper.BindPFlags(serveCmd.Flags())
 }
 
 func ServeAndAudit() error {
@@ -75,7 +79,7 @@ func ServeAndAudit() error {
 	for _, a := range aks {
 		simpleAuditor.AddApiKey(a)
 	}
-	restServer := rest.NewRestServer(statusReportMap, "8080")
+	restServer := rest.NewRestServer(statusReportMap, viper.GetString("web-port"))
 
 	go restServer.Serve()
 	go simpleAuditor.Audit()

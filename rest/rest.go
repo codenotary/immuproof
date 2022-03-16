@@ -17,6 +17,7 @@ func NewRestServer(statusMap *status.StatusReportMap, port string) *restServer {
 }
 
 func (s *restServer) Serve() {
+	log.Printf("Starting REST server on port %s", s.port)
 	http.HandleFunc("/", s.allStatuses)
 	log.Fatal(http.ListenAndServe(":"+s.port, nil))
 }
