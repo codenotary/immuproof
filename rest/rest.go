@@ -33,23 +33,23 @@ func NewRestServer(statusMap *status.StatusReportMap, port string) *restServer {
 	}
 }
 
-func (s *restServer) Serve() {
+func (s *restServer) Serve() error {
 	log.Printf("Starting REST server on port %s", s.port)
 	log.Print("UI is exposed on / and audit REST results on/api/status")
 
 	mutex := http.NewServeMux()
 	index, err := fs.Sub(content, "internal/embed")
 	if err != nil {
-		log.Fatal(err)
+		return err
 	}
 	mutex.Handle("/", http.FileServer(http.FS(index)))
 	mutex.Handle("/api/status", s.statusHandler)
 	err = http.ListenAndServe(fmt.Sprintf(":%s", s.port), mutex)
 	if err != nil {
-		log.Fatal(err)
+		return err
 	}
 
-	log.Fatal(http.ListenAndServe(":"+s.port, nil))
+	return http.ListenAndServe(":"+s.port, nil)
 }
 
 func (s *statusHandler) ServeHTTP(w http.ResponseWriter, r *http.Request) {

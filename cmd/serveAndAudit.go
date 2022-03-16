@@ -66,13 +66,8 @@ func ServeAndAudit() error {
 		viper.GetBool("lc-skip-tls-verify"),
 		viper.GetBool("no-tls"),
 	)
-	if err != nil {
-		return err
-	}
-	err = client.Connect()
-	if err != nil {
-		return err
-	}
+	cobra.CheckErr(err)
+	cobra.CheckErr(client.Connect())
 
 	statusReportMap := status.NewStatusReportMap()
 	simpleAuditor := audit.NewSimpleAuditor(client, statusReportMap)
@@ -81,8 +76,8 @@ func ServeAndAudit() error {
 	}
 	restServer := rest.NewRestServer(statusReportMap, viper.GetString("web-port"))
 
-	go restServer.Serve()
-	go simpleAuditor.Audit()
+	go cobra.CheckErr(restServer.Serve())
+	go cobra.CheckErr(simpleAuditor.Audit())
 
 	<-done
 	return nil
