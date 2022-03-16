@@ -3,8 +3,10 @@ package audit
 import (
 	"context"
 	"errors"
+	"fmt"
 	"github.com/codenotary/immuproof/status"
 	"github.com/vchain-us/ledger-compliance-go/grpcclient"
+	"github.com/vchain-us/ledger-compliance-go/schema"
 	"google.golang.org/grpc/metadata"
 	"log"
 	"strings"
@@ -30,6 +32,14 @@ func (a *simpleAuditor) AddApiKey(apiKey string) {
 }
 
 func (a *simpleAuditor) Audit() error {
+	f, err := a.client.Feats(context.TODO())
+	if err != nil {
+		return err
+	}
+	if _, ok := f.Map()[schema.FeatImmuProof]; !ok {
+		return fmt.Errorf("seems that the connected server component `%s` at version `%s` builded at `%s` doesn't support %s feature. Please contact a system administrator", f.Component, f.Version, f.BuildTime, schema.FeatImmuProof)
+	}
+
 	ticker := time.NewTicker(1000 * time.Millisecond)
 	go func() {
 		for {
