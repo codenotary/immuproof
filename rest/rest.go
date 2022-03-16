@@ -35,6 +35,7 @@ func NewRestServer(statusMap *status.StatusReportMap, port string) *restServer {
 
 func (s *restServer) Serve() {
 	log.Printf("Starting REST server on port %s", s.port)
+	log.Print("UI is exposed on / and audit REST results on/api/status")
 
 	mutex := http.NewServeMux()
 	index, err := fs.Sub(content, "internal/embed")
