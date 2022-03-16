@@ -6,7 +6,7 @@ require (
 	github.com/adrg/xdg v0.4.0
 	github.com/spf13/cobra v1.4.0
 	github.com/spf13/viper v1.10.1
-	github.com/vchain-us/ledger-compliance-go v0.9.2
+	github.com/vchain-us/ledger-compliance-go v0.9.3-0.20220316115502-9e4229553235
 	google.golang.org/grpc v1.43.0
 )
 
@@ -68,5 +68,3 @@ require (
 	gopkg.in/ini.v1 v1.66.2 // indirect
 	gopkg.in/yaml.v2 v2.4.0 // indirect
 )
-
-replace github.com/vchain-us/ledger-compliance-go => ./../ledger-compliance-go
