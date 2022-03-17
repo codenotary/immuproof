@@ -19,6 +19,7 @@ import (
 	"fmt"
 	"github.com/codenotary/immuproof/audit"
 	"github.com/codenotary/immuproof/cnc"
+	"github.com/codenotary/immuproof/meta"
 	"github.com/codenotary/immuproof/rest"
 	"github.com/codenotary/immuproof/status"
 	"github.com/spf13/cobra"
@@ -46,6 +47,7 @@ more detailed expl.`,
 
 func init() {
 	serveCmd.Flags().String("web-port", "8091", "rest server port")
+	serveCmd.Flags().Duration("audit-interval", meta.DefaultAuditInterval, "interval between audit runs")
 	rootCmd.AddCommand(serveCmd)
 	viper.BindPFlags(serveCmd.Flags())
 }
@@ -70,7 +72,7 @@ func ServeAndAudit() error {
 	cobra.CheckErr(client.Connect())
 
 	statusReportMap := status.NewStatusReportMap()
-	simpleAuditor := audit.NewSimpleAuditor(client, statusReportMap)
+	simpleAuditor := audit.NewSimpleAuditor(client, statusReportMap, viper.GetDuration("audit-interval"))
 	for _, a := range aks {
 		simpleAuditor.AddApiKey(a)
 	}

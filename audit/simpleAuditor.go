@@ -2,29 +2,33 @@ package audit
 
 import (
 	"context"
+	"encoding/json"
 	"errors"
 	"fmt"
+	"github.com/codenotary/immuproof/meta"
 	"github.com/codenotary/immuproof/status"
 	"github.com/vchain-us/ledger-compliance-go/grpcclient"
 	"github.com/vchain-us/ledger-compliance-go/schema"
 	"google.golang.org/grpc/metadata"
+	"io/ioutil"
 	"log"
 	"strings"
 	"time"
 )
 
 type simpleAuditor struct {
-	done      chan struct{}
-	client    grpcclient.LcClientIf
-	statusMap *status.StatusReportMap
-	apiKeys   []string
+	done          chan struct{}
+	client        grpcclient.LcClientIf
+	statusMap     *status.StatusReportMap
+	apiKeys       []string
+	auditInterval time.Duration
 }
 
-func NewSimpleAuditor(client grpcclient.LcClientIf, statusMap *status.StatusReportMap) *simpleAuditor {
+func NewSimpleAuditor(client grpcclient.LcClientIf, statusMap *status.StatusReportMap, auditInterval time.Duration) *simpleAuditor {
 	if client == nil || client.IsConnected() == false {
 		log.Fatal("client is nil or not connected")
 	}
-	return &simpleAuditor{client: client, statusMap: statusMap, done: make(chan struct{}), apiKeys: []string{}}
+	return &simpleAuditor{client: client, statusMap: statusMap, done: make(chan struct{}), apiKeys: []string{}, auditInterval: auditInterval}
 }
 
 func (a *simpleAuditor) AddApiKey(apiKey string) {
@@ -40,7 +44,11 @@ func (a *simpleAuditor) Audit() error {
 		return fmt.Errorf("seems that the connected server component `%s` at version `%s` builded at `%s` doesn't support %s feature. Please contact a system administrator", f.Component, f.Version, f.BuildTime, schema.FeatImmuProof)
 	}
 
-	ticker := time.NewTicker(1000 * time.Millisecond)
+	err = a.LoadStatusMap()
+	if err != nil {
+		return err
+	}
+	ticker := time.NewTicker(a.auditInterval)
 	go func() {
 		for {
 			var i int
@@ -63,7 +71,7 @@ func (a *simpleAuditor) Audit() error {
 					}
 
 					ctx := metadata.AppendToOutgoingContext(context.TODO(), "lc-api-key", ak)
-					err = a.client.ConsistencyCheck(ctx)
+					cResp, err := a.client.ConsistencyCheck(ctx)
 					if err != nil {
 						if strings.Contains(err.Error(), "corrupted data") {
 							statusReport.Status = status.Status_CORRUPTED_DATA
@@ -74,7 +82,13 @@ func (a *simpleAuditor) Audit() error {
 						log.Printf("error checking consistency: %v", err)
 					} else {
 						statusReport.Status = status.Status_NORMAL
+						statusReport.NewStateHash = cResp.NewStateHash
+						statusReport.PrevStateHash = cResp.PrevStateHash
 						a.statusMap.Add(statusReport)
+					}
+					err = a.SaveStatusMap()
+					if err != nil {
+						log.Printf("failed to save status map: %v", err)
 					}
 				}
 			}
@@ -92,4 +106,30 @@ func GetSignerIDFromApiKey(lcApiKey string) (string, error) {
 		return strings.Join(ris[:len(ris)-1], "."), nil
 	}
 	return "", errors.New("invalid api key")
+}
+
+func (a *simpleAuditor) SaveStatusMap() error {
+	j, err := json.Marshal(a.statusMap)
+	if err != nil {
+		return err
+	}
+	err = ioutil.WriteFile(meta.StateMapFileName, j, 0644)
+	if err != nil {
+		return err
+	}
+	return nil
+}
+
+func (a *simpleAuditor) LoadStatusMap() error {
+	j, err := ioutil.ReadFile(meta.StateMapFileName)
+	if err != nil {
+		if strings.Contains(err.Error(), "no such file or directory") {
+			return nil
+		}
+	}
+	err = json.Unmarshal(j, &a.statusMap)
+	if err != nil {
+		return err
+	}
+	return nil
 }
