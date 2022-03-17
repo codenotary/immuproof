@@ -95,7 +95,7 @@ func ensureDir() error {
 	if err != nil {
 		return fmt.Errorf("failed to create config folder: %w", err)
 	}
-	err = os.MkdirAll(meta.DefaultStateFolder, 0755)
+	err = os.MkdirAll(viper.GetString("audit-state-file"), 0755)
 	if err != nil {
 		return fmt.Errorf("failed to create config folder: %w", err)
 	}

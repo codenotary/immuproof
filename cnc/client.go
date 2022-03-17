@@ -5,7 +5,7 @@ import (
 	"crypto/x509"
 	"errors"
 	"fmt"
-	"github.com/codenotary/immuproof/meta"
+	"github.com/spf13/viper"
 	sdk "github.com/vchain-us/ledger-compliance-go/grpcclient"
 	"google.golang.org/grpc"
 	"google.golang.org/grpc/credentials"
@@ -36,7 +36,7 @@ func NewCNCClient(lcApiKey, host, port, lcCertPath string, skipTlsVerify, noTls 
 		}),
 		sdk.Host(host),
 		sdk.Port(p),
-		sdk.Dir(meta.DefaultStateFolder),
+		sdk.Dir(viper.GetString("audit-state-file")),
 		sdk.DialOptions(currentOptions),
 	), nil
 }

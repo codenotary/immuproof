@@ -48,6 +48,8 @@ more detailed expl.`,
 func init() {
 	serveCmd.Flags().String("web-port", "8091", "rest server port")
 	serveCmd.Flags().Duration("audit-interval", meta.DefaultAuditInterval, "interval between audit runs")
+	serveCmd.Flags().String("audit-state-folder", meta.DefaultStateFolder, "folder to store immudb immutable state")
+	serveCmd.Flags().String("state-cache-file", meta.DefaultStateMapFileName, "absolute file path to store history of immutable states. (JSON format)")
 	rootCmd.AddCommand(serveCmd)
 	viper.BindPFlags(serveCmd.Flags())
 }

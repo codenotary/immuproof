@@ -5,8 +5,8 @@ import (
 	"encoding/json"
 	"errors"
 	"fmt"
-	"github.com/codenotary/immuproof/meta"
 	"github.com/codenotary/immuproof/status"
+	"github.com/spf13/viper"
 	"github.com/vchain-us/ledger-compliance-go/grpcclient"
 	"github.com/vchain-us/ledger-compliance-go/schema"
 	"google.golang.org/grpc/metadata"
@@ -113,7 +113,7 @@ func (a *simpleAuditor) SaveStatusMap() error {
 	if err != nil {
 		return err
 	}
-	err = ioutil.WriteFile(meta.StateMapFileName, j, 0644)
+	err = ioutil.WriteFile(viper.GetString("state-cache-file"), j, 0644)
 	if err != nil {
 		return err
 	}
@@ -121,7 +121,7 @@ func (a *simpleAuditor) SaveStatusMap() error {
 }
 
 func (a *simpleAuditor) LoadStatusMap() error {
-	j, err := ioutil.ReadFile(meta.StateMapFileName)
+	j, err := ioutil.ReadFile(viper.GetString("state-cache-file"))
 	if err != nil {
 		if strings.Contains(err.Error(), "no such file or directory") {
 			return nil
