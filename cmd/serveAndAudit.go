@@ -76,8 +76,12 @@ func ServeAndAudit() error {
 	}
 	restServer := rest.NewRestServer(statusReportMap, viper.GetString("web-port"))
 
-	go cobra.CheckErr(restServer.Serve())
-	go cobra.CheckErr(simpleAuditor.Audit())
+	go func() {
+		cobra.CheckErr(restServer.Serve())
+	}()
+	go func() {
+		cobra.CheckErr(simpleAuditor.Audit())
+	}()
 
 	<-done
 	return nil

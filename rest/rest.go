@@ -35,7 +35,8 @@ func NewRestServer(statusMap *status.StatusReportMap, port string) *restServer {
 
 func (s *restServer) Serve() error {
 	log.Printf("Starting REST server on port %s", s.port)
-	log.Print("UI is exposed on / and audit REST results on/api/status")
+	log.Print("UI is exposed on /")
+	log.Print("REST server is exposed on /api/status")
 
 	mutex := http.NewServeMux()
 	index, err := fs.Sub(content, "internal/embed")
@@ -44,12 +45,7 @@ func (s *restServer) Serve() error {
 	}
 	mutex.Handle("/", http.FileServer(http.FS(index)))
 	mutex.Handle("/api/status", s.statusHandler)
-	err = http.ListenAndServe(fmt.Sprintf(":%s", s.port), mutex)
-	if err != nil {
-		return err
-	}
-
-	return http.ListenAndServe(":"+s.port, nil)
+	return http.ListenAndServe(fmt.Sprintf(":%s", s.port), mutex)
 }
 
 func (s *statusHandler) ServeHTTP(w http.ResponseWriter, r *http.Request) {
