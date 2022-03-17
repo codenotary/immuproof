@@ -52,7 +52,7 @@ func Execute() {
 func init() {
 	cobra.OnInitialize(initConfig)
 
-	rootCmd.PersistentFlags().StringVar(&cfgFile, "config", "", fmt.Sprintf("config file (default is %s/.immuproof.yaml)", meta.DefaultConfigFolder))
+	rootCmd.PersistentFlags().StringVar(&cfgFile, "config", meta.DefaultConfigFolder, fmt.Sprintf("config file (default is %s/.immuproof.yaml)", meta.DefaultConfigFolder))
 	rootCmd.PersistentFlags().IntP("port", "p", meta.DefaultCNCPort, "Codenotary Cloud/CAS server port number")
 	rootCmd.PersistentFlags().StringP("host", "a", meta.DefaultCNCHost, "Codenotary Cloud/CAS server host address")
 	rootCmd.PersistentFlags().StringSlice("api-key", nil, "Codenotary Cloud/CAS api-keys. Can be specified multiple times. First key is used for signing. For each key provided related ledger is audit. If no key is provided, no audit is performed")
@@ -95,7 +95,7 @@ func ensureDir() error {
 	if err != nil {
 		return fmt.Errorf("failed to create config folder: %w", err)
 	}
-	err = os.MkdirAll(viper.GetString("audit-state-file"), 0755)
+	err = os.MkdirAll(viper.GetString("audit-state-folder"), 0755)
 	if err != nil {
 		return fmt.Errorf("failed to create config folder: %w", err)
 	}
