@@ -32,21 +32,25 @@ immuproof serve --api-key {your api key} --port 443 --host admin.cas-staging.cod
 ```yaml
 Audit a ledger and launch an HTTP rest server to show audit results:
 
-more detailed expl.
+  more detailed expl.
 
 Usage:
   immuproof serve [flags]
 
 Flags:
-  -h, --help              help for serve
-      --web-port string   rest server port (default "8091")
+  --audit-interval duration     interval between audit runs (default 1h0m0s)
+  --audit-state-folder string   folder to store immudb immutable state (default "/home/falce/.local/state/immuproof")
+  -h, --help                        help for serve
+  --state-cache-file string     absolute file path to store history of immutable states. (JSON format) (default "/home/falce/.local/state/immuproof/state-map.json")
+  --web-port string             rest server port (default "8091")
 
 Global Flags:
-      --api-key strings   Codenotary Cloud/CAS api-keys. Can be specified multiple times. First key is used for signing. For each key provided related ledger is audit. If no key is provided, no audit is performed
-      --config string     config file (default is /home/falce/.config/ImmuProof/.immuproof.yaml)
+  --api-key strings   Codenotary Cloud/CAS api-keys. Can be specified multiple times. First key is used for signing. For each key provided related ledger is audit. If no key is provided, no audit is performed
+  --config string     config file (default is /home/falce/.config/immuproof/.immuproof.yaml) (default "/home/falce/.config/immuproof")
   -a, --host string       Codenotary Cloud/CAS server host address (default "localhost")
-      --lc-cert string    local or absolute path to a certificate file needed to set up tls connection to a Codenotary Cloud/CAS server
-      --no-tls            allow insecure connections when connecting to a Codenotary Cloud/CAS server
+  --lc-cert string    local or absolute path to a certificate file needed to set up tls connection to a Codenotary Cloud/CAS server
+  --no-tls            allow insecure connections when connecting to a Codenotary Cloud/CAS server
   -p, --port int          Codenotary Cloud/CAS server port number (default 443)
-      --skip-tls-verify   disables tls certificate verification when connecting to a Codenotary Cloud/CAS server
+  --skip-tls-verify   disables tls certificate verification when connecting to a Codenotary Cloud/CAS server
+  falce@falce-pc:~/vchain/immuproof$
 ```
