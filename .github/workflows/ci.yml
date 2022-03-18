@@ -1,14 +1,10 @@
-name: CodeCov
+name: Test
 
 on:
-  pull_request:
-    types: [opened, reopened]
-    branches:
-    - master
   push:
     branches:
-    - master
-
+      - master
+  pull_request:
 jobs:
   cd:
     name: Test
