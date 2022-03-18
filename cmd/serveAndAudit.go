@@ -17,6 +17,7 @@ package cmd
 
 import (
 	"fmt"
+
 	"github.com/codenotary/immuproof/audit"
 	"github.com/codenotary/immuproof/cnc"
 	"github.com/codenotary/immuproof/meta"
@@ -84,9 +85,12 @@ func ServeAndAudit() error {
 		cobra.CheckErr(restServer.Serve())
 	}()
 	go func() {
-		cobra.CheckErr(simpleAuditor.Audit())
+		cobra.CheckErr(simpleAuditor.Start())
 	}()
 
 	<-done
+
+	simpleAuditor.Stop()
+
 	return nil
 }

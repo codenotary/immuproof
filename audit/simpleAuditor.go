@@ -36,7 +36,7 @@ func (a *simpleAuditor) AddApiKey(apiKey string) {
 	a.apiKeys = append(a.apiKeys, apiKey)
 }
 
-func (a *simpleAuditor) Audit() error {
+func (a *simpleAuditor) Start() error {
 	f, err := a.client.Feats(context.TODO())
 	if err != nil {
 		return err
@@ -50,57 +50,56 @@ func (a *simpleAuditor) Audit() error {
 		return err
 	}
 	ticker := time.NewTicker(a.auditInterval)
-	go func() {
-		for {
-			var i int
-			for i = 0; i < len(a.apiKeys); i++ {
-				ak := a.apiKeys[i]
+	for {
+		var i int
+		for i = 0; i < len(a.apiKeys); i++ {
+			ak := a.apiKeys[i]
 
-				signerID, err := GetSignerIDFromApiKey(ak)
-				if err != nil {
-					log.Printf("failed to get signer id from api key: %s", ak)
-					continue
+			signerID, err := GetSignerIDFromApiKey(ak)
+			if err != nil {
+				log.Printf("failed to get signer id from api key: %s", ak)
+				continue
+			}
+
+			select {
+			case <-a.done:
+				return nil
+			case <-ticker.C:
+				statusReport := status.StatusReport{
+					SignerID: signerID,
+					Time:     time.Now(),
 				}
 
-				select {
-				case <-a.done:
-					return
-				case <-ticker.C:
-					statusReport := status.StatusReport{
-						SignerID: signerID,
-						Time:     time.Now(),
-					}
-
-					ctx := metadata.AppendToOutgoingContext(context.TODO(), "lc-api-key", ak)
-					cResp, err := a.client.ConsistencyCheck(ctx)
-					if err != nil {
-						if strings.Contains(err.Error(), "corrupted data") {
-							statusReport.Status = status.Status_CORRUPTED_DATA
-							a.statusMap.Add(statusReport)
-						}
-						statusReport.Status = status.Status_UNKNOWN
-						a.statusMap.Add(statusReport)
-						log.Printf("error checking consistency: %v", err)
-					} else {
-						statusReport.Status = status.Status_NORMAL
-						statusReport.NewTxID = cResp.NewTxID
-						statusReport.NewStateHash = cResp.NewStateHash
-						statusReport.PrevTxID = cResp.PrevTxID
-						statusReport.PrevStateHash = cResp.PrevStateHash
+				ctx := metadata.AppendToOutgoingContext(context.TODO(), "lc-api-key", ak)
+				cResp, err := a.client.ConsistencyCheck(ctx)
+				if err != nil {
+					if strings.Contains(err.Error(), "corrupted data") {
+						statusReport.Status = status.Status_CORRUPTED_DATA
 						a.statusMap.Add(statusReport)
 					}
-					err = a.SaveStatusMap()
-					if err != nil {
-						log.Printf("failed to save status map: %v", err)
-					}
+					statusReport.Status = status.Status_UNKNOWN
+					a.statusMap.Add(statusReport)
+					log.Printf("error checking consistency: %v", err)
+				} else {
+					statusReport.Status = status.Status_NORMAL
+					statusReport.NewTxID = cResp.NewTxID
+					statusReport.NewStateHash = cResp.NewStateHash
+					statusReport.PrevTxID = cResp.PrevTxID
+					statusReport.PrevStateHash = cResp.PrevStateHash
+					a.statusMap.Add(statusReport)
+				}
+				err = a.SaveStatusMap()
+				if err != nil {
+					log.Printf("failed to save status map: %v", err)
 				}
 			}
-			i = 0
 		}
-	}()
+		i = 0
+	}
+}
 
-	<-a.done
-	return nil
+func (a *simpleAuditor) Stop() {
+	a.done <- struct{}{}
 }
 
 func GetSignerIDFromApiKey(lcApiKey string) (string, error) {
