@@ -5,15 +5,16 @@ import (
 	"encoding/json"
 	"errors"
 	"fmt"
+	"io/ioutil"
+	"log"
+	"strings"
+	"time"
+
 	"github.com/codenotary/immuproof/status"
 	"github.com/spf13/viper"
 	"github.com/vchain-us/ledger-compliance-go/grpcclient"
 	"github.com/vchain-us/ledger-compliance-go/schema"
 	"google.golang.org/grpc/metadata"
-	"io/ioutil"
-	"log"
-	"strings"
-	"time"
 )
 
 type simpleAuditor struct {
@@ -77,12 +78,14 @@ func (a *simpleAuditor) Audit() error {
 							statusReport.Status = status.Status_CORRUPTED_DATA
 							a.statusMap.Add(statusReport)
 						}
-						statusReport.Status = err.Error()
+						statusReport.Status = status.Status_UNKNOWN
 						a.statusMap.Add(statusReport)
 						log.Printf("error checking consistency: %v", err)
 					} else {
 						statusReport.Status = status.Status_NORMAL
+						statusReport.NewTxID = cResp.NewTxID
 						statusReport.NewStateHash = cResp.NewStateHash
+						statusReport.PrevTxID = cResp.PrevTxID
 						statusReport.PrevStateHash = cResp.PrevStateHash
 						a.statusMap.Add(statusReport)
 					}

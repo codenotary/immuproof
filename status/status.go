@@ -7,12 +7,15 @@ import (
 
 const Status_CORRUPTED_DATA = "CORRUPTED_DATA"
 const Status_NORMAL = "NORMAL"
+const Status_UNKNOWN = "UNKNOWN"
 
 type StatusReport struct {
-	SignerID      string    `json:"-"`
+	SignerID      string    `json:"signer_id"`
 	Time          time.Time `json:"time"`
 	Status        string    `json:"status"`
+	PrevTxID      uint64    `json:"prev_tx_id"`
 	PrevStateHash string    `json:"prev_state_hash"`
+	NewTxID       uint64    `json:"new_tx_id"`
 	NewStateHash  string    `json:"new_state_hash"`
 }
 

@@ -678,8 +678,8 @@ github.com/tmc/grpc-websocket-proxy v0.0.0-20170815181823-89b8d40f7ca8/go.mod h1
 github.com/tv42/httpunix v0.0.0-20150427012821-b75d8614f926/go.mod h1:9ESjWnEqriFuLhtthL60Sar/7RFoluCcXsuvEwTV5KM=
 github.com/urfave/cli v1.20.0/go.mod h1:70zkFmudgCuE/ngEzBv17Jvp/497gISqfk5gWijbERA=
 github.com/urfave/cli v1.22.1/go.mod h1:Gos4lmkARVdJ6EkW0WaNv/tZAAMe9V7XWyB60NtXRu0=
-github.com/vchain-us/ledger-compliance-go v0.9.3-0.20220317143638-8acf55ce211d h1:XYAn6zLaKYfFOFGg8kfKeYR2NvvomdRRvPok6XnoowM=
-github.com/vchain-us/ledger-compliance-go v0.9.3-0.20220317143638-8acf55ce211d/go.mod h1:24Suc1pICrUWC76Do1y1RbZO0vCZ5IaLOqK1veYJFVI=
+github.com/vchain-us/ledger-compliance-go v0.9.3-0.20220318094446-fc13c004e805 h1:UZUnh7bR8RZ+5m6FqNvnYXXrr4keTQr7DU/GvnqvZz8=
+github.com/vchain-us/ledger-compliance-go v0.9.3-0.20220318094446-fc13c004e805/go.mod h1:24Suc1pICrUWC76Do1y1RbZO0vCZ5IaLOqK1veYJFVI=
 github.com/xiang90/probing v0.0.0-20190116061207-43a291ad63a2/go.mod h1:UETIi67q53MR2AWcXfiuqkDkRtnGDLqkBTpCHuJHxtU=
 github.com/yuin/goldmark v1.1.25/go.mod h1:3hX8gzYuyVAZsxl0MRgGTJEmQBFcNTphYh9decYSb74=
 github.com/yuin/goldmark v1.1.27/go.mod h1:3hX8gzYuyVAZsxl0MRgGTJEmQBFcNTphYh9decYSb74=
