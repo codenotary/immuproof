@@ -24,6 +24,7 @@ coverage.txt
 
 # Local .env files
 .env.*.local
+.state*
 
 # MacOS-specific files
 .DS_Store
