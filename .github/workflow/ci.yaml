@@ -1,12 +1,17 @@
 name: CodeCov
 
 on:
+  pull_request:
+    types: [opened, reopened]
+    branches:
+    - master
   push:
-    branches: [ master ]
+    branches:
+    - master
 
 jobs:
   cd:
-    name: CodeCov
+    name: Test
     runs-on: ubuntu-latest
     steps:
       - name: Set up Go 1.x
@@ -17,20 +22,4 @@ jobs:
       - name: Check out code into the Go module directory
         uses: actions/checkout@v2
       - name: Test
-        run: |
-          CVPKG=$(go list ./...)
-          go test -coverpkg=${CVPKG} -coverprofile=coverage.out -covermode=count  ./...
-      - name: Publish cod cov badge
-        run: |
-          set -x
-          total=`go tool cover -func=coverage.out | grep total | grep -Eo '[0-9]+\.[0-9]+'`
-          if (( $(echo "$total <= 50" | bc -l) )) ; then
-            COLOR=red
-          elif (( $(echo "$total > 80" | bc -l) )); then
-            COLOR=green
-          else
-            COLOR=orange
-          fi
-          curl "https://img.shields.io/badge/coavrege-$total%25-$COLOR" > badge.svg
-          gsutil  -h "Cache-Control: no-cache" cp badge.svg gs://${SOME_BUCKET}/${PROJECT_NAME}/codcov.svg
-          gsutil acl ch -u AllUsers:R gs://${SOME_BUCKET}/${PROJECT_NAME}/codcov.svg
+        run: go test ./...
