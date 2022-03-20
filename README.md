@@ -21,18 +21,16 @@ Local environment
 immuproof serve --api-key {your api key} --port 3324 --no-tls
 ```
 
-CAS staging environment
+CAS environment
 
 ```shell
-immuproof serve --api-key {your api key} --port 443 --host admin.cas-staging.codenotary.com --skip-tls-verify
+immuproof serve --api-key {your api key} --port 443 --host admin.cas.codenotary.com --skip-tls-verify
 ```
 
 ## Others options
 
 ```yaml
-Audit a ledger and launch an HTTP rest server to show audit results:
-
-  more detailed expl.
+Audit a ledger and launch an HTTP rest server to show audit results
 
 Usage:
   immuproof serve [flags]
