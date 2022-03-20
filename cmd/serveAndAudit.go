@@ -31,11 +31,8 @@ import (
 var serveCmd = &cobra.Command{
 	Use:   "serve",
 	Short: "Audit a ledger and launch an HTTP rest server to show audit results",
-	Long: `Audit a ledger and launch an HTTP rest server to show audit results:
-
-more detailed expl.`,
+	Long:  `Audit a ledger and launch an HTTP rest server to show audit results.`,
 	RunE: func(cmd *cobra.Command, args []string) error {
-
 		return ServeAndAudit()
 	},
 	Args: func(cmd *cobra.Command, args []string) error {

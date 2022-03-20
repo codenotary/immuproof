@@ -42,6 +42,7 @@ Flags:
   --audit-state-folder string   folder to store immudb immutable state (default "/home/falce/.local/state/immuproof")
   -h, --help                        help for serve
   --state-cache-file string     absolute file path to store history of immutable states. (JSON format) (default "/home/falce/.local/state/immuproof/state-map.json")
+  --state-cache-size int        max size of the state cache (default 90)
   --web-port string             rest server port (default "8091")
 
 Global Flags:
@@ -52,5 +53,4 @@ Global Flags:
   --no-tls            allow insecure connections when connecting to a Codenotary Cloud/CAS server
   -p, --port int          Codenotary Cloud/CAS server port number (default 443)
   --skip-tls-verify   disables tls certificate verification when connecting to a Codenotary Cloud/CAS server
-  falce@falce-pc:~/vchain/immuproof$
 ```
