@@ -20,7 +20,7 @@ func TestSimpleAuditor(t *testing.T) {
 
 	viper.Set("audit-interval", "1s")
 	viper.Set("state-cache-file", "tmpStateCache.json")
-
+	viper.Set("state-cache-size", 2)
 	defer os.Remove("tmpStateCache.json")
 
 	aks := []string{"signerID1.ak1", "signerID2.ak2"}
@@ -55,7 +55,7 @@ func TestSimpleAuditor(t *testing.T) {
 		require.NoError(t, err)
 	}()
 
-	time.Sleep(time.Second * 3)
+	time.Sleep(time.Second * 4)
 	simpleAuditor.Stop()
 
 	tmpStatusReportMap := status.NewStatusReportMap()
@@ -63,5 +63,5 @@ func TestSimpleAuditor(t *testing.T) {
 	require.NoError(t, err)
 	err = json.Unmarshal(j, &tmpStatusReportMap)
 	require.NoError(t, err)
-	require.True(t, len(tmpStatusReportMap.M) > 0)
+	require.True(t, len(tmpStatusReportMap.M) == 2)
 }

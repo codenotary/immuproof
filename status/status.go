@@ -28,9 +28,10 @@ type StatusReportMap struct {
 }
 
 func NewStatusReportMap() *StatusReportMap {
-	return &StatusReportMap{
+	srm := &StatusReportMap{
 		M: make(map[string]*statusReportPQ),
 	}
+	return srm
 }
 
 func (m *StatusReportMap) Add(report StatusReport) {
@@ -40,8 +41,8 @@ func (m *StatusReportMap) Add(report StatusReport) {
 	var pq *statusReportPQ
 	var ok bool
 	if pq, ok = m.M[report.SignerID]; !ok {
-		ppq := make(statusReportPQ, 5)
-		pq = &ppq
+		pq = NewStatusReportPQ()
+		m.M[report.SignerID] = pq
 	}
 	for pq.Len() > viper.GetInt("state-cache-size") {
 		heap.Pop(pq)
@@ -52,7 +53,7 @@ func (m *StatusReportMap) Add(report StatusReport) {
 func (m *StatusReportMap) GetAll() []*StatusReport {
 	m.l.Lock()
 	defer m.l.Unlock()
-	reports := make([]*StatusReport, 0, len(m.M))
+	reports := make([]*StatusReport, 0)
 	for _, report := range m.M {
 		reports = append(reports, report.GetAll()...)
 	}
@@ -60,6 +61,12 @@ func (m *StatusReportMap) GetAll() []*StatusReport {
 }
 
 type statusReportPQ []*StatusReport
+
+func NewStatusReportPQ() *statusReportPQ {
+	pq := make(statusReportPQ, 0)
+	heap.Init(&pq)
+	return &pq
+}
 
 func (pq statusReportPQ) Len() int           { return len(pq) }
 func (pq statusReportPQ) Less(i, j int) bool { return pq[i].Time.Before(pq[j].Time) }
