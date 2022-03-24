@@ -1,0 +1,46 @@
+.tampering-history {
+  .row {
+    padding: 20px;
+    div {
+      padding: 0;
+    }
+  }
+
+  &-wrapper {
+    padding: 20px;
+    background-color: $white;
+    border-radius: 30px;
+    box-shadow: 3px 3px 10px rgba(0, 0, 0, 0.15);
+
+    &__texts {
+      color: $dark;
+
+      div:last-of-type {
+        font-size: 12px;
+      }
+    }
+
+    &__check {
+      display: flex;
+      grid-gap: 5px;
+    }
+
+    &__checks {
+      position: relative;
+      width: 10px;
+      height: 25px;
+      border-radius: 5px;
+      background-color: $primary;
+    }
+
+    &__last-check {
+      grid-gap: 10px;
+
+      &-line {
+        background-color: #C1C1C1;
+        width: 80%;
+        height: 1px;
+      }
+    }
+  }
+}

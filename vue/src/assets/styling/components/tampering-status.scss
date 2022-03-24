@@ -1,0 +1,43 @@
+.tampering-status-wrapper {
+  &__status {
+    padding: 15px 30px;
+    border-radius: 30px;
+    background-color: $white;
+
+    p {
+      color: $primary;
+      font-weight: bold;
+    }
+
+    &::before {
+      content: '';
+      width: 10px;
+      height: 10px;
+      border-radius: 50%;
+      background-color: $primary;
+      display: block;
+    }
+  }
+
+  &__last-check {
+    p {
+      margin-bottom: 10px;
+
+      &:first-of-type {
+        color: $primary-dark;
+      }
+
+      &:last-of-type {
+        margin: 0;
+      }
+    }
+
+    &-date {
+      color: $grey-dark;
+
+      span {
+        color: $grey-dark;
+      }
+    }
+  }
+}

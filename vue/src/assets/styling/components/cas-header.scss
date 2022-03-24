@@ -1,0 +1,14 @@
+.cas-header {
+  position: relative;
+  background-color: $white;
+
+  h2 {
+    font-size: 1.5rem;
+  }
+
+  &__stamp {
+    position: absolute;
+    right: -100px;
+    top: 0;
+  }
+}
