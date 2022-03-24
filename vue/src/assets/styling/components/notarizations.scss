@@ -1,0 +1,28 @@
+.notarizations {
+  .bx--cc-- chart-wrapper {
+    width: 101% !important;
+  }
+
+  .row {
+    padding: 20px;
+
+    > div {
+      padding: 0;
+    }
+  }
+
+  &-wrapper {
+    padding: 20px;
+    background-color: $white;
+    border-radius: 30px;
+    box-shadow: 3px 3px 10px rgba(0, 0, 0, 0.15);
+
+    &__texts {
+      color: $dark;
+
+      div:last-of-type {
+        font-size: 12px;
+      }
+    }
+  }
+}
