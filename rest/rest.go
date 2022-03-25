@@ -21,6 +21,8 @@ import (
 	"log"
 	"net/http"
 
+	"github.com/rs/cors"
+
 	"github.com/codenotary/immuproof/status"
 )
 
@@ -52,14 +54,19 @@ func (s *restServer) Serve() error {
 	log.Print("UI is exposed on /")
 	log.Print("REST server is exposed on /api/status")
 
-	mutex := http.NewServeMux()
+	mux := http.NewServeMux()
+
+	muxCors := cors.Default().Handler(mux)
+
 	index, err := fs.Sub(content, "internal/embed")
 	if err != nil {
 		return err
 	}
-	mutex.Handle("/", http.FileServer(http.FS(index)))
-	mutex.Handle("/api/status", s.statusHandler)
-	return http.ListenAndServe(fmt.Sprintf(":%s", s.port), mutex)
+
+	mux.Handle("/", http.FileServer(http.FS(index)))
+	mux.Handle("/api/status", s.statusHandler)
+
+	return http.ListenAndServe(fmt.Sprintf(":%s", s.port), muxCors)
 }
 
 func (s *statusHandler) ServeHTTP(w http.ResponseWriter, r *http.Request) {
