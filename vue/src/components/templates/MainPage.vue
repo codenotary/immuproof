@@ -9,7 +9,10 @@
                         :tampering-message="tamperingMessage"
                         :check-date="checkDate">
                     </tampering-status>
-                    <tampering-history></tampering-history>
+                    <tampering-history
+                        :check-date="checkDate"
+                        :data="data">
+                    </tampering-history>
                     <notarizations></notarizations>
                 </div>
             </v-row>
@@ -44,6 +47,10 @@ export default {
         checkDate: {
             type: String,
             required: true
+        },
+        data: {
+            type: Array,
+            default: () => ([])
         }
     },
 }

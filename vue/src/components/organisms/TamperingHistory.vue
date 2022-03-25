@@ -4,14 +4,15 @@
             <v-row>
                 <div class="tampering-history-wrapper__texts col-12">
                     <div class="text-left font-weight-bold">Tampering Checks History</div>
-                    <div class="text-left">Since Monday, 12 January 2022 at 15:34</div>
+                    <div class="text-left">{{ checkDate }}</div>
                 </div>
                 <div class="tampering-history-wrapper__check col-12 flex justify-center mt-3">
                     <span
-                        v-for="index in 30"
+                        v-for="(item, index) in data"
                         :key="index"
-                        :data-information="index"
-                        class="tampering-history-wrapper__checks">
+                        :data-information="getInformation(item)"
+                        class="tampering-history-wrapper__checks"
+                        :class="getClass(item)">
                     </span>
                 </div>
                 <div class="tampering-history-wrapper__last-check d-flex justify-space-between align-center full-width col-12 mt-3">
@@ -26,10 +27,24 @@
 
 <script>
 export default {
+    props: {
+        checkDate: {
+            type: String,
+            required: true
+        },
+        data: {
+            type: Array,
+            default: () => ([])
+        }
+    },
 
+    methods: {
+        getClass({ status }) {
+            return status !== 'NORMAL' ? 'tampering-history-wrapper__checks-error' : '';
+        },
+        getInformation(item) {
+            console.log(item)
+        }
+    }
 }
 </script>
-
-<style scoped>
-
-</style>
