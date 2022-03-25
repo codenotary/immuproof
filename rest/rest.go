@@ -20,6 +20,7 @@ import (
 	"io/fs"
 	"log"
 	"net/http"
+	"time"
 
 	"github.com/rs/cors"
 
@@ -81,14 +82,28 @@ func (s *statusHandler) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 	json.NewEncoder(w).Encode(s.statusMap.GetAllByLedger())
 }
 
+type ledgerCounter struct {
+	NewNotarizationsCount uint64    `json:"newNotarizationsCount"`
+	CollectTime           time.Time `json:"collectTime"`
+}
+
 func (s *countHandler) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 	reports := s.statusMap.GetAllByLedger()
-	counts := make(map[string]uint64)
+	counts := make(map[string][]*ledgerCounter)
 	for id, checks := range reports {
+		lcs := make([]*ledgerCounter, 0)
+		var old *status.StatusReport
 		for _, check := range checks {
-			counts[id] = check.NewTxID
-			break
+			if old != nil {
+				lc := &ledgerCounter{
+					NewNotarizationsCount: check.NewTxID - old.NewTxID,
+					CollectTime:           check.Time,
+				}
+				lcs = append(lcs, lc)
+			}
+			old = check
 		}
+		counts[id] = lcs
 	}
 	json.NewEncoder(w).Encode(counts)
 }
