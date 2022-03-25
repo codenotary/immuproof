@@ -26,11 +26,30 @@ CAS environment
 ```shell
 immuproof serve --api-key {your api key} --port 443 --host admin.cas.codenotary.com --skip-tls-verify
 ```
+## Environment variables
+```shell
+  IMMUPROOF_API_KEY=
+  IMMUPROOF_PORT=
+  IMMUPROOF_HOST=
+  IMMUPROOF_SKIP_TLS_VERIFY=
+  IMMUPROOF_NO_TLS=
+  IMMUPROOF_CERT=
+  IMMUPROOF_HOST=
+  IMMUPROOF_AUDIT_INTERVAL=
+  IMMUPROOF_AUDIT_STATE_FOLDER=
+  IMMUPROOF_STATE_HISTORY_SIZE=
+  IMMUPROOF_STATE_HISTORY_FILE=
+  IMMUPROOF_WEB_PORT=
 
-## Others options
+```
+## Others serve options
 
 ```yaml
-Audit a ledger and launch an HTTP rest server to show audit results
+Audit a ledger and launch an HTTP rest server to show audit results.
+
+Eg:
+# Collect 3 days of status checks (1 per hour) from CAS server
+  immuproof serve --api-key {your api-key} --port 443 --host admin.cas.codenotary.com --skip-tls-verify --audit-interval 1h --state-history-size 72
 
 Usage:
   immuproof serve [flags]
@@ -39,15 +58,15 @@ Flags:
   --audit-interval duration     interval between audit runs (default 1h0m0s)
   --audit-state-folder string   folder to store immudb immutable state (default "/home/falce/.local/state/immuproof")
   -h, --help                        help for serve
-  --state-cache-file string     absolute file path to store history of immutable states. (JSON format) (default "/home/falce/.local/state/immuproof/state-map.json")
-  --state-cache-size int        max size of the state cache (default 90)
+  --state-history-file string   absolute file path to store history of immutable states. (JSON format) (default "/home/falce/.local/state/immuproof/state-history.json")
+  --state-history-size int      max size of the history of immutable states. (default 90)
   --web-port string             rest server port (default "8091")
 
 Global Flags:
   --api-key strings   Codenotary Cloud/CAS api-keys. Can be specified multiple times. First key is used for signing. For each key provided related ledger is audit. If no key is provided, no audit is performed
+  --cert string       local or absolute path to a certificate file needed to set up tls connection to a Codenotary Cloud/CAS server
   --config string     config file (default is /home/falce/.config/immuproof/.immuproof.yaml) (default "/home/falce/.config/immuproof")
   -a, --host string       Codenotary Cloud/CAS server host address (default "localhost")
-  --lc-cert string    local or absolute path to a certificate file needed to set up tls connection to a Codenotary Cloud/CAS server
   --no-tls            allow insecure connections when connecting to a Codenotary Cloud/CAS server
   -p, --port int          Codenotary Cloud/CAS server port number (default 443)
   --skip-tls-verify   disables tls certificate verification when connecting to a Codenotary Cloud/CAS server

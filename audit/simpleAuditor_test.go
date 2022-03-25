@@ -32,8 +32,8 @@ import (
 func TestSimpleAuditor(t *testing.T) {
 
 	viper.Set("audit-interval", "1s")
-	viper.Set("state-cache-file", "tmpStateCache.json")
-	viper.Set("state-cache-size", 2)
+	viper.Set("state-history-file", "tmpStateCache.json")
+	viper.Set("state-history-size", 2)
 	defer os.Remove("tmpStateCache.json")
 
 	aks := []string{"signerID1.ak1", "signerID2.ak2"}

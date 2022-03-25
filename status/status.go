@@ -57,7 +57,7 @@ func (m *StatusReportMap) Add(report StatusReport) {
 		pq = NewStatusReportPQ()
 		m.M[report.SignerID] = pq
 	}
-	for pq.Len() > viper.GetInt("state-cache-size") {
+	for pq.Len() >= viper.GetInt("state-history-size") {
 		heap.Pop(pq)
 	}
 	heap.Push(pq, &report)
