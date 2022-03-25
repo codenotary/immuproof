@@ -14,10 +14,16 @@
         />
         <documentation-button class="mt-3"></documentation-button>
         <i-button
-            icon="mdi-discord"
+            icon="filled-discord"
             :divider="true"
             color="#147cb6">
             <div class="pa-2">Members</div>
+        </i-button>
+        <i-button
+            :divider="true"
+            icon="filled-discord"
+            color="#147cb6">
+            <div class="pa-2">Share feedback</div>
         </i-button>
     </div>
 </template>

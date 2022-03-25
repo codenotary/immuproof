@@ -43,16 +43,16 @@ export default {
                 },
                 axes: {
                     bottom: {
-                        mapsTo: "key",
-                        scaleType: "time",
+                        mapsTo: 'key',
+                        scaleType: 'time',
                     },
                     left: {
-                        mapsTo: "value",
+                        mapsTo: 'value',
                         scaleType: "linear"
                     },
                 },
-                "height": "170px",
-                "toolbar": {
+                height: '170px',
+                toolbar: {
                     enabled: false
                 }
             }

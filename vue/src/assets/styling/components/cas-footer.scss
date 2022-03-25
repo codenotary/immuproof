@@ -1,0 +1,21 @@
+.cas-footer {
+  background-color: $dark;
+
+  &__main-logo {
+    margin-left: 140px;
+  }
+
+  &__copyright {
+    border-top: 1px solid $white;
+    color: $grey;
+  }
+
+  .immudb-button-secured-by {
+    .v-divider {
+      background-color: $dark;
+    }
+    .caption {
+      line-height: unset;
+    }
+  }
+}
