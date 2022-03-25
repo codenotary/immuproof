@@ -78,7 +78,7 @@ func (s *restServer) Serve() error {
 }
 
 func (s *statusHandler) ServeHTTP(w http.ResponseWriter, r *http.Request) {
-	json.NewEncoder(w).Encode(s.statusMap.GetAll())
+	json.NewEncoder(w).Encode(s.statusMap.GetAllByLedger())
 }
 
 func (s *countHandler) ServeHTTP(w http.ResponseWriter, r *http.Request) {
