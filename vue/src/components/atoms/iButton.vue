@@ -10,13 +10,11 @@
         <slot
             v-if="icon !== ''"
             name="icon">
-            <v-icon
-                :size="22"
-                class="py-1 px-2"
-                :color="color"
-            >
-                {{ icon }}
-            </v-icon>
+            <v-img
+                :src="require(`@/assets/images/${icon}.svg`)"
+                :contain="true"
+                size="20px">
+            </v-img>
         </slot>
         <v-divider
             v-if="divider"

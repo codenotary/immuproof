@@ -13,8 +13,11 @@
 </template>
 
 <script>
-import Chart from "@/components/organisms/Chart";
+import Chart from '@/components/organisms/Chart.vue';
+
 export default {
-    components: {Chart}
+    components: {
+        Chart
+    }
 }
 </script>
