@@ -43,7 +43,10 @@ export default {
             return status !== 'NORMAL' ? 'tampering-history-wrapper__checks-error' : '';
         },
         getInformation(item) {
-            console.log(item)
+            const date = new Date(item.time);
+            const timeDetail = `${date.toDateString()} at ${date.toTimeString().split(' ')[0]}`
+
+            return `${timeDetail} ${item.status}`;
         }
     }
 }
