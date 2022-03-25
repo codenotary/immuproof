@@ -31,6 +31,10 @@
       height: 25px;
       border-radius: 5px;
       background-color: $primary;
+
+      &-error {
+        background-color: $error;
+      }
     }
 
     &__last-check {
