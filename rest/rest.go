@@ -32,10 +32,14 @@ var content embed.FS
 type restServer struct {
 	port          string
 	statusHandler *statusHandler
+	countHandler  *countHandler
 }
 
 type statusHandler struct {
-	port      string
+	statusMap *status.StatusReportMap
+}
+
+type countHandler struct {
 	statusMap *status.StatusReportMap
 }
 
@@ -43,7 +47,9 @@ func NewRestServer(statusMap *status.StatusReportMap, port string) *restServer {
 	return &restServer{
 		port: port,
 		statusHandler: &statusHandler{
-			port:      port,
+			statusMap: statusMap,
+		},
+		countHandler: &countHandler{
 			statusMap: statusMap,
 		},
 	}
@@ -52,7 +58,8 @@ func NewRestServer(statusMap *status.StatusReportMap, port string) *restServer {
 func (s *restServer) Serve() error {
 	log.Printf("Starting REST server on port %s", s.port)
 	log.Print("UI is exposed on /")
-	log.Print("REST server is exposed on /api/status")
+	log.Print("REST status history is exposed on /api/status")
+	log.Print("REST notarization's counter are exposed on /api/notarization/count")
 
 	mux := http.NewServeMux()
 
@@ -65,10 +72,23 @@ func (s *restServer) Serve() error {
 
 	mux.Handle("/", http.FileServer(http.FS(index)))
 	mux.Handle("/api/status", s.statusHandler)
+	mux.Handle("/api/notarization/count", s.countHandler)
 
 	return http.ListenAndServe(fmt.Sprintf(":%s", s.port), muxCors)
 }
 
 func (s *statusHandler) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 	json.NewEncoder(w).Encode(s.statusMap.GetAll())
+}
+
+func (s *countHandler) ServeHTTP(w http.ResponseWriter, r *http.Request) {
+	reports := s.statusMap.GetAllByLedger()
+	counts := make(map[string]uint64)
+	for id, checks := range reports {
+		for _, check := range checks {
+			counts[id] = check.NewTxID
+			break
+		}
+	}
+	json.NewEncoder(w).Encode(counts)
 }

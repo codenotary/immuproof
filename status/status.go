@@ -63,6 +63,16 @@ func (m *StatusReportMap) Add(report StatusReport) {
 	heap.Push(pq, &report)
 }
 
+func (m *StatusReportMap) GetAllByLedger() map[string][]*StatusReport {
+	m.l.Lock()
+	defer m.l.Unlock()
+	reports := make(map[string][]*StatusReport, 0)
+	for id, report := range m.M {
+		reports[id] = append(reports[id], report.GetAll()...)
+	}
+	return reports
+}
+
 func (m *StatusReportMap) GetAll() []*StatusReport {
 	m.l.Lock()
 	defer m.l.Unlock()
