@@ -32,13 +32,18 @@ import (
 var serveCmd = &cobra.Command{
 	Use:   "serve",
 	Short: "Audit a ledger and launch an HTTP rest server to show audit results",
-	Long:  `Audit a ledger and launch an HTTP rest server to show audit results.`,
+	Long: `Audit a ledger and launch an HTTP rest server to show audit results.
+
+Eg:
+# Collect 3 days of status checks (1 per hour) from CAS server
+immuproof serve --api-key {your api-key} --port 443 --host admin.cas.codenotary.com --skip-tls-verify --audit-interval 1h --state-history-size 72
+`,
 	RunE: func(cmd *cobra.Command, args []string) error {
 		return ServeAndAudit()
 	},
 	Args: func(cmd *cobra.Command, args []string) error {
-		if viper.GetBool("lc-skip-tls-verify") && viper.GetBool("no-tls") {
-			return fmt.Errorf("--lc-skip-tls-verify and --no-tls are mutually exclusive")
+		if viper.GetBool("skip-tls-verify") && viper.GetBool("no-tls") {
+			return fmt.Errorf("--skip-tls-verify and --no-tls are mutually exclusive")
 		}
 		return nil
 	},
@@ -48,8 +53,8 @@ func init() {
 	serveCmd.Flags().String("web-port", "8091", "rest server port")
 	serveCmd.Flags().Duration("audit-interval", meta.DefaultAuditInterval, "interval between audit runs")
 	serveCmd.Flags().String("audit-state-folder", meta.DefaultStateFolder, "folder to store immudb immutable state")
-	serveCmd.Flags().Int("state-cache-size", 90, "max size of the state cache")
-	serveCmd.Flags().String("state-cache-file", meta.DefaultStateMapFileName, "absolute file path to store history of immutable states. (JSON format)")
+	serveCmd.Flags().Int("state-history-size", 90, "max size of the history of immutable states.")
+	serveCmd.Flags().String("state-history-file", meta.DefaultStateMapFileName, "absolute file path to store history of immutable states. (JSON format)")
 	rootCmd.AddCommand(serveCmd)
 	viper.BindPFlags(serveCmd.Flags())
 }
@@ -66,8 +71,8 @@ func ServeAndAudit() error {
 		aks[0],
 		viper.GetString("host"),
 		viper.GetString("port"),
-		viper.GetString("lc-cert"),
-		viper.GetBool("lc-skip-tls-verify"),
+		viper.GetString("cert"),
+		viper.GetBool("skip-tls-verify"),
 		viper.GetBool("no-tls"),
 	)
 	cobra.CheckErr(err)

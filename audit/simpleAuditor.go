@@ -73,38 +73,14 @@ func (a *simpleAuditor) Start() error {
 				log.Printf("failed to get signer id from api key: %s", ak)
 				continue
 			}
+			// show something now
+			a.collectOne(ak, signerID)
 
 			select {
 			case <-a.done:
 				return nil
 			case <-ticker.C:
-				statusReport := status.StatusReport{
-					SignerID: signerID,
-					Time:     time.Now(),
-				}
-
-				ctx := metadata.AppendToOutgoingContext(context.TODO(), "lc-api-key", ak)
-				cResp, err := a.client.ConsistencyCheck(ctx)
-				if err != nil {
-					if strings.Contains(err.Error(), "corrupted data") {
-						statusReport.Status = status.Status_CORRUPTED_DATA
-						a.statusMap.Add(statusReport)
-					}
-					statusReport.Status = status.Status_UNKNOWN
-					a.statusMap.Add(statusReport)
-					log.Printf("error checking consistency: %v", err)
-				} else {
-					statusReport.Status = status.Status_NORMAL
-					statusReport.NewTxID = cResp.NewTxID
-					statusReport.NewStateHash = cResp.NewStateHash
-					statusReport.PrevTxID = cResp.PrevTxID
-					statusReport.PrevStateHash = cResp.PrevStateHash
-					a.statusMap.Add(statusReport)
-				}
-				err = a.SaveStatusMap()
-				if err != nil {
-					log.Printf("failed to save status map: %v", err)
-				}
+				a.collectOne(ak, signerID)
 			}
 		}
 		i = 0
@@ -128,7 +104,7 @@ func (a *simpleAuditor) SaveStatusMap() error {
 	if err != nil {
 		return err
 	}
-	err = ioutil.WriteFile(viper.GetString("state-cache-file"), j, 0644)
+	err = ioutil.WriteFile(viper.GetString("state-history-file"), j, 0644)
 	if err != nil {
 		return err
 	}
@@ -136,7 +112,7 @@ func (a *simpleAuditor) SaveStatusMap() error {
 }
 
 func (a *simpleAuditor) LoadStatusMap() error {
-	j, err := ioutil.ReadFile(viper.GetString("state-cache-file"))
+	j, err := ioutil.ReadFile(viper.GetString("state-history-file"))
 	if err != nil {
 		if strings.Contains(err.Error(), "no such file or directory") {
 			return nil
@@ -147,4 +123,34 @@ func (a *simpleAuditor) LoadStatusMap() error {
 		return err
 	}
 	return nil
+}
+
+func (a *simpleAuditor) collectOne(ak, signerID string) {
+	statusReport := status.StatusReport{
+		SignerID: signerID,
+		Time:     time.Now(),
+	}
+
+	ctx := metadata.AppendToOutgoingContext(context.TODO(), "lc-api-key", ak)
+	cResp, err := a.client.ConsistencyCheck(ctx)
+	if err != nil {
+		if strings.Contains(err.Error(), "corrupted data") {
+			statusReport.Status = status.Status_CORRUPTED_DATA
+			a.statusMap.Add(statusReport)
+		}
+		statusReport.Status = status.Status_UNKNOWN
+		a.statusMap.Add(statusReport)
+		log.Printf("error checking consistency: %v", err)
+	} else {
+		statusReport.Status = status.Status_NORMAL
+		statusReport.NewTxID = cResp.NewTxID
+		statusReport.NewStateHash = cResp.NewStateHash
+		statusReport.PrevTxID = cResp.PrevTxID
+		statusReport.PrevStateHash = cResp.PrevStateHash
+		a.statusMap.Add(statusReport)
+	}
+	err = a.SaveStatusMap()
+	if err != nil {
+		log.Printf("failed to save status map: %v", err)
+	}
 }

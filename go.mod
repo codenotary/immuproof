@@ -12,6 +12,7 @@ require (
 
 require (
 	github.com/codenotary/immudb v1.2.2
+	github.com/rs/cors v1.8.2
 	github.com/stretchr/testify v1.7.0
 )
 

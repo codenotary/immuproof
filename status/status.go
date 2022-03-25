@@ -57,10 +57,20 @@ func (m *StatusReportMap) Add(report StatusReport) {
 		pq = NewStatusReportPQ()
 		m.M[report.SignerID] = pq
 	}
-	for pq.Len() > viper.GetInt("state-cache-size") {
+	for pq.Len() >= viper.GetInt("state-history-size") {
 		heap.Pop(pq)
 	}
 	heap.Push(pq, &report)
+}
+
+func (m *StatusReportMap) GetAllByLedger() map[string][]*StatusReport {
+	m.l.Lock()
+	defer m.l.Unlock()
+	reports := make(map[string][]*StatusReport, 0)
+	for id, report := range m.M {
+		reports[id] = append(reports[id], report.GetAll()...)
+	}
+	return reports
 }
 
 func (m *StatusReportMap) GetAll() []*StatusReport {
