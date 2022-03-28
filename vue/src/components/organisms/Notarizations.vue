@@ -4,7 +4,7 @@
             <v-row>
                 <div class="col-12 notarizations-wrapper__texts">
                     <div class="text-left font-weight-bold">Notarizations</div>
-                    <div class="text-left">Since Monday, 12 January 2022 at 15:34</div>
+                    <div class="text-left">{{ firstCheckDate }}</div>
                 </div>
                 <apex-chart
                     class="mt-3"
@@ -36,19 +36,10 @@ export default {
         notarizationCountData: {
             type: Array,
             default: () => ([])
-        }
-    },
-    computed: {
-        options() {
-            return {
-                legend: { enabled: false },
-                axes: {
-                    bottom: { title: 'Time', scaleType: 'labels', visible: true },
-                    left: { title: 'Count', mapsTo: 'newNotarizationsCount', scaleType: 'linear' },
-                },
-                height: '170px',
-                toolbar: { enabled: false }
-            }
+        },
+        firstCheckDate: {
+            type: String,
+            required: true
         }
     }
 }

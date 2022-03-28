@@ -3,8 +3,8 @@
         <v-container class="tampering-history-wrapper">
             <v-row>
                 <div class="tampering-history-wrapper__texts col-12">
-                    <div class="text-left font-weight-bold">Tampering Checks History</div>
-                    <div class="text-left">{{ checkDate }}</div>
+                    <div class="text-left font-weight-bold">Status Checks History</div>
+                    <div class="text-left">{{ lastCheckDate }}</div>
                 </div>
                 <div class="tampering-history-wrapper__check col-12 flex justify-center mt-3">
                     <span
@@ -28,7 +28,7 @@
 <script>
 export default {
     props: {
-        checkDate: {
+        lastCheckDate: {
             type: String,
             required: true
         },

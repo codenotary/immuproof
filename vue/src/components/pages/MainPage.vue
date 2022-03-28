@@ -1,7 +1,8 @@
 <template>
     <main-page
         :tampering-message="tampering"
-        :check-date="lastCheckDate"
+        :last-check-date="lastCheckDate"
+        :first-check-date="firstCheckDate"
         :notarizations="notarizationData"
         :data="statusData"
         :notarization-count-categories="notarizationCountCategories"
@@ -42,12 +43,33 @@ export default {
                 ? 'No Tampering Detected'
                 : 'Status Unknown';
         },
+        firstCheckDate() {
+            const firstCheckTime = this.statusData[0]?.time;
 
+            return formattedDateLocaleString(firstCheckTime,
+                {
+                    year: 'numeric',
+                    weekday: 'long',
+                    month: 'long',
+                    day: '2-digit',
+                    hour: 'numeric',
+                    minute: 'numeric',
+                    timeZoneName: 'short'
+                });
+        },
         lastCheckDate() {
             const lastCheckTime = this.statusData[this.statusData.length - 1]?.time;
-            const date = new Date(lastCheckTime);
 
-            return `${date.toDateString()} at ${date.toTimeString().split(' ')[0]}`;
+            return formattedDateLocaleString(lastCheckTime,
+                {
+                    year: 'numeric',
+                    weekday: 'long',
+                    month: 'long',
+                    day: '2-digit',
+                    hour: 'numeric',
+                    minute: 'numeric',
+                    timeZoneName: 'short'
+                });
         },
         notarizationCountCategories() {
             return this.notarizationData.map(data =>
@@ -73,8 +95,7 @@ export default {
             const hash = Object.keys(data)[0];
 
             if (data[hash].length > 45) {
-                const slicedArray =  data[hash].slice(-45);
-                this.statusData = slicedArray;
+                this.statusData = data[hash].slice(-45);
 
                 return;
             }
@@ -92,8 +113,7 @@ export default {
            const hash = Object.keys(data)[0];
 
             if (data[hash].length > 30) {
-                const slicedArray =  data[hash].slice(-30);
-                this.notarizationData = slicedArray;
+                this.notarizationData = data[hash].slice(-30);
 
                 return;
             }

@@ -34,11 +34,17 @@ export default {
                     },
                     toolbar: {
                         show: false
-                    }
+                    },
+                    height: '170px'
                 },
                 stroke: {
-                    curve: 'smooth'
+                    curve: 'smooth',
+                    width: 2
                 },
+                tooltip: {
+                    enabled: false
+                },
+                colors: ['#153954'],
                 xaxis: {
                     categories: this.categories,
                     labels: {

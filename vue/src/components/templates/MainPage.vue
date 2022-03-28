@@ -7,13 +7,14 @@
                 <div class="main-page__content full-width">
                     <tampering-status
                         :tampering-message="tamperingMessage"
-                        :check-date="checkDate">
+                        :last-check-date="lastCheckDate">
                     </tampering-status>
                     <tampering-history
-                        :check-date="checkDate"
+                        :last-check-date="lastCheckDate"
                         :data="data">
                     </tampering-history>
                     <notarizations
+                        :first-check-date="firstCheckDate"
                         :notarizations="notarizations"
                         :notarization-count-categories="notarizationCountCategories"
                         :notarization-count-data="notarizationCountData">
@@ -48,7 +49,11 @@ export default {
             type: String,
             required: true
         },
-        checkDate: {
+        lastCheckDate: {
+            type: String,
+            required: true
+        },
+        firstCheckDate: {
             type: String,
             required: true
         },
