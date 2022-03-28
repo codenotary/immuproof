@@ -32,6 +32,8 @@ var content embed.FS
 
 type restServer struct {
 	port          string
+	webCertFile   string
+	webKeyFile    string
 	statusHandler *statusHandler
 	countHandler  *countHandler
 }
@@ -44,9 +46,11 @@ type countHandler struct {
 	statusMap *status.StatusReportMap
 }
 
-func NewRestServer(statusMap *status.StatusReportMap, port string) *restServer {
+func NewRestServer(statusMap *status.StatusReportMap, port, webCertFile, webKeyFile string) *restServer {
 	return &restServer{
-		port: port,
+		port:        port,
+		webCertFile: webCertFile,
+		webKeyFile:  webKeyFile,
 		statusHandler: &statusHandler{
 			statusMap: statusMap,
 		},
@@ -75,7 +79,13 @@ func (s *restServer) Serve() error {
 	mux.Handle("/api/status", s.statusHandler)
 	mux.Handle("/api/notarization/count", s.countHandler)
 
-	return http.ListenAndServe(fmt.Sprintf(":%s", s.port), muxCors)
+	if s.webCertFile != "" && s.webKeyFile != "" {
+		log.Print("REST server is using HTTPS")
+		return http.ListenAndServeTLS(fmt.Sprintf(":%s", s.port), s.webCertFile, s.webKeyFile, muxCors)
+	} else {
+		log.Print("REST server is using HTTP")
+		return http.ListenAndServe(fmt.Sprintf(":%s", s.port), muxCors)
+	}
 }
 
 func (s *statusHandler) ServeHTTP(w http.ResponseWriter, r *http.Request) {
