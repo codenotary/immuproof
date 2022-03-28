@@ -2,7 +2,9 @@
     <div class="tampering-status-wrapper full-width mt-10">
         <v-container>
             <v-row justify="space-between" class="tampering-status-wrapper__content align-center">
-                <div class="tampering-status-wrapper__status d-flex align-center">
+                <div
+                    class="tampering-status-wrapper__status d-flex align-center"
+                    :class="{ 'tampering-status-wrapper__status-error' : tamperingMessage !== 'NORMAL' }">
                     <p class="ma-0 ml-3">{{ tamperingMessage }}</p>
                 </div>
                 <div class="tampering-status-wrapper__last-check">

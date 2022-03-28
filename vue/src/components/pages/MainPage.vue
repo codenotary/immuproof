@@ -2,12 +2,14 @@
     <main-page
         :tampering-message="tampering"
         :check-date="lastCheckDate"
+        :notarizations="notarizationData"
         :data="statusData">
     </main-page>
 </template>
 
 <script>
 import MainPage from '../templates/MainPage';
+import { formattedDateLocaleString } from '@/helpers/helpers';
 
 export default {
     components: {
@@ -36,7 +38,7 @@ export default {
         },
 
         lastCheckDate() {
-            const lastCheckTime = this.statusData[this.statusData.length - 1].time;
+            const lastCheckTime = this.statusData[this.statusData.length - 1]?.time;
             const date = new Date(lastCheckTime);
 
             return `${date.toDateString()} at ${date.toTimeString().split(' ')[0]}`;
@@ -52,9 +54,15 @@ export default {
             }
 
             const hash = Object.keys(data)[0];
-            this.statusData = data[hash];
 
-            console.log('STATUS DATA:', this.statusData);
+            if (data[hash].length > 30) {
+                const slicedArray =  data[hash].slice(-30);
+                this.statusData = slicedArray;
+
+                return;
+            }
+
+            this.statusData = data[hash];
         },
 
         async fetchNotarizationCount() {
@@ -64,10 +72,22 @@ export default {
                return;
            }
 
-            const hash = Object.keys(data)[0];
-            this.notarizationData = data[hash];
+           const hash = Object.keys(data)[0];
 
-            console.log('NOTARIZATION DATA:', this.notarizationData);
+           data[hash].forEach((item, index) => {
+               item.key = index;
+               item.group = 'Dataset 1';
+               item.collectTime = formattedDateLocaleString(item.collectTime)
+           });
+
+            if (data[hash].length > 30) {
+                const slicedArray =  data[hash].slice(-30);
+                this.notarizationData = slicedArray;
+
+                return;
+            }
+
+           this.notarizationData = data[hash];
         }
     }
 }
