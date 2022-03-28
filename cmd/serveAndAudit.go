@@ -45,12 +45,17 @@ immuproof serve --api-key {your api-key} --port 443 --host admin.cas.codenotary.
 		if viper.GetBool("skip-tls-verify") && viper.GetBool("no-tls") {
 			return fmt.Errorf("--skip-tls-verify and --no-tls are mutually exclusive")
 		}
+		if (viper.IsSet("web-cert-file") || viper.IsSet("web-key-file")) && (!(viper.IsSet("web-cert-file") && viper.IsSet("web-key-file"))) {
+			return fmt.Errorf("--web-cert-file and --web-key-file must be used together")
+		}
 		return nil
 	},
 }
 
 func init() {
 	serveCmd.Flags().String("web-port", "8091", "rest server port")
+	serveCmd.Flags().String("web-cert-file", "", "certificate file absolute path")
+	serveCmd.Flags().String("web-key-file", "", "key file absolute path")
 	serveCmd.Flags().Duration("audit-interval", meta.DefaultAuditInterval, "interval between audit runs")
 	serveCmd.Flags().String("audit-state-folder", meta.DefaultStateFolder, "folder to store immudb immutable state")
 	serveCmd.Flags().Int("state-history-size", 90, "max size of the history of immutable states.")
@@ -83,7 +88,7 @@ func ServeAndAudit() error {
 	for _, a := range aks {
 		simpleAuditor.AddApiKey(a)
 	}
-	restServer := rest.NewRestServer(statusReportMap, viper.GetString("web-port"))
+	restServer := rest.NewRestServer(statusReportMap, viper.GetString("web-port"), viper.GetString("web-cert-file"), viper.GetString("web-key-file"))
 
 	go func() {
 		cobra.CheckErr(restServer.Serve())

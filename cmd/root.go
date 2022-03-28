@@ -48,6 +48,9 @@ Environment variables:
   IMMUPROOF_STATE_HISTORY_SIZE=
   IMMUPROOF_STATE_HISTORY_FILE=
   IMMUPROOF_WEB_PORT=
+  IMMUPROOF_WEB_KEY_FILE=
+  IMMUPROOF_WEB_CERT_FILE=
+
 
 When immuproof is launched it fetches a fresh status from CodeNotaryCloud or CAS backed by immudb and it verifies the integrity compared to an older one stored locally.
 The idea is to check if previous state is "included" in the new one.

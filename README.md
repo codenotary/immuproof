@@ -26,6 +26,21 @@ CAS environment
 ```shell
 immuproof serve --api-key {your api key} --port 443 --host admin.cas.codenotary.com --skip-tls-verify
 ```
+
+## HTTPS
+
+Following commands can be used to generate a self-signed certificate for the local server.
+
+```shell
+openssl ecparam -genkey -name secp384r1 -out server.key
+openssl req -new -x509 -sha256 -key server.key -out server.crt -days 3650
+```
+
+Launch immuproof with the generated certificate:
+
+```shell
+immuproof serve --api-key {your api key} --port 443 --host admin.cas.codenotary.com --audit-interval 1s --state-history-size 72 --web-cert-file server.crt --web-key-file server.key
+
 ## Environment variables
 ```shell
   IMMUPROOF_API_KEY=
@@ -42,6 +57,7 @@ immuproof serve --api-key {your api key} --port 443 --host admin.cas.codenotary.
   IMMUPROOF_WEB_PORT=
 
 ```
+
 ## Others serve options
 
 ```yaml

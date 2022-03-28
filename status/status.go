@@ -29,6 +29,7 @@ const Status_UNKNOWN = "UNKNOWN"
 type StatusReport struct {
 	SignerID      string    `json:"signer_id"`
 	Time          time.Time `json:"time"`
+	TimeZone      string    `json:"time_zone"`
 	Status        string    `json:"status"`
 	PrevTxID      uint64    `json:"prev_tx_id"`
 	PrevStateHash string    `json:"prev_state_hash"`

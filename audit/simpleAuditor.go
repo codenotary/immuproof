@@ -130,11 +130,13 @@ func (a *simpleAuditor) LoadStatusMap() error {
 }
 
 func (a *simpleAuditor) collectOne(ak, signerID string) {
+	t := time.Now()
+	tzn, _ := t.Zone()
 	statusReport := status.StatusReport{
 		SignerID: signerID,
-		Time:     time.Now(),
+		Time:     t,
+		TimeZone: tzn,
 	}
-
 	ctx := metadata.AppendToOutgoingContext(context.TODO(), "lc-api-key", ak)
 	cResp, err := a.client.ConsistencyCheck(ctx)
 	if err != nil {
