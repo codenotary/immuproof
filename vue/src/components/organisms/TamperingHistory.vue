@@ -40,7 +40,14 @@ export default {
 
     methods: {
         getClass({ status }) {
-            return status !== 'NORMAL' ? 'tampering-history-wrapper__checks-error' : '';
+            switch (status) {
+                case 'UNKNOWN':
+                    return 'tampering-history-wrapper__checks-unknown';
+                case 'CORRUPTED_DATA':
+                    return 'tampering-history-wrapper__checks-error';
+                default:
+                    return 'tampering-history-wrapper__checks-normal';
+            }
         },
         getInformation(item) {
             const date = new Date(item.time);

@@ -1,10 +1,5 @@
-export function formattedDateLocaleString(
-	date,
-	extraOptions = {
-		weekday: 'long', year: 'numeric', month: 'long', day: 'numeric'
-	}
-) {
-	const options = { ...extraOptions, weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' };
+export function formattedDateLocaleString(date, extraOptions) {
+	const options = { ...extraOptions, month: 'long', day: 'numeric', hour: '2-digit', minute: '2-digit' };
 
 	return new Date(date).toLocaleTimeString('en-US', options);
 }

@@ -13,8 +13,11 @@
                         :check-date="checkDate"
                         :data="data">
                     </tampering-history>
-                    <notarizations :notarizations="notarizations"></notarizations>
-                    <apex-chart type="bar"></apex-chart>
+                    <notarizations
+                        :notarizations="notarizations"
+                        :notarization-count-categories="notarizationCountCategories"
+                        :notarization-count-data="notarizationCountData">
+                    </notarizations>
                 </div>
             </v-row>
         </v-container>
@@ -29,11 +32,9 @@ import TamperingStatus from '@/components/organisms/TamperingStatus';
 import TamperingHistory from '@/components/organisms/TamperingHistory';
 import Notarizations from '@/components/organisms/Notarizations';
 import CasFooter from '@/components/organisms/CasFooter';
-import ApexChart from "@/components/organisms/ApexChart";
 
 export default {
     components: {
-        ApexChart,
         CasFooter,
         Notarizations,
         TamperingStatus,
@@ -56,6 +57,14 @@ export default {
             default: () => ([])
         },
         notarizations: {
+            type: Array,
+            default: () => ([])
+        },
+        notarizationCountCategories: {
+            type: Array,
+            default: () => ([])
+        },
+        notarizationCountData: {
             type: Array,
             default: () => ([])
         }
