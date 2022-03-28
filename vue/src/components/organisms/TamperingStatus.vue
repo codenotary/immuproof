@@ -9,7 +9,7 @@
                 </div>
                 <div class="tampering-status-wrapper__last-check">
                     <p class="font-weight-bold text-left">Last Check</p>
-                    <p class="tampering-status-wrapper__last-check-date text-left">{{ checkDate }}</p>
+                    <p class="tampering-status-wrapper__last-check-date text-left">{{ lastCheckDate }}</p>
                     <p class="text-left">
                         <span class="font-weight-bold">TxID</span>
                         25
@@ -27,7 +27,7 @@ export default {
             type: String,
             required: true
         },
-        checkDate: {
+        lastCheckDate: {
             type: String,
             required: true
         }
