@@ -95,6 +95,7 @@ func (s *statusHandler) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 type ledgerCounter struct {
 	NewNotarizationsCount uint64    `json:"newNotarizationsCount"`
 	CollectTime           time.Time `json:"collectTime"`
+	CollectTimeZone       string    `json:"collectTimeZone"`
 }
 
 func (s *countHandler) ServeHTTP(w http.ResponseWriter, r *http.Request) {
@@ -114,6 +115,7 @@ func (s *countHandler) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 			lc := &ledgerCounter{
 				NewNotarizationsCount: nc,
 				CollectTime:           check.Time,
+				CollectTimeZone:       check.TimeZone,
 			}
 			lcs = append(lcs, lc)
 			old = check
