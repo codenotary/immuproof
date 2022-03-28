@@ -7,6 +7,25 @@
             height="auto"
             :contain="true"
         />
+        <div class="cas-header__hosted-by d-flex justify-center align-center mt-4">
+            <p class="cas-header__hosted-by-text ma-0 mr-2 font-weight-bold">Hosted by:</p>
+            <a
+                href="https://almalinux.org/"
+                target="_blank">
+                <v-img
+                    :src="require('@/assets/images/logo-home-assistant.svg')"
+                    :max-height="30"
+                    :max-width="140"
+                    :contain="true"
+                    height="auto">
+                </v-img>
+            </a>
+            <a
+                href="https://almalinux.org/"
+                class="ma-0 ml-2 text-decoration-none">
+                Home Assistant
+            </a>
+        </div>
     </div>
 </template>
 

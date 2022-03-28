@@ -13,7 +13,7 @@
                         :check-date="checkDate"
                         :data="data">
                     </tampering-history>
-                    <notarizations></notarizations>
+                    <notarizations :notarizations="notarizations"></notarizations>
                 </div>
             </v-row>
         </v-container>
@@ -49,6 +49,10 @@ export default {
             required: true
         },
         data: {
+            type: Array,
+            default: () => ([])
+        },
+        notarizations: {
             type: Array,
             default: () => ([])
         }

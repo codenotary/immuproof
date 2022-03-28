@@ -11,4 +11,14 @@
     right: -100px;
     top: 0;
   }
+
+  &__hosted-by {
+    &-text {
+      color: $primary-base;
+    }
+
+    a {
+      color: $dark
+    }
+  }
 }

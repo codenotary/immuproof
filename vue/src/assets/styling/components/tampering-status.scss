@@ -1,5 +1,6 @@
 .tampering-status-wrapper {
   &__status {
+    box-shadow: 3px 3px 10px rgba(0, 0, 0, 0.15);
     padding: 15px 30px;
     border-radius: 30px;
     background-color: $white;
@@ -7,6 +8,7 @@
     p {
       color: $primary;
       font-weight: bold;
+      text-transform: uppercase;
     }
 
     &::before {
@@ -16,6 +18,16 @@
       border-radius: 50%;
       background-color: $primary;
       display: block;
+    }
+
+    &-error {
+      p {
+        color: $error;
+      }
+
+      &::before {
+        background-color: $error;
+      }
     }
   }
 

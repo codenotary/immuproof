@@ -17,13 +17,13 @@
             icon="filled-discord"
             :divider="true"
             color="#147cb6">
-            <div class="pa-2">Members</div>
+            <div class="pa-2 text-capitalize">Members</div>
         </i-button>
         <i-button
-            :divider="true"
             icon="filled-discord"
+            :divider="true"
             color="#147cb6">
-            <div class="pa-2">Share feedback</div>
+            <div class="pa-2 text-capitalize">Share feedback</div>
         </i-button>
     </div>
 </template>

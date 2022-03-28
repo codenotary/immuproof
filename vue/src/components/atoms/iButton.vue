@@ -13,7 +13,7 @@
             <v-img
                 :src="require(`@/assets/images/${icon}.svg`)"
                 :contain="true"
-                size="20px">
+                height="20">
             </v-img>
         </slot>
         <v-divider
