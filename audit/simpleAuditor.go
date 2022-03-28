@@ -63,6 +63,7 @@ func (a *simpleAuditor) Start() error {
 		return err
 	}
 	ticker := time.NewTicker(a.auditInterval)
+	first := true
 	for {
 		var i int
 		for i = 0; i < len(a.apiKeys); i++ {
@@ -73,8 +74,11 @@ func (a *simpleAuditor) Start() error {
 				log.Printf("failed to get signer id from api key: %s", ak)
 				continue
 			}
-			// show something now
-			a.collectOne(ak, signerID)
+			if first {
+				// show something now
+				a.collectOne(ak, signerID)
+				first = false
+			}
 
 			select {
 			case <-a.done:

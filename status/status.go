@@ -15,6 +15,7 @@ package status
 
 import (
 	"container/heap"
+	"sort"
 	"sync"
 	"time"
 
@@ -68,7 +69,11 @@ func (m *StatusReportMap) GetAllByLedger() map[string][]*StatusReport {
 	defer m.l.Unlock()
 	reports := make(map[string][]*StatusReport, 0)
 	for id, report := range m.M {
-		reports[id] = append(reports[id], report.GetAll()...)
+		all := report.GetAll()
+		sort.Slice(all, func(i, j int) bool {
+			return all[i].Time.Before(all[j].Time)
+		})
+		reports[id] = append(reports[id], all...)
 	}
 	return reports
 }

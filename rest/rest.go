@@ -94,13 +94,18 @@ func (s *countHandler) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 		lcs := make([]*ledgerCounter, 0)
 		var old *status.StatusReport
 		for _, check := range checks {
+			nc := uint64(0)
 			if old != nil {
-				lc := &ledgerCounter{
-					NewNotarizationsCount: check.NewTxID - old.NewTxID,
-					CollectTime:           check.Time,
+				nc = check.NewTxID - old.NewTxID
+				if old.NewTxID > check.NewTxID {
+					nc = 0
 				}
-				lcs = append(lcs, lc)
 			}
+			lc := &ledgerCounter{
+				NewNotarizationsCount: nc,
+				CollectTime:           check.Time,
+			}
+			lcs = append(lcs, lc)
 			old = check
 		}
 		counts[id] = lcs

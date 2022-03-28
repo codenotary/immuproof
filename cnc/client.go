@@ -50,7 +50,7 @@ func NewCNCClient(lcApiKey, host, port, lcCertPath string, skipTlsVerify, noTls 
 		}),
 		sdk.Host(host),
 		sdk.Port(p),
-		sdk.Dir(viper.GetString("audit-state-file")),
+		sdk.Dir(viper.GetString("audit-state-folder")),
 		sdk.DialOptions(currentOptions),
 	), nil
 }
