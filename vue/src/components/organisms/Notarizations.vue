@@ -6,28 +6,34 @@
                     <div class="text-left font-weight-bold">Notarizations</div>
                     <div class="text-left">Since Monday, 12 January 2022 at 15:34</div>
                 </div>
-
-                <chart
+                <apex-chart
                     class="mt-3"
-                    :data="notarizations"
-                    :options="options">
-                </chart>
+                    type="line"
+                    :categories="notarizationCountCategories"
+                    :data="notarizationCountData">
+                </apex-chart>
             </v-row>
         </v-container>
     </div>
 </template>
 
 <script>
-import Chart from '@/components/organisms/Chart.vue';
-// import ApexChart from "@/components/organisms/ApexChart";
+import ApexChart from '@/components/organisms/ApexChart';
 
 export default {
     components: {
-        // ApexChart,
-        Chart
+        ApexChart
     },
     props: {
         notarizations: {
+            type: Array,
+            default: () => ([])
+        },
+        notarizationCountCategories: {
+            type: Array,
+            default: () => ([])
+        },
+        notarizationCountData: {
             type: Array,
             default: () => ([])
         }
@@ -37,7 +43,7 @@ export default {
             return {
                 legend: { enabled: false },
                 axes: {
-                    bottom: {  title: 'Time', scaleType: 'labels', visible: true },
+                    bottom: { title: 'Time', scaleType: 'labels', visible: true },
                     left: { title: 'Count', mapsTo: 'newNotarizationsCount', scaleType: 'linear' },
                 },
                 height: '170px',

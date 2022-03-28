@@ -30,10 +30,17 @@
       width: 10px;
       height: 25px;
       border-radius: 5px;
-      background-color: $primary;
+
+      &-normal {
+        background-color: $primary;
+      }
 
       &-error {
         background-color: $error;
+      }
+
+      &-unknown {
+        background-color: $unknown;
       }
     }
 

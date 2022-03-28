@@ -29,6 +29,16 @@
         background-color: $error;
       }
     }
+
+    &-unknown {
+      p {
+        color: $unknown;
+      }
+
+      &::before {
+        background-color: $unknown;
+      }
+    }
   }
 
   &__last-check {

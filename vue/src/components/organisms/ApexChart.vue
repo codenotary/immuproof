@@ -1,9 +1,10 @@
 <template>
-    <div>
+    <div class="full-width">
         <apexchart
             :type="type"
             :options="chartOptions"
-            :series="series"></apexchart>
+            :series="series">
+        </apexchart>
     </div>
 </template>
 
@@ -24,22 +25,43 @@ export default {
         }
     },
 
-    data() {
-        return {
-            chartOptions: {
+    computed: {
+        chartOptions() {
+            return {
                 chart: {
-                    id: 'vuechart-example'
+                    zoom: {
+                        enabled: false
+                    },
+                    toolbar: {
+                        show: false
+                    }
+                },
+                stroke: {
+                    curve: 'smooth'
                 },
                 xaxis: {
-                    categories: [1991, 1992, 1993, 1994, 1995, 1996, 1997, 1998]
+                    categories: this.categories,
+                    labels: {
+                        show: false
+                    }
+                },
+                yaxis: {
+                    labels: {
+                        show: false
+                    }
+                },
+                dataLabels: {
+                    enabled: false
                 }
-            },
-            series: [{
-                name: 'series-1',
-                data: [30, 40, 35, 50, 49, 60, 70, 91]
+            };
+        },
+        series() {
+            return [{
+                name: 'Notarizations',
+                data: this.data
             }]
         }
-    },
+    }
 };
 </script>
 

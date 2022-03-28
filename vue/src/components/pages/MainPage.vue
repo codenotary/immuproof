@@ -3,7 +3,9 @@
         :tampering-message="tampering"
         :check-date="lastCheckDate"
         :notarizations="notarizationData"
-        :data="statusData">
+        :data="statusData"
+        :notarization-count-categories="notarizationCountCategories"
+        :notarization-count-data="notarizationCountData">
     </main-page>
 </template>
 
@@ -32,9 +34,13 @@ export default {
 
     computed: {
         tampering() {
-            return this.statusData.some(item => item.status !== 'NORMAL')
-                ? 'Tampering Detected'
-                : 'No Tampering Detected';
+            if (this.statusData.some(item => item.status === 'CORRUPTED_DATA')) {
+                return 'Tampering Detected';
+            }
+
+            return this.statusData[this.statusData.length - 1]?.status === 'NORMAL'
+                ? 'No Tampering Detected'
+                : 'Status Unknown';
         },
 
         lastCheckDate() {
@@ -42,6 +48,17 @@ export default {
             const date = new Date(lastCheckTime);
 
             return `${date.toDateString()} at ${date.toTimeString().split(' ')[0]}`;
+        },
+        notarizationCountCategories() {
+            return this.notarizationData.map(data =>
+                formattedDateLocaleString(
+                    data.collectTime,
+                    { month: 'long', day: 'numeric', hour: '2-digit', minute: '2-digit' }
+                )
+            );
+        },
+        notarizationCountData() {
+            return this.notarizationData.map(data => data.newNotarizationsCount);
         }
     },
 
@@ -55,8 +72,8 @@ export default {
 
             const hash = Object.keys(data)[0];
 
-            if (data[hash].length > 30) {
-                const slicedArray =  data[hash].slice(-30);
+            if (data[hash].length > 45) {
+                const slicedArray =  data[hash].slice(-45);
                 this.statusData = slicedArray;
 
                 return;
@@ -73,13 +90,6 @@ export default {
            }
 
            const hash = Object.keys(data)[0];
-
-           data[hash].forEach((item, index) => {
-               item.key = index;
-               // item.group = 'Dataset 1';
-               item.collectTime = formattedDateLocaleString(item.collectTime);
-               // item.newNotarizationsCount = numFormatter(item.newNotarizationsCount);
-           });
 
             if (data[hash].length > 30) {
                 const slicedArray =  data[hash].slice(-30);

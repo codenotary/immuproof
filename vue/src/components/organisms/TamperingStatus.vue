@@ -4,7 +4,7 @@
             <v-row justify="space-between" class="tampering-status-wrapper__content align-center">
                 <div
                     class="tampering-status-wrapper__status d-flex align-center"
-                    :class="{ 'tampering-status-wrapper__status-error' : tamperingMessage !== 'NORMAL' }">
+                    :class="getClassName">
                     <p class="ma-0 ml-3">{{ tamperingMessage }}</p>
                 </div>
                 <div class="tampering-status-wrapper__last-check">
@@ -30,6 +30,19 @@ export default {
         checkDate: {
             type: String,
             required: true
+        }
+    },
+
+    computed: {
+        getClassName() {
+            switch (this.tamperingMessage) {
+                case 'Status Unknown':
+                    return 'tampering-status-wrapper__status-unknown';
+                case 'Tampering Detected':
+                    return 'tampering-status-wrapper__status-error';
+                default:
+                    return 'tampering-status-wrapper__status-normal';
+            }
         }
     }
 }
