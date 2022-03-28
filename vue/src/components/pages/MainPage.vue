@@ -76,8 +76,9 @@ export default {
 
            data[hash].forEach((item, index) => {
                item.key = index;
-               item.group = 'Dataset 1';
-               item.collectTime = formattedDateLocaleString(item.collectTime)
+               // item.group = 'Dataset 1';
+               item.collectTime = formattedDateLocaleString(item.collectTime);
+               // item.newNotarizationsCount = numFormatter(item.newNotarizationsCount);
            });
 
             if (data[hash].length > 30) {

@@ -14,6 +14,7 @@
                         :data="data">
                     </tampering-history>
                     <notarizations :notarizations="notarizations"></notarizations>
+                    <apex-chart type="bar"></apex-chart>
                 </div>
             </v-row>
         </v-container>
@@ -28,9 +29,11 @@ import TamperingStatus from '@/components/organisms/TamperingStatus';
 import TamperingHistory from '@/components/organisms/TamperingHistory';
 import Notarizations from '@/components/organisms/Notarizations';
 import CasFooter from '@/components/organisms/CasFooter';
+import ApexChart from "@/components/organisms/ApexChart";
 
 export default {
     components: {
+        ApexChart,
         CasFooter,
         Notarizations,
         TamperingStatus,
