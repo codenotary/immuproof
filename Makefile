@@ -1,6 +1,6 @@
 SHELL=/bin/bash -o pipefail
 
-VERSION=0.0.0
+VERSION=0.0.5
 
 GO ?= go
 
@@ -20,6 +20,7 @@ TEST_FLAGS ?= -v -race
 immuproof:
 	$(GO) build -ldflags '${LDFLAGS} -X github.com/codenotary/immuproof/meta.version=v${VERSION}-dev' -o immuproof ./main.go
 
+.PHONY: immuproof-release
 immuproof-release:
 	$(GO) build -ldflags '${LDFLAGS}' -o immuproof ./main.go
 
