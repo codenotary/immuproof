@@ -1,8 +1,9 @@
 SHELL=/bin/bash -o pipefail
 
-VERSION=0.0.5
+VERSION=0.0.6
 
 GO ?= go
+NPM ?= npm
 
 GIT_REV := $(shell git rev-parse HEAD 2> /dev/null || true)
 GIT_COMMIT := $(if $(shell git status --porcelain --untracked-files=no),${GIT_REV}-dirty,${GIT_REV})
@@ -18,11 +19,11 @@ TEST_FLAGS ?= -v -race
 
 .PHONY: immuproof
 immuproof:
-	$(GO) build -ldflags '${LDFLAGS} -X github.com/codenotary/immuproof/meta.version=v${VERSION}-dev' -o immuproof ./main.go
+	cd vue && $(NPM) install && $(NPM) run build && cd .. && $(GO) build -ldflags '${LDFLAGS} -X github.com/codenotary/immuproof/meta.version=v${VERSION}-dev' -o immuproof ./main.go
 
 .PHONY: immuproof-release
 immuproof-release:
-	$(GO) build -ldflags '${LDFLAGS}' -o immuproof ./main.go
+	cd vue && $(NPM) install && $(NPM) run build && cd .. && $(GO) build -ldflags '${LDFLAGS}' -o immuproof ./main.go
 
 .PHONY: test
 test:
