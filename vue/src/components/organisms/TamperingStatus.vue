@@ -32,7 +32,7 @@ export default {
             required: true
         },
         lastTxId: {
-            type: String,
+            type: Number,
             required: true
         }
     },

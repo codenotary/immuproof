@@ -1,0 +1,20 @@
+.floating-menu {
+  position: fixed;
+  top: 0;
+  left: 0;
+  padding: 25px;
+
+  .documentation-button, .main-button {
+    font-size: 12px;
+
+    p {
+      margin: 0;
+    }
+  }
+
+  .main-button {
+    &__divider {
+      height: 20px;
+    }
+  }
+}

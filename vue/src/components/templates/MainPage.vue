@@ -75,8 +75,8 @@ export default {
             default: () => ([])
         },
         lastTxId: {
-            type: String,
-            default: ''
+            type: Number,
+            default: 0
         }
     },
 }

@@ -1,25 +1,24 @@
 <template>
     <v-btn
-        :href="link"
-        class="d-flex align-center overflow-hidden mt-2"
+        class="main-button d-flex align-center justify-start overflow-hidden mt-2"
         target="_blank"
         rel="noopener"
+        :href="link"
         :depressed="depressed"
         :outlined="outlined"
         :color="outlined ? color : ''">
         <slot
             v-if="icon !== ''"
             name="icon">
-            <v-img
-                :src="require(`@/assets/images/${icon}.svg`)"
-                :contain="true"
-                height="20">
-            </v-img>
+            <v-icon
+                :style="{ color: color }"
+                class="mr-2">
+                {{ icon }}
+            </v-icon>
         </slot>
         <v-divider
             v-if="divider"
-            class="my-4"
-            style="max-height: 20px; height: 20px;"
+            class="main-button__divider my-4"
             :color="color"
             :vertical="true">
         </v-divider>

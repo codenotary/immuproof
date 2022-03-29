@@ -3,6 +3,7 @@ import axios from 'axios';
 import App from './App.vue';
 import vuetify from './plugins/vuetify';
 import VueApexCharts from 'vue-apexcharts'
+import '@mdi/font/css/materialdesignicons.css';
 
 import '@/assets/styling/main.scss';
 

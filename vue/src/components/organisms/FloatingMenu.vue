@@ -1,50 +1,40 @@
 <template>
-    <div class="floating-container d-flex flex-column">
+    <div class="floating-menu d-flex flex-column">
         <v-img
-            class="menu-floating__logo"
+            class="floating-menu__logo"
             :src="require('@/assets/images/logo-cas.svg')"
             :contain="true"
             height="90"
         />
         <v-img
-            class="menu-floating__logo"
+            class="floating-menu__cas-text"
             :src="require('@/assets/images/logo-cas-text.svg')"
             :contain="true"
             height="50"
         />
         <documentation-button class="mt-3"></documentation-button>
-        <i-button
-            icon="filled-discord"
-            :divider="true"
-            color="#147cb6">
-            <div class="pa-2 text-capitalize">Members</div>
-        </i-button>
-        <i-button
-            icon="filled-discord"
-            :divider="true"
-            color="#147cb6">
-            <div class="pa-2 text-capitalize">Share feedback</div>
-        </i-button>
+        <discord-button></discord-button>
+        <main-button
+            icon="mdi-discord"
+            link="https://github.com/codenotary/immuproof/issues"
+            color="#153954"
+            :outlined="true"
+            :divider="true">
+            <div class="ml-2 text-capitalize">Share feedback</div>
+        </main-button>
     </div>
 </template>
 
 <script>
 import DocumentationButton from '@/components/organisms/DocumentationButton.vue';
-import IButton from '@/components/atoms/iButton.vue';
+import MainButton from '@/components/atoms/MainButton.vue';
+import DiscordButton from '@/components/organisms/DiscordButton.vue';
 
 export default {
     components: {
-        IButton,
+        DiscordButton,
+        MainButton,
         DocumentationButton
     }
 }
 </script>
-
-<style scoped>
-    .floating-container {
-        position: fixed;
-        top: 0;
-        left: 0;
-        padding: 25px;
-    }
-</style>

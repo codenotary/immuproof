@@ -1,6 +1,6 @@
 <template>
     <v-btn
-        class="documentation-button pa-2"
+        class="documentation-button text-capitalize pa-2"
         :text="true"
         :depressed="true"
         href="https://github.com/codenotary/immuproof"
@@ -9,9 +9,3 @@
         Documentation
     </v-btn>
 </template>
-
-<style lang="scss">
-.documentation-button {
-    font-size: 12px;
-}
-</style>
