@@ -86,7 +86,7 @@ export default {
 
     methods: {
         async fetchStatus() {
-           const { data } = await this.$axios.get('http://localhost:8091/api/status');
+            const { data } = await this.$axios.get('http://localhost:8091/api/status');
 
             if (!data) {
                 return;
@@ -104,13 +104,15 @@ export default {
         },
 
         async fetchNotarizationCount() {
-           const { data } = await this.$axios.get('http://localhost:8091/api/notarization/count');
+            console.log(process.env)
+            const prefix = process.env.NODE_ENV === 'development' ? 'http://localhost:8091/' : '/';
+            const { data } = await this.$axios.get(`${prefix}api/notarization/count`);
 
-           if (!data) {
-               return;
-           }
+            if (!data) {
+                return;
+            }
 
-           const hash = Object.keys(data)[0];
+            const hash = Object.keys(data)[0];
 
             if (data[hash].length > 30) {
                 this.notarizationData = data[hash].slice(-30);
@@ -118,7 +120,7 @@ export default {
                 return;
             }
 
-           this.notarizationData = data[hash];
+            this.notarizationData = data[hash];
         }
     }
 }
