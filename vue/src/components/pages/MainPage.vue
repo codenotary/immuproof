@@ -2,6 +2,7 @@
     <main-page
         :tampering-message="tampering"
         :last-check-date="lastCheckDate"
+        :last-tx-id="lastTXId"
         :first-check-date="firstCheckDate"
         :notarizations="notarizationData"
         :data="statusData"
@@ -57,8 +58,11 @@ export default {
                     timeZoneName: 'short'
                 });
         },
+        lastData() {
+            return this.statusData[this.statusData.length - 1];
+        },
         lastCheckDate() {
-            const lastCheckTime = this.statusData[this.statusData.length - 1]?.time;
+            const lastCheckTime = this.lastData?.time;
 
             return formattedDateLocaleString(lastCheckTime,
                 {
@@ -70,6 +74,9 @@ export default {
                     minute: 'numeric',
                     timeZoneName: 'short'
                 });
+        },
+        lastTXId() {
+            return this.lastData?.new_tx_id;
         },
         notarizationCountCategories() {
             return this.notarizationData.map(data =>
@@ -104,7 +111,6 @@ export default {
         },
 
         async fetchNotarizationCount() {
-            console.log(process.env)
             const prefix = process.env.NODE_ENV === 'development' ? 'http://localhost:8091/' : '/';
             const { data } = await this.$axios.get(`${prefix}api/notarization/count`);
 

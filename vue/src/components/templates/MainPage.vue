@@ -7,7 +7,8 @@
                 <div class="main-page__content full-width">
                     <tampering-status
                         :tampering-message="tamperingMessage"
-                        :last-check-date="lastCheckDate">
+                        :last-check-date="lastCheckDate"
+                        :last-tx-id="lastTxId">
                     </tampering-status>
                     <tampering-history
                         :last-check-date="lastCheckDate"
@@ -72,6 +73,10 @@ export default {
         notarizationCountData: {
             type: Array,
             default: () => ([])
+        },
+        lastTxId: {
+            type: String,
+            default: ''
         }
     },
 }

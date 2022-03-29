@@ -18,7 +18,7 @@
                             v-show="historyData[index].show"
                             title="Proof Value"
                             :history-data="item">
-                    </hover-box>
+                        </hover-box>
                     </span>
                 </div>
                 <div class="tampering-history-wrapper__last-check d-flex justify-space-between align-center full-width col-12 mt-3">
