@@ -31,7 +31,7 @@ export default {
                 chart: {
                     zoom: { enabled: false },
                     toolbar: { show: false },
-                    height: '170px'
+                    height: '100px'
                 },
                 stroke: { curve: 'smooth', width: 2 },
                 tooltip: { enabled: false },
