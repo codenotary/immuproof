@@ -29,36 +29,16 @@ export default {
         chartOptions() {
             return {
                 chart: {
-                    zoom: {
-                        enabled: false
-                    },
-                    toolbar: {
-                        show: false
-                    },
+                    zoom: { enabled: false },
+                    toolbar: { show: false },
                     height: '170px'
                 },
-                stroke: {
-                    curve: 'smooth',
-                    width: 2
-                },
-                tooltip: {
-                    enabled: false
-                },
+                stroke: { curve: 'smooth', width: 2 },
+                tooltip: { enabled: false },
                 colors: ['#153954'],
-                xaxis: {
-                    categories: this.categories,
-                    labels: {
-                        show: false
-                    }
-                },
-                yaxis: {
-                    labels: {
-                        show: false
-                    }
-                },
-                dataLabels: {
-                    enabled: false
-                }
+                xaxis: { categories: this.categories, labels: { show: false } },
+                yaxis: { labels: { show: false } },
+                dataLabels: { enabled: false }
             };
         },
         series() {
@@ -70,7 +50,3 @@ export default {
     }
 };
 </script>
-
-<style scoped>
-
-</style>

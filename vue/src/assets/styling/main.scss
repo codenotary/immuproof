@@ -2,7 +2,6 @@
 @import 'typography';
 @import 'helpers';
 @import 'colors';
-@import '~carbon-components/scss/globals/scss/styles';
 
 /** Components **/
 @import './components/main-page';
@@ -12,3 +11,4 @@
 @import './components/tampering-status';
 @import './components/tampering-history';
 @import './components/notarizations';
+@import './components/hover-box';

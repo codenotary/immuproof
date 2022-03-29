@@ -11,7 +11,7 @@
                     </tampering-status>
                     <tampering-history
                         :last-check-date="lastCheckDate"
-                        :data="data">
+                        :history-data="data">
                     </tampering-history>
                     <notarizations
                         :first-check-date="firstCheckDate"

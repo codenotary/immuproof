@@ -1,7 +1,7 @@
 .tampering-history {
   .row {
     padding: 20px;
-    div {
+    > div {
       padding: 0;
     }
   }
@@ -30,22 +30,40 @@
       width: 10px;
       height: 25px;
       border-radius: 5px;
+      border: 1px solid $primary-base;
 
       &-normal {
         background-color: $primary;
+
+        &:hover {
+          background-color: $lighter;
+        }
       }
 
       &-error {
         background-color: $error;
+
+        &:hover {
+          background-color: $secondary-light;
+        }
       }
 
       &-unknown {
         background-color: $unknown;
+
+        &:hover {
+          background-color: $accent-light;
+        }
       }
     }
 
     &__last-check {
       grid-gap: 10px;
+
+      div {
+        color: $grey;
+        font-size: 12px;
+      }
 
       &-line {
         background-color: #C1C1C1;

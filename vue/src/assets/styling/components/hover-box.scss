@@ -1,0 +1,47 @@
+.hover-box {
+  background-color: $white;
+  box-shadow: 3px 3px 10px rgba(0, 0, 0, 0.15);
+  padding: 15px;
+  min-width: 650px;
+  position: relative;
+  z-index: 2;
+  border-radius: 30px;
+  top: 10px;
+
+  &__wrapper {
+    &-title {
+      width: 100%;
+      padding: 4px 0;
+      border: 1px solid $dark;
+      border-radius: 30px;
+      font-size: 12px;
+      color: $primary-dark;
+    }
+
+    &-time {
+      margin: 10px 0;
+      font-size: 12px;
+      color: $grey-dark;
+    }
+
+    &-information {
+      display: grid;
+      grid-template-columns: 110px 1fr;
+      justify-content: start;
+      align-items: center;
+      justify-items: start;
+      grid-row-gap: 10px;
+    }
+
+    &-subtitle {
+      text-align: left;
+      font-size: 12px;
+      color: $dark;
+    }
+
+    &-content {
+      color: $grey-dark;
+      font-size: 12px;
+    }
+  }
+}

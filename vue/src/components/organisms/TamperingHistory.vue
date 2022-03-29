@@ -8,11 +8,17 @@
                 </div>
                 <div class="tampering-history-wrapper__check col-12 flex justify-center mt-3">
                     <span
-                        v-for="(item, index) in data"
+                        v-for="(item, index) in historyData"
                         :key="index"
-                        :data-information="getInformation(item)"
                         class="tampering-history-wrapper__checks"
-                        :class="getClass(item)">
+                        :class="getClass(item)"
+                        @mouseover="showBox(index)"
+                        @mouseleave="hideBox(index)">
+                        <hover-box
+                            v-show="historyData[index].show"
+                            title="Proof Value"
+                            :history-data="item">
+                    </hover-box>
                     </span>
                 </div>
                 <div class="tampering-history-wrapper__last-check d-flex justify-space-between align-center full-width col-12 mt-3">
@@ -26,16 +32,24 @@
 </template>
 
 <script>
+import HoverBox from "@/components/organisms/HoverBox";
 export default {
+    components: { HoverBox },
     props: {
         lastCheckDate: {
             type: String,
             required: true
         },
-        data: {
+        historyData: {
             type: Array,
             default: () => ([])
         }
+    },
+
+    data() {
+       return {
+           boxShow: []
+       };
     },
 
     methods: {
@@ -49,11 +63,11 @@ export default {
                     return 'tampering-history-wrapper__checks-normal';
             }
         },
-        getInformation(item) {
-            const date = new Date(item.time);
-            const timeDetail = `${date.toDateString()} at ${date.toTimeString().split(' ')[0]}`
-
-            return `${timeDetail} ${item.status}`;
+        showBox(index) {
+            this.$set(this.historyData[index], 'show', true);
+        },
+        hideBox(index) {
+            this.$set(this.historyData[index], 'show', false);
         }
     }
 }
