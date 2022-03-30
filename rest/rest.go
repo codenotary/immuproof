@@ -50,6 +50,8 @@ type countHandler struct {
 }
 
 type webHandler struct {
+	address string
+	port    string
 }
 
 func NewRestServer(statusMap *status.StatusReportMap, port, address, webCertFile, webKeyFile string) *restServer {
@@ -63,7 +65,10 @@ func NewRestServer(statusMap *status.StatusReportMap, port, address, webCertFile
 		countHandler: &countHandler{
 			statusMap: statusMap,
 		},
-		webHandler: &webHandler{},
+		webHandler: &webHandler{
+			address: address,
+			port:    port,
+		},
 	}
 }
 
@@ -90,7 +95,7 @@ func (s *restServer) Serve() error {
 	}
 }
 
-func (*webHandler) ServeHTTP(w http.ResponseWriter, r *http.Request) {
+func (s *webHandler) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 	index, err := fs.Sub(content, "internal/embed")
 	if err != nil {
 		log.Fatalln(err)
@@ -98,12 +103,16 @@ func (*webHandler) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 
 	view := template.Must(template.ParseFS(index, "index.html"))
 
-	type approval struct {
-		Status bool
+	type env struct {
+		PORT, ADDRESS string
 	}
 
-	workflow := approval{Status: true}
-	err = view.ExecuteTemplate(w, "index.html", workflow)
+	e := env{
+		PORT:    s.port,
+		ADDRESS: s.address,
+	}
+
+	err = view.ExecuteTemplate(w, "index.html", e)
 	if err != nil {
 		log.Fatalln(err)
 	}
