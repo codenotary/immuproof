@@ -93,7 +93,8 @@ export default {
 
     methods: {
         async fetchStatus() {
-            const { data } = await this.$axios.get('http://localhost:8091/api/status');
+            const prefix = process.env.NODE_ENV === 'development' ? 'http://localhost:8091/' : '/';
+            const { data } = await this.$axios.get(`${prefix}api/notarization/count`);
 
             if (!data) {
                 return;
