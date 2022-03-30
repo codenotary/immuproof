@@ -19,6 +19,13 @@ import (
 	"github.com/adrg/xdg"
 )
 
+var version = ""
+
+var static = ""
+
+var gitCommit = ""
+var gitBranch = ""
+
 const AppName = "immuproof"
 const LedgerHeaderName = "lc-ledger"
 
@@ -30,3 +37,22 @@ var DefaultCNCPort = 443
 var DefaultCNCHost = "localhost"
 
 var DefaultAuditInterval, _ = time.ParseDuration("1h")
+
+// Version returns the current Immuproof version string
+func Version() string {
+	return version
+}
+
+// StaticBuild returns when the current Immuproof executable has been statically linked against libraries
+func StaticBuild() bool {
+	return static == "static"
+}
+
+// GitRevision returns the current CodeNotary Immuproof git revision string
+func GitRevision() string {
+	rev := gitCommit
+	if gitBranch != "" {
+		rev += " (" + gitBranch + ")"
+	}
+	return rev
+}
