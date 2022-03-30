@@ -23,15 +23,12 @@ export default {
     data() {
         return {
             statusData: [],
-            notarizationData: [],
-            port: null
+            notarizationData: []
         };
     },
 
     beforeCreate(){
         document.title = 'Immuproof';
-
-        this.port = '{{ PORT }}'
     },
 
     async beforeMount() {
