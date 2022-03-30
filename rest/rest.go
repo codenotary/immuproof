@@ -17,6 +17,7 @@ import (
 	"embed"
 	"encoding/json"
 	"fmt"
+	"html/template"
 	"io/fs"
 	"log"
 	"net/http"
@@ -31,11 +32,13 @@ import (
 var content embed.FS
 
 type restServer struct {
+	address       string
 	port          string
 	webCertFile   string
 	webKeyFile    string
 	statusHandler *statusHandler
 	countHandler  *countHandler
+	webHandler    *webHandler
 }
 
 type statusHandler struct {
@@ -46,7 +49,10 @@ type countHandler struct {
 	statusMap *status.StatusReportMap
 }
 
-func NewRestServer(statusMap *status.StatusReportMap, port, webCertFile, webKeyFile string) *restServer {
+type webHandler struct {
+}
+
+func NewRestServer(statusMap *status.StatusReportMap, port, address, webCertFile, webKeyFile string) *restServer {
 	return &restServer{
 		port:        port,
 		webCertFile: webCertFile,
@@ -57,6 +63,7 @@ func NewRestServer(statusMap *status.StatusReportMap, port, webCertFile, webKeyF
 		countHandler: &countHandler{
 			statusMap: statusMap,
 		},
+		webHandler: &webHandler{},
 	}
 }
 
@@ -70,12 +77,7 @@ func (s *restServer) Serve() error {
 
 	muxCors := cors.Default().Handler(mux)
 
-	index, err := fs.Sub(content, "internal/embed")
-	if err != nil {
-		return err
-	}
-
-	mux.Handle("/", http.FileServer(http.FS(index)))
+	mux.Handle("/", s.webHandler)
 	mux.Handle("/api/status", s.statusHandler)
 	mux.Handle("/api/notarization/count", s.countHandler)
 
@@ -85,6 +87,25 @@ func (s *restServer) Serve() error {
 	} else {
 		log.Print("REST server is using HTTP")
 		return http.ListenAndServe(fmt.Sprintf(":%s", s.port), muxCors)
+	}
+}
+
+func (*webHandler) ServeHTTP(w http.ResponseWriter, r *http.Request) {
+	index, err := fs.Sub(content, "internal/embed")
+	if err != nil {
+		log.Fatalln(err)
+	}
+
+	view := template.Must(template.ParseFS(index, "index.html"))
+
+	type approval struct {
+		Status bool
+	}
+
+	workflow := approval{Status: true}
+	err = view.ExecuteTemplate(w, "index.html", workflow)
+	if err != nil {
+		log.Fatalln(err)
 	}
 }
 
