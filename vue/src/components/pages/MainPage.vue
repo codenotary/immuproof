@@ -23,8 +23,15 @@ export default {
     data() {
         return {
             statusData: [],
-            notarizationData: []
+            notarizationData: [],
+            port: null
         };
+    },
+
+    beforeCreate(){
+        document.title = 'Immuproof';
+
+        this.port = '{{ PORT }}'
     },
 
     async beforeMount() {
@@ -94,7 +101,7 @@ export default {
     methods: {
         async fetchStatus() {
             const prefix = process.env.NODE_ENV === 'development' ? 'http://localhost:8091/' : '/';
-            const { data } = await this.$axios.get(`${prefix}api/notarization/count`);
+            const { data } = await this.$axios.get(`${prefix}api/status`);
 
             if (!data) {
                 return;
