@@ -1,7 +1,7 @@
 <template>
     <div class="tampering-status-wrapper full-width mt-10">
         <v-container>
-            <v-row justify="space-between" class="tampering-status-wrapper__content align-center">
+            <v-row class="tampering-status-wrapper__content align-center">
                 <div
                     class="tampering-status-wrapper__status d-flex align-center"
                     :class="getClassName">
