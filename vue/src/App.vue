@@ -15,7 +15,7 @@ export default {
     },
     beforeCreate() {
         let serverScript = document.createElement('script');
-        serverScript.innerHTML = 'window.portValue = "{{ .PORT }}"; window.address = "{{ .ADDRESS }}";'
+        serverScript.innerHTML = 'window.portValue = "{{{ .PORT }}}"; window.address = "{{{ .ADDRESS }}}";'
 
         document.body.appendChild(serverScript);
     }

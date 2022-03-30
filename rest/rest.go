@@ -17,10 +17,11 @@ import (
 	"embed"
 	"encoding/json"
 	"fmt"
-	"html/template"
 	"io/fs"
 	"log"
 	"net/http"
+	"path/filepath"
+	"text/template"
 	"time"
 
 	"github.com/rs/cors"
@@ -101,20 +102,25 @@ func (s *webHandler) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 		log.Fatalln(err)
 	}
 
-	view := template.Must(template.ParseFS(index, "index.html"))
+	if r.URL.Path == "/js/app.js" || r.URL.Path == "/js/app.js.map" {
+		file := filepath.Base(r.URL.Path)
+		view := template.Must(template.New("").Delims("{{{", "}}}").ParseFS(index, "js/"+file))
 
-	type env struct {
-		PORT, ADDRESS string
-	}
+		type env struct {
+			PORT, ADDRESS string
+		}
 
-	e := env{
-		PORT:    s.port,
-		ADDRESS: s.address,
-	}
+		e := env{
+			PORT:    s.port,
+			ADDRESS: s.address,
+		}
 
-	err = view.ExecuteTemplate(w, "index.html", e)
-	if err != nil {
-		log.Fatalln(err)
+		err = view.ExecuteTemplate(w, file, e)
+		if err != nil {
+			log.Fatalln(err)
+		}
+	} else {
+		http.FileServer(http.FS(index)).ServeHTTP(w, r)
 	}
 }
 
