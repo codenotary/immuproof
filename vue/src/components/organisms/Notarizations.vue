@@ -9,7 +9,7 @@
                 <apex-chart
                     class="mt-3"
                     type="line"
-                    :categories="notarizationCountCategories"
+                    :categories="notarizationCategoriesCount"
                     :data="notarizationCountData">
                 </apex-chart>
             </v-row>
@@ -18,29 +18,17 @@
 </template>
 
 <script>
-import ApexChart from '@/components/organisms/ApexChart';
+import ApexChart from '@/components/organisms/ApexChart.vue';
 
 export default {
     components: {
         ApexChart
     },
     props: {
-        notarizations: {
-            type: Array,
-            default: () => ([])
-        },
-        notarizationCountCategories: {
-            type: Array,
-            default: () => ([])
-        },
-        notarizationCountData: {
-            type: Array,
-            default: () => ([])
-        },
-        firstCheckDate: {
-            type: String,
-            required: true
-        }
+        notarizations: { type: Array, default: () => ([]) },
+        notarizationCategoriesCount: { type: Array, default: () => ([]) },
+        notarizationCountData: { type: Array, default: () => ([]) },
+        firstCheckDate: { type: String, required: true }
     }
 }
 </script>

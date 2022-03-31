@@ -1,16 +1,16 @@
 <template>
-    <div class="tampering-status-wrapper full-width mt-10">
+    <div class="tampering-status full-width mt-10">
         <v-container>
-            <v-row class="tampering-status-wrapper__content align-center">
+            <v-row class="tampering-status__content align-center">
                 <div
-                    class="tampering-status-wrapper__status d-flex align-center"
+                    class="tampering-status__status d-flex align-center"
                     :class="getClassName">
                     <p class="ma-0 ml-3">{{ tamperingMessage }}</p>
                 </div>
-                <div class="tampering-status-wrapper__last-check">
+                <div class="tampering-status__last-check">
                     <p class="font-weight-bold text-left">Last Check</p>
-                    <p class="tampering-status-wrapper__last-check-date text-left">{{ lastCheckDate }}</p>
-                    <p class="tampering-status-wrapper__last-check-id text-left">
+                    <p class="tampering-status__last-check-date text-left">{{ lastCheckDate }}</p>
+                    <p class="tampering-status__last-check-id text-left">
                         <span>TxID</span>
                         {{ lastTxId }}
                     </p>
@@ -41,11 +41,11 @@ export default {
         getClassName() {
             switch (this.tamperingMessage) {
                 case 'Status Unknown':
-                    return 'tampering-status-wrapper__status-unknown';
+                    return 'tampering-status__status-unknown';
                 case 'Tampering Detected':
-                    return 'tampering-status-wrapper__status-error';
+                    return 'tampering-status__status-error';
                 default:
-                    return 'tampering-status-wrapper__status-normal';
+                    return 'tampering-status__status-normal';
             }
         }
     }

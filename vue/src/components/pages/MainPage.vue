@@ -7,20 +7,22 @@
         :notarizations="notarizationData"
         :data="statusData"
         :logo-url="logoUrl"
-        :notarization-count-categories="notarizationCountCategories"
+        :notarization-categories-count="notarizationCategoriesCount"
         :notarization-count-data="notarizationCountData">
     </main-page>
 </template>
 
 <script>
-import MainPage from '../templates/MainPage';
 import { formattedDateLocaleString } from '@/helpers/helpers';
+import MainPage from '@/components/templates/MainPage.vue';
+
+const MAX_STATUS_NUMBER = 45;
+const MAX_NOTARIZATION_NUMBER = 30;
 
 export default {
     components: {
         MainPage
     },
-
     data() {
         return {
             statusData: [],
@@ -30,11 +32,9 @@ export default {
             address: ''
         };
     },
-
-    beforeCreate(){
+    beforeCreate() {
         document.title = 'Immuproof';
     },
-
     async beforeMount() {
         this.checkLogoUrl();
 
@@ -43,7 +43,6 @@ export default {
             this.fetchNotarizationCount()
         ]);
     },
-
     computed: {
         tampering() {
             if (this.statusData.some(item => item.status === 'CORRUPTED_DATA')) {
@@ -88,7 +87,7 @@ export default {
         lastTXId() {
             return this.lastData?.new_tx_id;
         },
-        notarizationCountCategories() {
+        notarizationCategoriesCount() {
             return this.notarizationData.map(data =>
                 formattedDateLocaleString(
                     data.collectTime,
@@ -100,7 +99,6 @@ export default {
             return this.notarizationData.map(data => data.newNotarizationsCount);
         }
     },
-
     methods: {
         async fetchStatus() {
             const prefix = this.getAddressPrefix();
@@ -112,15 +110,14 @@ export default {
 
             const hash = Object.keys(data)[0];
 
-            if (data[hash].length > 45) {
-                this.statusData = data[hash].slice(-45);
+            if (data[hash].length > MAX_STATUS_NUMBER) {
+                this.statusData = data[hash].slice(-MAX_STATUS_NUMBER);
 
                 return;
             }
 
             this.statusData = data[hash];
         },
-
         async fetchNotarizationCount() {
             const prefix = this.getAddressPrefix();
             const { data } = await this.$axios.get(`${prefix}/api/notarization/count`);
@@ -131,8 +128,8 @@ export default {
 
             const hash = Object.keys(data)[0];
 
-            if (data[hash].length > 30) {
-                this.notarizationData = data[hash].slice(-30);
+            if (data[hash].length > MAX_NOTARIZATION_NUMBER) {
+                this.notarizationData = data[hash].slice(-MAX_NOTARIZATION_NUMBER);
 
                 return;
             }

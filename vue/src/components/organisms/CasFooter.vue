@@ -21,8 +21,8 @@
 </template>
 
 <script>
-import ButtonSocial from '@/components/atoms/ButtonSocial';
-import ButtonSecured from '@/components/atoms/ButtonSecured';
+import ButtonSocial from '@/components/atoms/ButtonSocial.vue';
+import ButtonSecured from '@/components/atoms/ButtonSecured.vue';
 
 export default {
     components: {

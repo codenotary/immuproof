@@ -4,6 +4,7 @@
   left: 0;
   padding: 25px;
   display: flex;
+  z-index: 2;
   flex-direction: column;
 
   &__buttons {

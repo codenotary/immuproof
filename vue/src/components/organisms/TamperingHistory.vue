@@ -12,8 +12,8 @@
                         :key="index"
                         class="tampering-history-wrapper__checks"
                         :class="getClass(item)"
-                        @mouseover="showBox(index)"
-                        @mouseleave="hideBox(index)">
+                        @mouseover="toggleBox(index, true)"
+                        @mouseleave="toggleBox(index, false)">
                         <hover-box
                             v-show="historyData[index].show"
                             title="Proof Value"
@@ -32,26 +32,14 @@
 </template>
 
 <script>
-import HoverBox from "@/components/organisms/HoverBox";
+import HoverBox from '@/components/organisms/HoverBox.vue';
+
 export default {
     components: { HoverBox },
     props: {
-        lastCheckDate: {
-            type: String,
-            required: true
-        },
-        historyData: {
-            type: Array,
-            default: () => ([])
-        }
+        lastCheckDate: { type: String, required: true },
+        historyData: { type: Array, default: () => ([]) }
     },
-
-    data() {
-       return {
-           boxShow: []
-       };
-    },
-
     methods: {
         getClass({ status }) {
             switch (status) {
@@ -63,11 +51,8 @@ export default {
                     return 'tampering-history-wrapper__checks-normal';
             }
         },
-        showBox(index) {
-            this.$set(this.historyData[index], 'show', true);
-        },
-        hideBox(index) {
-            this.$set(this.historyData[index], 'show', false);
+        toggleBox(index, show) {
+            this.$set(this.historyData[index], 'show', show);
         }
     }
 }

@@ -24,7 +24,7 @@
 </template>
 
 <script>
-import ButtonPill from '@/components/atoms/ButtonPill';
+import ButtonPill from '@/components/atoms/ButtonPill.vue';
 
 export default {
     components: {

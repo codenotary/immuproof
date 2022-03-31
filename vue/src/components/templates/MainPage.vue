@@ -17,7 +17,7 @@
                     <notarizations
                         :first-check-date="firstCheckDate"
                         :notarizations="notarizations"
-                        :notarization-count-categories="notarizationCountCategories"
+                        :notarization-categories-count="notarizationCategoriesCount"
                         :notarization-count-data="notarizationCountData">
                     </notarizations>
                 </div>
@@ -28,12 +28,12 @@
 </template>
 
 <script>
-import FloatingMenu from '@/components/organisms/FloatingMenu';
-import CasHeader from '@/components/organisms/CasHeader';
-import TamperingStatus from '@/components/organisms/TamperingStatus';
-import TamperingHistory from '@/components/organisms/TamperingHistory';
-import Notarizations from '@/components/organisms/Notarizations';
-import CasFooter from '@/components/organisms/CasFooter';
+import FloatingMenu from '@/components/organisms/FloatingMenu.vue';
+import CasHeader from '@/components/organisms/CasHeader.vue';
+import TamperingStatus from '@/components/organisms/TamperingStatus.vue';
+import TamperingHistory from '@/components/organisms/TamperingHistory.vue';
+import Notarizations from '@/components/organisms/Notarizations.vue';
+import CasFooter from '@/components/organisms/CasFooter.vue';
 
 export default {
     components: {
@@ -44,44 +44,16 @@ export default {
         FloatingMenu,
         TamperingHistory
     },
-
     props: {
-        tamperingMessage: {
-            type: String,
-            required: true
-        },
-        lastCheckDate: {
-            type: String,
-            required: true
-        },
-        firstCheckDate: {
-            type: String,
-            required: true
-        },
-        data: {
-            type: Array,
-            default: () => ([])
-        },
-        notarizations: {
-            type: Array,
-            default: () => ([])
-        },
-        notarizationCountCategories: {
-            type: Array,
-            default: () => ([])
-        },
-        notarizationCountData: {
-            type: Array,
-            default: () => ([])
-        },
-        lastTxId: {
-            type: Number,
-            default: 0
-        },
-        logoUrl: {
-            type: String,
-            default: ''
-        }
-    },
+        tamperingMessage: { type: String, required: true },
+        lastCheckDate: { type: String, required: true },
+        firstCheckDate: { type: String, required: true },
+        data: { type: Array, default: () => ([]) },
+        notarizations: { type: Array, default: () => ([]) },
+        notarizationCategoriesCount: { type: Array, default: () => ([]) },
+        notarizationCountData: { type: Array, default: () => ([]) },
+        lastTxId: { type: Number, default: 0 },
+        logoUrl: { type: String, default: '' }
+    }
 }
 </script>

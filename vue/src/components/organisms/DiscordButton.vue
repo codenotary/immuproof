@@ -26,9 +26,7 @@ export default {
             const { data } = await this.$axios.get('https://discordapp.com/api/v9/invites/4wuHaewsxp?with_counts=true');
 
             if (data) {
-                const { approximate_member_count } = data;
-
-                this.count = approximate_member_count || '';
+                this.count = data.approximate_member_count || '';
             }
         }
         catch (err) {

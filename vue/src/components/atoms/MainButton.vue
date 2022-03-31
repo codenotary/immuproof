@@ -29,30 +29,12 @@
 <script>
 export default {
     props: {
-        link: {
-            type: String,
-            default: ''
-        },
-        outlined: {
-            type: Boolean,
-            default: true
-        },
-        depressed: {
-            type: Boolean,
-            default: true
-        },
-        divider: {
-            type: Boolean,
-            default: false
-        },
-        color: {
-            type: String,
-            default: '#ffffff'
-        },
-        icon: {
-            type: String,
-            default: ''
-        }
+        link: { type: String, default: '' },
+        outlined: { type: Boolean, default: true },
+        depressed: { type: Boolean, default: true },
+        divider: { type: Boolean, default: false },
+        color: { type: String, default: '#ffffff' },
+        icon: { type: String, default: '' }
     }
 }
 </script>
