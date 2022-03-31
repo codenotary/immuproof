@@ -97,8 +97,8 @@ export default {
 
     methods: {
         async fetchStatus() {
-            const prefix = process.env.NODE_ENV === 'development' ? 'http://localhost:8091/' : '/';
-            const { data } = await this.$axios.get(`${prefix}api/status`);
+            const prefix = this.getAdressPrefix();
+            const { data } = await this.$axios.get(`${prefix}/api/status`);
 
             if (!data) {
                 return;
@@ -116,8 +116,8 @@ export default {
         },
 
         async fetchNotarizationCount() {
-            const prefix = process.env.NODE_ENV === 'development' ? 'http://localhost:8091/' : '/';
-            const { data } = await this.$axios.get(`${prefix}api/notarization/count`);
+            const prefix = this.getAdressPrefix();
+            const { data } = await this.$axios.get(`${prefix}/api/notarization/count`);
 
             if (!data) {
                 return;
@@ -132,6 +132,25 @@ export default {
             }
 
             this.notarizationData = data[hash];
+        },
+        getAdressPrefix() {
+            if (process.env.NODE_ENV === 'development') {
+                const { PORT = '8091' } = process.env;
+                return `http://localhost:${PORT}/`;
+            }
+
+            let address = '';
+            let port = '';
+
+            if (address && address.includes('{{')) {
+                address = 'localhost';
+            }
+
+            if (port && port.includes('{{')) {
+                address = '8091';
+            }
+
+            return `${address}:${port}`;
         }
     }
 }
