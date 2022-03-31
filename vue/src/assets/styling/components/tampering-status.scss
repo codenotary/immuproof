@@ -26,21 +26,21 @@
 
     &-error {
       p {
-        color: $error;
+        color: $accent;
       }
 
       &::before {
-        background-color: $error;
+        background-color: $accent;
       }
     }
 
     &-unknown {
       p {
-        color: $unknown;
+        color: $secondary;
       }
 
       &::before {
-        background-color: $unknown;
+        background-color: $secondary;
       }
     }
   }

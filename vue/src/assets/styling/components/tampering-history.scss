@@ -41,7 +41,7 @@
       }
 
       &-error {
-        background-color: $error;
+        background-color: $accent;
 
         &:hover {
           background-color: $secondary-light;
@@ -49,7 +49,7 @@
       }
 
       &-unknown {
-        background-color: $unknown;
+        background-color: $secondary;
 
         &:hover {
           background-color: $accent-light;

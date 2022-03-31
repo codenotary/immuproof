@@ -24,7 +24,9 @@ export default {
 </script>
 
 <style lang="scss">
+@import "assets/styling/colors";
+
 #app {
-    background-color: #FAF9F8;
+    background-color: $light-base;
 }
 </style>
