@@ -41,6 +41,10 @@ clean/dist:
 clean: clean/dist
 	rm -f ./vcn
 
+.PHONY: docker
+docker:
+	docker build -t immuproof .
+
 .PHONY: CHANGELOG.md
 CHANGELOG.md:
 	git-chglog -o CHANGELOG.md
