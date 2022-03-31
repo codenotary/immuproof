@@ -6,6 +6,7 @@
         :first-check-date="firstCheckDate"
         :notarizations="notarizationData"
         :data="statusData"
+        :logo-url="logoUrl"
         :notarization-count-categories="notarizationCountCategories"
         :notarization-count-data="notarizationCountData">
     </main-page>
@@ -23,7 +24,10 @@ export default {
     data() {
         return {
             statusData: [],
-            notarizationData: []
+            notarizationData: [],
+            logoUrl: '',
+            portValue: '',
+            address: ''
         };
     },
 
@@ -32,6 +36,8 @@ export default {
     },
 
     async beforeMount() {
+        this.checkLogoUrl();
+
         await Promise.all([
             this.fetchStatus(),
             this.fetchNotarizationCount()
@@ -97,7 +103,7 @@ export default {
 
     methods: {
         async fetchStatus() {
-            const prefix = this.getAdressPrefix();
+            const prefix = this.getAddressPrefix();
             const { data } = await this.$axios.get(`${prefix}/api/status`);
 
             if (!data) {
@@ -116,7 +122,7 @@ export default {
         },
 
         async fetchNotarizationCount() {
-            const prefix = this.getAdressPrefix();
+            const prefix = this.getAddressPrefix();
             const { data } = await this.$axios.get(`${prefix}/api/notarization/count`);
 
             if (!data) {
@@ -133,24 +139,23 @@ export default {
 
             this.notarizationData = data[hash];
         },
-        getAdressPrefix() {
+        getAddressPrefix() {
             if (process.env.NODE_ENV === 'development') {
                 const { PORT = '8091' } = process.env;
-                return `http://localhost:${PORT}/`;
+
+                return `http://localhost:${PORT}`;
             }
 
-            let address = '';
-            let port = '';
+            return '';
+        },
+        checkLogoUrl() {
+            if (hostedByLogoUrl && hostedByLogoUrl.includes('{{')) {
+                this.logoUrl = '';
 
-            if (address && address.includes('{{')) {
-                address = 'localhost';
+                return;
             }
 
-            if (port && port.includes('{{')) {
-                address = '8091';
-            }
-
-            return `${address}:${port}`;
+            this.logoUrl = hostedByLogoUrl;
         }
     }
 }

@@ -3,7 +3,7 @@
         <floating-menu></floating-menu>
         <v-container>
             <v-row class="text-center">
-                <cas-header></cas-header>
+                <cas-header :logo-url="logoUrl"></cas-header>
                 <div class="main-page__content full-width">
                     <tampering-status
                         :tampering-message="tamperingMessage"
@@ -77,6 +77,10 @@ export default {
         lastTxId: {
             type: Number,
             default: 0
+        },
+        logoUrl: {
+            type: String,
+            default: ''
         }
     },
 }

@@ -9,7 +9,8 @@ module.exports = {
   ],
   globals: {
     'address': true,
-    'portValue': true
+    'portValue': true,
+    'hostedByLogoUrl': true
   },
   parserOptions: {
     parser: 'babel-eslint'

@@ -1,15 +1,45 @@
 # Immuproof UI
 
-## Project setup
+
+Install dependencies
+
+```shell
+npm install 
 ```
-npm install
+---
+
+
+Build project
+```shell
+npm run build 
+```
+---
+
+Build BE to compile files
+```
+go build -o immuproof main.go
 ```
 
-### Make sure that server running in the root project please see [read me](https://github.com/codenotary/immuproof/blob/master/README.md)
+---
 
-After running server UI is ready for local development.
+Run with immuproof
 
-### Compiles and hot-reloads for development
+```shell
+./immuproof serve --api-key {apiKey} --port 443  --host admin.cas-staging.codenotary.com --skip-tls-verify --audit-interval 1h --state-history-size 720 
 ```
+
+
+---
+##For working locally with Vue;
+
+First run backend for API connection
+
+Without BE running, FE will not display datas!
+
+```shell
+./immuproof serve --api-key {apiKey} --port 443  --host admin.cas-staging.codenotary.com --skip-tls-verify --audit-interval 1h --state-history-size 720 
+```
+
+```shell
 npm run serve
 ```
