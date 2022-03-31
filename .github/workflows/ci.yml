@@ -3,8 +3,9 @@ name: Test
 on:
   push:
     branches:
-      - feature/ci
+      - master
   pull_request:
+
 jobs:
   cd:
     name: Test
