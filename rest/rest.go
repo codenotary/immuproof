@@ -51,11 +51,12 @@ type countHandler struct {
 }
 
 type webHandler struct {
-	address string
-	port    string
+	address      string
+	port         string
+	hostedByLink string
 }
 
-func NewRestServer(statusMap *status.StatusReportMap, port, address, webCertFile, webKeyFile string) *restServer {
+func NewRestServer(statusMap *status.StatusReportMap, port, address, webCertFile, webKeyFile, webHostedByLink string) *restServer {
 	return &restServer{
 		port:        port,
 		webCertFile: webCertFile,
@@ -67,8 +68,9 @@ func NewRestServer(statusMap *status.StatusReportMap, port, address, webCertFile
 			statusMap: statusMap,
 		},
 		webHandler: &webHandler{
-			address: address,
-			port:    port,
+			address:      address,
+			port:         port,
+			hostedByLink: webHostedByLink,
 		},
 	}
 }
@@ -107,12 +109,13 @@ func (s *webHandler) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 		view := template.Must(template.New("").Delims("{{{", "}}}").ParseFS(index, "js/"+file))
 
 		type env struct {
-			PORT, ADDRESS string
+			PORT, ADDRESS, HOSTED_BY_LINK string
 		}
 
 		e := env{
-			PORT:    s.port,
-			ADDRESS: s.address,
+			PORT:           s.port,
+			ADDRESS:        s.address,
+			HOSTED_BY_LINK: s.hostedByLink,
 		}
 
 		err = view.ExecuteTemplate(w, file, e)
