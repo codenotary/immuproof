@@ -51,7 +51,7 @@ Environment variables:
   IMMUPROOF_WEB_ADDRESS=
   IMMUPROOF_WEB_KEY_FILE=
   IMMUPROOF_WEB_CERT_FILE=
-  IMMUPROOF_WEB_HOSTED_BY_LINK=
+  IMMUPROOF_WEB_HOSTED_BY_LOGO_URL=
 
 
 When immuproof is launched it fetches a fresh status from CodeNotaryCloud or CAS backed by immudb and it verifies the integrity compared to an older one stored locally.

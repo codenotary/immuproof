@@ -57,7 +57,7 @@ func init() {
 	serveCmd.Flags().String("web-address", "localhost", "rest server address")
 	serveCmd.Flags().String("web-cert-file", "", "certificate file absolute path")
 	serveCmd.Flags().String("web-key-file", "", "key file absolute path")
-	serveCmd.Flags().String("web-hosted-by-link", "", "hosted by logo link")
+	serveCmd.Flags().String("web-hosted-by-logo-url", "", "URL to hosted by logo")
 	serveCmd.Flags().Duration("audit-interval", meta.DefaultAuditInterval, "interval between audit runs")
 	serveCmd.Flags().String("audit-state-folder", meta.DefaultStateFolder, "folder to store immudb immutable state")
 	serveCmd.Flags().Int("state-history-size", 90, "max size of the history of immutable states.")
@@ -95,7 +95,7 @@ func ServeAndAudit() error {
 		viper.GetString("web-address"),
 		viper.GetString("web-cert-file"),
 		viper.GetString("web-key-file"),
-		viper.GetString("web-hosted-by-link"))
+		viper.GetString("web-hosted-by-logo-url"))
 
 	go func() {
 		cobra.CheckErr(restServer.Serve())
