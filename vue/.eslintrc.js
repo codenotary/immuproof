@@ -7,6 +7,10 @@ module.exports = {
     'plugin:vue/essential',
     'eslint:recommended'
   ],
+  globals: {
+    'address': true,
+    'portValue': true
+  },
   parserOptions: {
     parser: 'babel-eslint'
   },
