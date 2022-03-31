@@ -7,6 +7,9 @@ The idea is to check if previous state is "included" in the new one.
 A REST service is also provided to allow the user to query the status of the audit.
 A simple web UI is also provided to visualize data.
 
+## Golang version
+Currently supported golang version is `1.17`
+
 ## Build
 
 ```shell
