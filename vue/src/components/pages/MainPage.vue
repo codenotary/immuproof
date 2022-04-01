@@ -146,7 +146,7 @@ export default {
             return '';
         },
         checkLogoUrl() {
-            if (hostedByLogoUrl && hostedByLogoUrl.includes('{{')) {
+            if (hostedByLogoUrl?.includes('{{')) {
                 this.logoUrl = '';
 
                 return;
