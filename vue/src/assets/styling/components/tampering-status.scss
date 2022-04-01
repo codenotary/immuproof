@@ -1,0 +1,89 @@
+.tampering-status {
+  &__content {
+    justify-content: space-between;
+  }
+
+  &__status {
+    box-shadow: 3px 3px 10px rgba(0, 0, 0, 0.15);
+    padding: 15px 30px;
+    border-radius: 30px;
+    background-color: $white;
+
+    p {
+      color: $primary;
+      font-weight: bold;
+      text-transform: uppercase;
+    }
+
+    &::before {
+      content: '';
+      width: 10px;
+      height: 10px;
+      border-radius: 50%;
+      background-color: $primary;
+      display: block;
+    }
+
+    &-error {
+      p {
+        color: $accent;
+      }
+
+      &::before {
+        background-color: $accent;
+      }
+    }
+
+    &-unknown {
+      p {
+        color: $secondary;
+      }
+
+      &::before {
+        background-color: $secondary;
+      }
+    }
+  }
+
+  &__last-check {
+    p {
+      margin-bottom: 10px;
+
+      &:first-of-type {
+        color: $primary-dark;
+      }
+
+      &:last-of-type {
+        margin: 0;
+      }
+    }
+
+    &-date {
+      color: $grey-dark;
+
+      span {
+        color: $grey-dark;
+      }
+    }
+
+    &-id {
+      color: $grey-dark;
+    }
+  }
+
+  @media only screen and (max-width: 1100px) {
+    &__last-check {
+      margin-top: 16px;
+    }
+  }
+
+  @media only screen and (max-width: 586px) {
+    &__content {
+      justify-content: center;
+    }
+
+    &__last-check {
+      margin-top: 16px;
+    }
+  }
+}

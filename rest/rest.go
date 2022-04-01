@@ -20,6 +20,8 @@ import (
 	"io/fs"
 	"log"
 	"net/http"
+	"path/filepath"
+	"text/template"
 	"time"
 
 	"github.com/rs/cors"
@@ -31,11 +33,13 @@ import (
 var content embed.FS
 
 type restServer struct {
+	address       string
 	port          string
 	webCertFile   string
 	webKeyFile    string
 	statusHandler *statusHandler
 	countHandler  *countHandler
+	webHandler    *webHandler
 }
 
 type statusHandler struct {
@@ -46,7 +50,13 @@ type countHandler struct {
 	statusMap *status.StatusReportMap
 }
 
-func NewRestServer(statusMap *status.StatusReportMap, port, webCertFile, webKeyFile string) *restServer {
+type webHandler struct {
+	address         string
+	port            string
+	hostedByLogoURL string
+}
+
+func NewRestServer(statusMap *status.StatusReportMap, port, address, webCertFile, webKeyFile, webHostedByLogoURL string) *restServer {
 	return &restServer{
 		port:        port,
 		webCertFile: webCertFile,
@@ -56,6 +66,11 @@ func NewRestServer(statusMap *status.StatusReportMap, port, webCertFile, webKeyF
 		},
 		countHandler: &countHandler{
 			statusMap: statusMap,
+		},
+		webHandler: &webHandler{
+			address:         address,
+			port:            port,
+			hostedByLogoURL: webHostedByLogoURL,
 		},
 	}
 }
@@ -70,12 +85,7 @@ func (s *restServer) Serve() error {
 
 	muxCors := cors.Default().Handler(mux)
 
-	index, err := fs.Sub(content, "internal/embed")
-	if err != nil {
-		return err
-	}
-
-	mux.Handle("/", http.FileServer(http.FS(index)))
+	mux.Handle("/", s.webHandler)
 	mux.Handle("/api/status", s.statusHandler)
 	mux.Handle("/api/notarization/count", s.countHandler)
 
@@ -85,6 +95,35 @@ func (s *restServer) Serve() error {
 	} else {
 		log.Print("REST server is using HTTP")
 		return http.ListenAndServe(fmt.Sprintf(":%s", s.port), muxCors)
+	}
+}
+
+func (s *webHandler) ServeHTTP(w http.ResponseWriter, r *http.Request) {
+	index, err := fs.Sub(content, "internal/embed")
+	if err != nil {
+		log.Fatalln(err)
+	}
+
+	if r.URL.Path == "/js/app.js" || r.URL.Path == "/js/app.js.map" {
+		file := filepath.Base(r.URL.Path)
+		view := template.Must(template.New("").Delims("{{{", "}}}").ParseFS(index, "js/"+file))
+
+		type env struct {
+			PORT, ADDRESS, HOSTED_BY_LOGO_URL string
+		}
+
+		e := env{
+			PORT:               s.port,
+			ADDRESS:            s.address,
+			HOSTED_BY_LOGO_URL: s.hostedByLogoURL,
+		}
+
+		err = view.ExecuteTemplate(w, file, e)
+		if err != nil {
+			log.Fatalln(err)
+		}
+	} else {
+		http.FileServer(http.FS(index)).ServeHTTP(w, r)
 	}
 }
 

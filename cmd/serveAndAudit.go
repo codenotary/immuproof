@@ -54,8 +54,10 @@ immuproof serve --api-key {your api-key} --port 443 --host admin.cas.codenotary.
 
 func init() {
 	serveCmd.Flags().String("web-port", "8091", "rest server port")
+	serveCmd.Flags().String("web-address", "localhost", "rest server address")
 	serveCmd.Flags().String("web-cert-file", "", "certificate file absolute path")
 	serveCmd.Flags().String("web-key-file", "", "key file absolute path")
+	serveCmd.Flags().String("web-hosted-by-logo-url", "", "URL to hosted by logo")
 	serveCmd.Flags().Duration("audit-interval", meta.DefaultAuditInterval, "interval between audit runs")
 	serveCmd.Flags().String("audit-state-folder", meta.DefaultStateFolder, "folder to store immudb immutable state")
 	serveCmd.Flags().Int("state-history-size", 90, "max size of the history of immutable states.")
@@ -88,7 +90,12 @@ func ServeAndAudit() error {
 	for _, a := range aks {
 		simpleAuditor.AddApiKey(a)
 	}
-	restServer := rest.NewRestServer(statusReportMap, viper.GetString("web-port"), viper.GetString("web-cert-file"), viper.GetString("web-key-file"))
+	restServer := rest.NewRestServer(statusReportMap,
+		viper.GetString("web-port"),
+		viper.GetString("web-address"),
+		viper.GetString("web-cert-file"),
+		viper.GetString("web-key-file"),
+		viper.GetString("web-hosted-by-logo-url"))
 
 	go func() {
 		cobra.CheckErr(restServer.Serve())

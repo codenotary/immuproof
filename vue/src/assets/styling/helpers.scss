@@ -1,0 +1,31 @@
+.full-width {
+  width: 100%;
+}
+
+[data-information]:hover:before, [data-information]:hover:after {
+  opacity: 1;
+  transition: none;
+  visibility: visible;
+}
+
+[data-information]:after {
+  content: attr(data-information);
+  width: max-content;
+  max-width: 210px;
+  opacity: 0;
+  visibility: hidden;
+  position: absolute;
+  top: calc(110% + 7px);
+  font-size: 13px;
+  line-height: 16px;
+  border: 1px solid #2C3546;
+  border-radius: 4px;
+  box-shadow: 0 4px 12px rgba(44,53,70,0.15);
+  background-color: #2C3546;
+  color: #fff;
+  padding: 8px 16px;
+  z-index: 5;
+  transition: none;
+  word-break: break-word;
+  white-space: initial;
+}

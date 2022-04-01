@@ -58,7 +58,9 @@ immuproof serve --api-key {your api key} --port 443 --host admin.cas.codenotary.
   IMMUPROOF_STATE_HISTORY_SIZE=
   IMMUPROOF_STATE_HISTORY_FILE=
   IMMUPROOF_WEB_PORT=
-
+  IMMUPROOF_WEB_ADDRESS=
+  IMMUPROOF_WEB_KEY_FILE=
+  IMMUPROOF_WEB_CERT_FILE=
 ```
 
 ## Others serve options
@@ -79,6 +81,9 @@ Flags:
   -h, --help                        help for serve
   --state-history-file string   absolute file path to store history of immutable states. (JSON format) (default "/home/falce/.local/state/immuproof/state-history.json")
   --state-history-size int      max size of the history of immutable states. (default 90)
+  --web-address string          rest server address (default "localhost")
+  --web-cert-file string        certificate file absolute path
+  --web-key-file string         key file absolute path
   --web-port string             rest server port (default "8091")
 
 Global Flags:
