@@ -19,11 +19,12 @@ TEST_FLAGS ?= -v -race
 
 .PHONY: immuproof
 immuproof:
-	cd vue && $(NPM) install && $(NPM) run build && cd .. && $(GO) build -ldflags '${LDFLAGS} -X github.com/codenotary/immuproof/meta.version=v${VERSION}-dev' -o immuproof ./main.go
+cd vue && $(NPM) install && $(NPM) run build && cd .. && $(GO) build -ldflags '${LDFLAGS} -X github.com/codenotary/immuproof/meta.version=v${VERSION}-dev' -o immuproof ./main.go
 
 .PHONY: immuproof-release
 immuproof-release:
 	cd vue && $(NPM) install && $(NPM) run build && cd .. && $(GO) build -ldflags '${LDFLAGS}' -o immuproof ./main.go
+	$(GO) build -ldflags '${LDFLAGS} -X github.com/codenotary/immuproof/meta.version=v${VERSION}-dev' -o immuproof ./main.go
 
 .PHONY: test
 test:
@@ -41,6 +42,10 @@ clean/dist:
 .PHONY: clean
 clean: clean/dist
 	rm -f ./vcn
+
+.PHONY: docker
+docker:
+	docker build -t immuproof .
 
 .PHONY: CHANGELOG.md
 CHANGELOG.md:
