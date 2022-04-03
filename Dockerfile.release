@@ -1,0 +1,9 @@
+FROM debian:bullseye-slim
+LABEL org.opencontainers.image.authors="CodeNotary, Inc. <info@codenotary.com>"
+
+# Note: this requires running `make immuproof-release` before building the image
+COPY immuproof /usr/sbin/immuproof
+
+EXPOSE 8091
+
+ENTRYPOINT ["/usr/sbin/immuproof", "serve"]
