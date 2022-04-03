@@ -44,3 +44,18 @@ jobs:
           asset_path: ./immuproof
           asset_name: immuproof
           asset_content_type: application/x-executable
+      - name: Login to GitHub Container Registry
+        uses: docker/login-action@v1
+        with:
+          registry: ghcr.io
+          username: ${{ github.repository_owner }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+      - name: Docker Build and Push
+        uses: docker/build-push-action@v2
+        with:
+          context: .
+          platforms: linux/amd64
+          push: true
+          tags: |
+            ghcr.io/codenotary/immuproof:${{ github.ref_name }}
+            ghcr.io/codenotary/immuproof:latest
