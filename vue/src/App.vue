@@ -16,7 +16,8 @@ export default {
     beforeCreate() {
         // Creates script tag that contains values to be populated by BE
         let serverScript = document.createElement('script');
-        serverScript.innerHTML = 'window.portValue = "{{{ .PORT }}}"; window.address = "{{{ .ADDRESS }}}"; window.hostedByLogoUrl = "{{{ .HOSTED_BY_LOGO_URL }}}";'
+        serverScript.innerHTML = 'window.portValue = "{{{ .PORT }}}"; window.address = "{{{ .ADDRESS }}}"; \
+        window.hostedByLogoUrl = "{{{ .HOSTED_BY_LOGO_URL }}}"; window.hostedByText = "{{{ .HOSTED_BY_TEXT }}}"; window.titleText = "{{{ .TITLE_TEXT }}}";'
 
         document.body.appendChild(serverScript);
     }

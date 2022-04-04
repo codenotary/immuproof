@@ -54,9 +54,11 @@ type webHandler struct {
 	address         string
 	port            string
 	hostedByLogoURL string
+	hostedByText    string
+	titleText       string
 }
 
-func NewRestServer(statusMap *status.StatusReportMap, port, address, webCertFile, webKeyFile, webHostedByLogoURL string) *restServer {
+func NewRestServer(statusMap *status.StatusReportMap, port, address, webCertFile, webKeyFile, webHostedByLogoURL, webHostedByText, webTitleText string) *restServer {
 	return &restServer{
 		port:        port,
 		webCertFile: webCertFile,
@@ -71,6 +73,8 @@ func NewRestServer(statusMap *status.StatusReportMap, port, address, webCertFile
 			address:         address,
 			port:            port,
 			hostedByLogoURL: webHostedByLogoURL,
+			hostedByText:    webHostedByText,
+			titleText:       webTitleText,
 		},
 	}
 }
@@ -109,13 +113,15 @@ func (s *webHandler) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 		view := template.Must(template.New("").Delims("{{{", "}}}").ParseFS(index, "js/"+file))
 
 		type env struct {
-			PORT, ADDRESS, HOSTED_BY_LOGO_URL string
+			PORT, ADDRESS, HOSTED_BY_LOGO_URL, HOSTED_BY_TEXT, TITLE_TEXT string
 		}
 
 		e := env{
 			PORT:               s.port,
 			ADDRESS:            s.address,
 			HOSTED_BY_LOGO_URL: s.hostedByLogoURL,
+			HOSTED_BY_TEXT:     s.hostedByText,
+			TITLE_TEXT:         s.titleText,
 		}
 
 		err = view.ExecuteTemplate(w, file, e)
