@@ -104,10 +104,16 @@ func (s *restServer) Serve() error {
 	}
 }
 
+func (s *restServer) Stop() error {
+	return s.httpServer.Close()
+}
+
 func (s *webHandler) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 	index, err := fs.Sub(content, "internal/embed")
 	if err != nil {
-		log.Fatalln(err)
+		w.WriteHeader(http.StatusInternalServerError)
+		w.Write([]byte(err.Error()))
+		return
 	}
 
 	if r.URL.Path == "/js/app.js" || r.URL.Path == "/js/app.js.map" {
@@ -126,9 +132,10 @@ func (s *webHandler) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 			TITLE_TEXT:         s.titleText,
 		}
 
-		err = view.ExecuteTemplate(w, file, e)
-		if err != nil {
-			log.Fatalln(err)
+		if err := view.ExecuteTemplate(w, file, e); err != nil {
+			w.WriteHeader(http.StatusInternalServerError)
+			w.Write([]byte(err.Error()))
+			return
 		}
 	} else {
 		http.FileServer(http.FS(index)).ServeHTTP(w, r)
