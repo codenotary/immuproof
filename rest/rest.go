@@ -37,6 +37,7 @@ type restServer struct {
 	port          string
 	webCertFile   string
 	webKeyFile    string
+	httpServer    *http.Server
 	statusHandler *statusHandler
 	countHandler  *countHandler
 	webHandler    *webHandler
@@ -58,8 +59,11 @@ type webHandler struct {
 	titleText       string
 }
 
-func NewRestServer(statusMap *status.StatusReportMap, port, address, webCertFile, webKeyFile, webHostedByLogoURL, webHostedByText, webTitleText string) *restServer {
-	return &restServer{
+func NewRestServer(statusMap *status.StatusReportMap, port, address, webCertFile, webKeyFile, webHostedByLogoURL, webHostedByText, webTitleText string) (*restServer, error) {
+	mux := http.NewServeMux()
+	muxCors := cors.Default().Handler(mux)
+
+	rs := &restServer{
 		port:        port,
 		webCertFile: webCertFile,
 		webKeyFile:  webKeyFile,
@@ -76,7 +80,14 @@ func NewRestServer(statusMap *status.StatusReportMap, port, address, webCertFile
 			hostedByText:    webHostedByText,
 			titleText:       webTitleText,
 		},
+		httpServer: &http.Server{Addr: fmt.Sprintf(":%s", port), Handler: muxCors},
 	}
+
+	mux.Handle("/", rs.webHandler)
+	mux.Handle("/api/status", rs.statusHandler)
+	mux.Handle("/api/notarization/count", rs.countHandler)
+
+	return rs, nil
 }
 
 func (s *restServer) Serve() error {
@@ -84,21 +95,12 @@ func (s *restServer) Serve() error {
 	log.Print("UI is exposed on /")
 	log.Print("REST status history is exposed on /api/status")
 	log.Print("REST notarization's counter are exposed on /api/notarization/count")
-
-	mux := http.NewServeMux()
-
-	muxCors := cors.Default().Handler(mux)
-
-	mux.Handle("/", s.webHandler)
-	mux.Handle("/api/status", s.statusHandler)
-	mux.Handle("/api/notarization/count", s.countHandler)
-
 	if s.webCertFile != "" && s.webKeyFile != "" {
 		log.Print("REST server is using HTTPS")
-		return http.ListenAndServeTLS(fmt.Sprintf(":%s", s.port), s.webCertFile, s.webKeyFile, muxCors)
+		return s.httpServer.ListenAndServeTLS(s.webCertFile, s.webKeyFile)
 	} else {
 		log.Print("REST server is using HTTP")
-		return http.ListenAndServe(fmt.Sprintf(":%s", s.port), muxCors)
+		return s.httpServer.ListenAndServe()
 	}
 }
 

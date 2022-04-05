@@ -16,12 +16,14 @@ package audit
 import (
 	"context"
 	"encoding/json"
+	"fmt"
 	"io/ioutil"
 	"os"
 	"testing"
 	"time"
 
-	"github.com/codenotary/immuproof/cnc"
+	"github.com/codenotary/immuproof/cnc/cnctest"
+
 	"github.com/codenotary/immuproof/status"
 	"github.com/spf13/viper"
 	"github.com/stretchr/testify/require"
@@ -33,11 +35,11 @@ func TestSimpleAuditor(t *testing.T) {
 
 	viper.Set("audit-interval", "1s")
 	viper.Set("state-history-file", "tmpStateCache.json")
-	viper.Set("state-history-size", 2)
+	historySize := 2
 	defer os.Remove("tmpStateCache.json")
 
 	aks := []string{"signerID1.ak1", "signerID2.ak2"}
-	cMock := &cnc.LcClientMock{
+	cMock := &cnctest.LcClientMock{
 		ConsistencyCheckF: func(ctx context.Context) (*sdk.ConsistencyCheckResponse, error) {
 			return &sdk.ConsistencyCheckResponse{
 				PrevTxID:      0,
@@ -58,7 +60,7 @@ func TestSimpleAuditor(t *testing.T) {
 			}, nil
 		},
 	}
-	statusReportMap := status.NewStatusReportMap()
+	statusReportMap := status.NewStatusReportMap(historySize)
 	simpleAuditor := NewSimpleAuditor(cMock, statusReportMap, viper.GetDuration("audit-interval"))
 	for _, a := range aks {
 		simpleAuditor.AddApiKey(a)
@@ -71,10 +73,87 @@ func TestSimpleAuditor(t *testing.T) {
 	time.Sleep(time.Second * 4)
 	simpleAuditor.Stop()
 
-	tmpStatusReportMap := status.NewStatusReportMap()
+	tmpStatusReportMap := status.NewStatusReportMap(historySize)
 	j, err := ioutil.ReadFile("tmpStateCache.json")
 	require.NoError(t, err)
 	err = json.Unmarshal(j, &tmpStatusReportMap)
 	require.NoError(t, err)
-	require.True(t, len(tmpStatusReportMap.M) == 2)
+	require.True(t, len(tmpStatusReportMap.M) == historySize)
+}
+
+func TestSimpleAuditorCorruptedData(t *testing.T) {
+
+	viper.Set("audit-interval", "1s")
+	viper.Set("state-history-file", "tmpStateCache.json")
+	historySize := 2
+	defer os.Remove("tmpStateCache.json")
+
+	aks := []string{"signerID1.ak1", "signerID2.ak2"}
+	cMock := &cnctest.LcClientMock{
+		ConsistencyCheckF: func(ctx context.Context) (*sdk.ConsistencyCheckResponse, error) {
+			return nil, fmt.Errorf("corrupted data")
+		},
+		IsConnectedF: func() bool {
+			return true
+		},
+		FeatsF: func(ctx context.Context) (*schema.Features, error) {
+			return &schema.Features{
+				Feat: []string{"immuproof"},
+			}, nil
+		},
+	}
+	statusReportMap := status.NewStatusReportMap(historySize)
+	simpleAuditor := NewSimpleAuditor(cMock, statusReportMap, viper.GetDuration("audit-interval"))
+	for _, a := range aks {
+		simpleAuditor.AddApiKey(a)
+	}
+	go func() {
+		err := simpleAuditor.Start()
+		require.NoError(t, err)
+	}()
+
+	time.Sleep(time.Second * 4)
+	simpleAuditor.Stop()
+
+	tmpStatusReportMap := status.NewStatusReportMap(historySize)
+	j, err := ioutil.ReadFile("tmpStateCache.json")
+	require.NoError(t, err)
+	err = json.Unmarshal(j, &tmpStatusReportMap)
+	require.NoError(t, err)
+	require.True(t, len(tmpStatusReportMap.M) == historySize)
+	allByLed := tmpStatusReportMap.GetAllByLedger()
+	for _, led := range allByLed {
+		for _, s := range led {
+			require.True(t, s.Status == status.Status_CORRUPTED_DATA)
+			break
+		}
+	}
+}
+
+func TestSimpleAuditorFeatNotSupported(t *testing.T) {
+
+	viper.Set("audit-interval", "1s")
+	viper.Set("state-history-file", "tmpStateCache.json")
+	historySize := 2
+	defer os.Remove("tmpStateCache.json")
+
+	aks := []string{"signerID1.ak1", "signerID2.ak2"}
+	cMock := &cnctest.LcClientMock{
+		IsConnectedF: func() bool {
+			return true
+		},
+		FeatsF: func(ctx context.Context) (*schema.Features, error) {
+			return &schema.Features{
+				Feat: []string{},
+			}, nil
+		},
+	}
+	statusReportMap := status.NewStatusReportMap(historySize)
+	simpleAuditor := NewSimpleAuditor(cMock, statusReportMap, viper.GetDuration("audit-interval"))
+	for _, a := range aks {
+		simpleAuditor.AddApiKey(a)
+	}
+
+	err := simpleAuditor.Start()
+	require.Contains(t, err.Error(), "doesn't support immuproof feature")
 }

@@ -30,10 +30,13 @@ import (
 var cfgFile string
 
 // rootCmd represents the base command when called without any subcommands
-var rootCmd = &cobra.Command{
-	Use:   "immuproof",
-	Short: "Simple audit tool for CAS and CodeNotaryCloud services",
-	Long: `Simple audit tool for CAS and CodeNotaryCloud services.
+var rootCmd = NewRootCmd()
+
+func NewRootCmd() *cobra.Command {
+	return &cobra.Command{
+		Use:   "immuproof",
+		Short: "Simple audit tool for CAS and CodeNotaryCloud services",
+		Long: `Simple audit tool for CAS and CodeNotaryCloud services.
 
 Environment variables:
   IMMUPROOF_API_KEY=
@@ -65,6 +68,7 @@ Eg:
 # Collect 3 days of status checks (1 per hour) from CAS server
 immuproof serve --api-key {your api-key} --port 443 --host admin.cas.codenotary.com --skip-tls-verify --audit-interval 1h --state-history-size 72
 `,
+	}
 }
 
 // Execute adds all child commands to the root command and sets flags appropriately.
