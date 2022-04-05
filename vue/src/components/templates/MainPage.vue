@@ -3,7 +3,11 @@
         <floating-menu></floating-menu>
         <v-container>
             <v-row class="text-center">
-                <cas-header :logo-url="logoUrl"></cas-header>
+                <cas-header
+                    :hosted-by-text="hostedByText"
+                    :title-text="titleText"
+                    :logo-url="logoUrl">
+                </cas-header>
                 <div class="main-page__content full-width">
                     <tampering-status
                         :tampering-message="tamperingMessage"
@@ -53,7 +57,9 @@ export default {
         notarizationCategoriesCount: { type: Array, default: () => ([]) },
         notarizationCountData: { type: Array, default: () => ([]) },
         lastTxId: { type: Number, default: 0 },
-        logoUrl: { type: String, default: '' }
+        logoUrl: { type: String, default: '' },
+        hostedByText: { type: String, default: '' },
+        titleText: { type: String, default: '' },
     }
 }
 </script>
