@@ -23,7 +23,7 @@ func TestNewCNCClientTLS(t *testing.T) {
 	lcApiKey := "test_api_key"
 	host := "test_host"
 	port := "8080"
-	lcCertPath := "./cnctest/server.crt"
+	lcCertPath := "./cnctest/test_server.crt"
 	var skipTlsVerify, noTls bool
 	c, err := NewCNCClient(lcApiKey, host, port, lcCertPath, skipTlsVerify, noTls)
 	require.NoError(t, err)

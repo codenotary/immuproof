@@ -29,5 +29,4 @@ func TestServeAndAuditFailConnectErr(t *testing.T) {
 	rootCmd.AddCommand(sa)
 	err := rootCmd.Execute()
 	require.Error(t, err)
-	require.Contains(t, err.Error(), "no such host")
 }
