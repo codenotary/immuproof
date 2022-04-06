@@ -54,7 +54,7 @@ func TestCountHandler_ServeHTTP(t *testing.T) {
 	require.Equal(t, 200, resp.StatusCode)
 }
 
-func TestWevHandler_ServeHTTP(t *testing.T) {
+func TestWebHandler_ServeHTTP(t *testing.T) {
 	srm := status.NewStatusReportMap(2)
 	rs, err := NewRestServer(srm, "0", "", "", "", "", "", "")
 	require.NoError(t, err)

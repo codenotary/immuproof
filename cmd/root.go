@@ -35,8 +35,8 @@ var rootCmd = NewRootCmd()
 func NewRootCmd() *cobra.Command {
 	return &cobra.Command{
 		Use:   "immuproof",
-		Short: "Simple audit tool for CAS service",
-		Long: `Simple audit tool for CAS service.
+		Short: "Simple audit tool for CAS",
+		Long: `Simple audit tool for CAS.
 
 Environment variables:
   IMMUPROOF_API_KEY=
