@@ -1,6 +1,6 @@
 # Immuproof
 
-Simple audit tool for CAS service.
+Simple audit tool for CAS.
 
 When immuproof is launched it fetches a fresh status from CAS backed by immudb and it verifies the integrity compared to an older one stored locally.
 The idea is to check if previous state is "included" in the new one.
