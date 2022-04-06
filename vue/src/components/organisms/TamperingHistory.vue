@@ -3,7 +3,7 @@
         <v-container class="tampering-history-wrapper">
             <v-row>
                 <div class="tampering-history-wrapper__texts col-12">
-                    <div class="text-left font-weight-bold">Status Checks History</div>
+                    <div class="text-left font-weight-bold">State Check History</div>
                     <div class="text-left">{{ lastCheckDate }}</div>
                 </div>
                 <div class="tampering-history-wrapper__check col-12 flex justify-center mt-3">
