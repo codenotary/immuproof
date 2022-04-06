@@ -1,0 +1,25 @@
+name: pull-request
+
+on:
+  pull_request
+
+jobs:
+  coverage:
+    name: coverage
+    runs-on: ubuntu-latest
+    steps:
+      - name: Set up Go 1.x
+        uses: actions/setup-go@v2
+        with:
+          go-version: 1.17.6
+        id: go
+      - name: Check out code into the Go module directory
+        uses: actions/checkout@v2
+      - name: Coverage
+        run: |
+          set -eo pipefail
+          go install github.com/mattn/goveralls@latest
+          go install github.com/ory/go-acc@latest
+          go-acc $(go list ./...) --covermode=atomic --ignore test,rest/internal -o coverage.txt -- -failfast || true
+          cat coverage.txt | grep -v "cnctest" > coverage.out
+          goveralls -coverprofile=coverage.out -service=gh-ci -repotoken ${{ secrets.COVERALLS_TOKEN }}

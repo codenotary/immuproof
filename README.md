@@ -1,5 +1,7 @@
 # Immuproof
 
+[![Coverage Status](https://coveralls.io/repos/github/codenotary/immuproof/badge.svg)](https://coveralls.io/github/codenotary/immuproof)
+
 Simple audit tool for CAS.
 
 When immuproof is launched it fetches a fresh status from CAS backed by immudb and it verifies the integrity compared to an older one stored locally.
