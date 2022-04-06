@@ -43,3 +43,15 @@ jobs:
           tags: |
             ghcr.io/codenotary/immuproof:master
             codenotary/immuproof:master
+      - name: Notarize git repository
+        uses: docker://codenotary/cas
+        with:
+          args: n git://. --host cas.codenotary.com --api-key ${{ secrets.CAS_API_KEY }}
+      - name: Notarize Go binary
+        uses: docker://codenotary/cas
+        with:
+          args: n immuproof --host cas.codenotary.com --api-key ${{ secrets.CAS_API_KEY }}
+      - name: Notarize docker image
+        uses: docker://codenotary/cas:bom-docker
+        with:
+          args: n docker://codenotary/immuproof:master --host cas.codenotary.com --api-key ${{ secrets.CAS_API_KEY }}
