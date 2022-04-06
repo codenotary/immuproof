@@ -20,6 +20,10 @@ jobs:
           set -eo pipefail
           go install github.com/mattn/goveralls@latest
           go install github.com/ory/go-acc@latest
-          go-acc $(go list ./...) --covermode=atomic --ignore test,rest/internal -o coverage.txt -- -failfast || true
+          # to speed up test(avoid to build frontend) following are created fake embeddable files
+          mkdir -p rest/internal/embed/js
+          touch rest/internal/embed/index.html
+          touch rest/internal/embed/js/app.js
+          go-acc $(go list ./...) --covermode=atomic --ignore test,rest -o coverage.txt -- -failfast
           cat coverage.txt | grep -v "cnctest" > coverage.out
           goveralls -coverprofile=coverage.out -service=gh-ci -repotoken ${{ secrets.COVERALLS_TOKEN }}
