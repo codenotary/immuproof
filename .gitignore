@@ -54,5 +54,5 @@ API-docs.md
 /.pydevproject
 
 # client static dir
-rest/internal/embed/*
+rest/internal/embed
 node_modules
