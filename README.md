@@ -33,6 +33,27 @@ CAS environment
 immuproof serve --api-key {your api key} --port 443 --host admin.cas.codenotary.com --skip-tls-verify
 ```
 
+## Usage with docker
+
+```shell
+docker pull codenotary/immuproof:latest
+docker run -p 8091:8091 codenotary/immuproof serve --api-key {your api key} --port 443 --host admin.cas.codenotary.com --skip-tls-verify --audit-interval 1h --state-history-size 72
+```
+
+In order to not lose the audit history and [immudb](https://github.com/codenotary/immudb) status file it's recommended to run the service with a volume mount using floowing flags:
+
+```shell
+--audit-state-folder={my docker volume}
+--state-history-file={my docker volume}
+```
+
+or environment variables:
+
+```shell
+IMMUPROOF_AUDIT_STATE_FOLDER={my docker volume}
+IMMUPROOF_STATE_HISTORY_FILE={my docker volume}
+```
+
 ## HTTPS
 
 Following commands can be used to generate a self-signed certificate for the local server.
@@ -84,9 +105,9 @@ Usage:
 
 Flags:
   --audit-interval duration         interval between audit runs (default 1h0m0s)
-  --audit-state-folder string       folder to store immudb immutable state (default "/home/USER/.local/state/immuproof")
+  --audit-state-folder string       folder to store immudb immutable state (default "/root/.local/state/immuproof")
   -h, --help                            help for serve
-  --state-history-file string       absolute file path to store history of immutable states. (JSON format) (default "/home/falce/.local/state/immuproof/state-history.json")
+  --state-history-file string       absolute file path to store history of immutable states. (JSON format) (default "/root/.local/state/immuproof/state-history.json")
   --state-history-size int          max size of the history of immutable states. (default 90)
   --web-address string              rest server address (default "localhost")
   --web-cert-file string            certificate file absolute path
@@ -99,9 +120,9 @@ Flags:
 Global Flags:
   --api-key strings   CAS api-keys. Can be specified multiple times. First key is used for signing. For each key provided related ledger is audit. If no key is provided, no audit is performed
   --cert string       local or absolute path to a certificate file needed to set up tls connection to a CAS server
-  --config string     config file (default is /home/USER/.config/immuproof/.immuproof.yaml) (default "/home/USER/.config/immuproof")
-  -a, --host string       CASserver host address (default "localhost")
+  --config string     config file (default is /root/.config/immuproof/.immuproof.yaml) (default "/root/.config/immuproof")
+  -a, --host string       CAS server host address (default "localhost")
   --no-tls            allow insecure connections when connecting to a CAS server
-  -p, --port int          CASserver port number (default 443)
+  -p, --port int          CAS server port number (default 443)
   --skip-tls-verify   disables tls certificate verification when connecting to a CAS server
 ```
