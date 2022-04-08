@@ -40,7 +40,7 @@ docker pull codenotary/immuproof:latest
 docker run -p 8091:8091 codenotary/immuproof serve --api-key {your api key} --port 443 --host admin.cas.codenotary.com --skip-tls-verify --audit-interval 1h --state-history-size 72
 ```
 
-In order to not lose the audit history and [immudb](https://github.com/codenotary/immudb) status file it's recommended to run the service with a volume mount using floowing flags:
+In order to not lose the audit history and [immudb](https://github.com/codenotary/immudb) status file it's recommended to run the service with a volume mount using following flags:
 
 ```shell
 --audit-state-folder={my docker volume}
