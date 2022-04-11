@@ -66,6 +66,7 @@ Launch immuproof with the generated certificate:
 
 ```shell
 immuproof serve --api-key {your CAS api key} --port 443 --host admin.cas.codenotary.com --audit-interval 1s --state-history-size 72 --web-cert-file server.crt --web-key-file server.key
+```
 
 ## Environment variables
 ```shell
@@ -87,7 +88,6 @@ immuproof serve --api-key {your CAS api key} --port 443 --host admin.cas.codenot
   IMMUPROOF_WEB_TITLE_TEXT=
   IMMUPROOF_WEB_HOSTED_BY_LOGO_URL=
   IMMUPROOF_WEB_HOSTED_BY_TEXT=
-
 ```
 
 ## Others serve options
