@@ -29,7 +29,7 @@ immuproof serve --api-key {your CAS api key} --port 3324 --no-tls
 CAS environment
 
 ```shell
-immuproof serve --api-key {your CAS api key} --port 443 --host admin.cas.codenotary.com --skip-tls-verify
+immuproof serve --api-key {your CAS api key} --port 443 --host cas.codenotary.com 
 ```
 
 ## Usage with docker
@@ -97,7 +97,7 @@ Audit a ledger and launch an HTTP rest server to show audit results.
 
 Eg:
 # Collect 3 days of status checks (1 per hour) from CAS server
-  immuproof serve --api-key {your CAS api-key} --port 443 --host cas.codenotary.com --skip-tls-verify --audit-interval 1h --state-history-size 72
+  immuproof serve --api-key {your CAS api-key} --port 443 --host cas.codenotary.com --audit-interval 1h --state-history-size 72
 
 Usage:
   immuproof serve [flags]
