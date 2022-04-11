@@ -74,7 +74,7 @@ jobs:
       - name: Notarize Go binary
         uses: docker://codenotary/cas
         with:
-          args: n immuproof --host cas.codenotary.com --api-key ${{ secrets.CAS_API_KEY) }}
+          args: n immuproof --host cas.codenotary.com --api-key ${{ secrets.CAS_API_KEY }}
       - name: Notarize docker image
         uses: docker://codenotary/cas:bom-docker
         with:
