@@ -171,7 +171,7 @@ export default {
         },
         checkTitleText() {
             if (titleText?.includes('{{')) {
-                this.titleText = 'Community Attestation Service Status Page';
+                this.titleText = 'Community Attestation Service Validator';
 
                 return;
             }
