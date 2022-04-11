@@ -4,9 +4,18 @@
 
 CAS Validation Service.
 
+<img align="right" src="https://cas.codenotary.com/_nuxt/src/static/images/logo-cas.svg" width="256px"/>
+
 When immuproof is launched it fetches a fresh status from [immudb](https://github.com/codenotary/immudb) the immutable database [CAS](https://cas.codenotary.com) is build on and it verifies the integrity compared to an older one stored locally.
 The validation service checks if the previous state is "included" in the new state of immudb.
 A REST service is also provided to allow the user to query the status of the validation as well as a Web UI to visualize data.
+
+## Public CAS validator URLs
+
+Here you can find the public CAS validators:
+
+[Codenotary](https://cas-validator.codenotary.com)
+
 
 ## Golang version
 
