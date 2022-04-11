@@ -115,7 +115,7 @@ Flags:
   --web-hosted-by-text string       displayed subtitle for hosted by logo (default "Hosted by:")
   --web-key-file string             key file absolute path
   --web-port string                 rest server port (default "8091")
-  --web-title-text string           displayed title text (default "COMMUNITY ATTESTATION SERVICE STATUS PAGE")
+  --web-title-text string           displayed title text (default "COMMUNITY ATTESTATION SERVICE VALIDATOR")
 
 Global Flags:
   --api-key strings   CAS api-keys. Can be specified multiple times. First key is used for signing. For each key provided related ledger is audit. If no key is provided, no audit is performed
