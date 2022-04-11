@@ -1,7 +1,7 @@
 import Vue from 'vue';
 import axios from 'axios';
 import App from './App.vue';
-import vuetify from './plugins/vuetify';
+import vuetify from './plugins/vuetify.js';
 import VueApexCharts from 'vue-apexcharts'
 import '@mdi/font/css/materialdesignicons.css';
 
