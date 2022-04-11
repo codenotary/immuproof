@@ -78,4 +78,4 @@ jobs:
       - name: Notarize docker image
         uses: docker://codenotary/cas:bom-docker
         with:
-          args: n docker://codenotary/immuproof:master --host cas.codenotary.com --api-key ${{ secrets.CAS_API_KEY }}
+          args: n docker://codenotary/immuproof:${{ github.ref_name }} --host cas.codenotary.com --api-key ${{ secrets.CAS_API_KEY }}
