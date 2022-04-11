@@ -65,7 +65,7 @@ openssl req -new -x509 -sha256 -key server.key -out server.crt -days 3650
 Launch immuproof with the generated certificate:
 
 ```shell
-immuproof serve --api-key {your CAS api key} --port 443 --host admin.cas.codenotary.com --audit-interval 1s --state-history-size 72 --web-cert-file server.crt --web-key-file server.key
+immuproof serve --api-key {your CAS api key} --port 443 --host cas.codenotary.com --audit-interval 1s --state-history-size 72 --web-cert-file server.crt --web-key-file server.key
 ```
 
 ## Environment variables
@@ -97,7 +97,7 @@ Audit a ledger and launch an HTTP rest server to show audit results.
 
 Eg:
 # Collect 3 days of status checks (1 per hour) from CAS server
-  immuproof serve --api-key {your api-key} --port 443 --host admin.cas.codenotary.com --skip-tls-verify --audit-interval 1h --state-history-size 72
+  immuproof serve --api-key {your CAS api-key} --port 443 --host cas.codenotary.com --skip-tls-verify --audit-interval 1h --state-history-size 72
 
 Usage:
   immuproof serve [flags]
@@ -119,7 +119,7 @@ Flags:
 Global Flags:
   --api-key strings   CAS api-keys. Can be specified multiple times. First key is used for signing. For each key provided related ledger is audit. If no key is provided, no audit is performed
   --cert string       local or absolute path to a certificate file needed to set up tls connection to a CAS server
-  --config string     config file (default is /root/.config/immuproof/.immuproof.yaml) (default "/root/.config/immuproof")
+  --config string     config file (default is /root/.config/immuproof/.immuproof.yaml) (default "HOME/.config/immuproof")
   -a, --host string       CAS server host address (default "localhost")
   --no-tls            allow insecure connections when connecting to a CAS server
   -p, --port int          CAS server port number (default 443)
