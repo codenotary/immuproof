@@ -2,16 +2,15 @@
 
 [![Coverage Status](https://coveralls.io/repos/github/codenotary/immuproof/badge.svg)](https://coveralls.io/github/codenotary/immuproof)
 
-Simple audit tool for CAS.
+CAS Validation Service.
 
-When immuproof is launched it fetches a fresh status from CAS backed by immudb and it verifies the integrity compared to an older one stored locally.
-The idea is to check if previous state is "included" in the new one.
-A REST service is also provided to allow the user to query the status of the audit.
-A simple web UI is also provided to visualize data.
+When immuproof is launched it fetches a fresh status from [immudb](https://github.com/codenotary/immudb) the immutable database [CAS](https://cas.codenotary.com) is build on and it verifies the integrity compared to an older one stored locally.
+The validation service checks if the previous state is "included" in the new state of immudb.
+A REST service is also provided to allow the user to query the status of the validation as well as a Web UI to visualize data.
 
 ## Golang version
 
-Currently supported golang version is `1.17`
+Currently supported Go version is `1.17`
 
 ## Build
 
@@ -24,34 +23,34 @@ go build -o immuproof main.go
 Local environment
 
 ```shell
-immuproof serve --api-key {your api key} --port 3324 --no-tls
+immuproof serve --api-key {your CAS api key} --port 3324 --no-tls
 ```
 
 CAS environment
 
 ```shell
-immuproof serve --api-key {your api key} --port 443 --host admin.cas.codenotary.com --skip-tls-verify
+immuproof serve --api-key {your CAS api key} --port 443 --host admin.cas.codenotary.com --skip-tls-verify
 ```
 
 ## Usage with docker
 
 ```shell
 docker pull codenotary/immuproof:latest
-docker run -p 8091:8091 codenotary/immuproof serve --api-key {your api key} --port 443 --host admin.cas.codenotary.com --skip-tls-verify --audit-interval 1h --state-history-size 72
+docker run -p 8091:8091 codenotary/immuproof serve --api-key {your api key} --port 443 --host cas.codenotary.com --audit-interval 1h --state-history-size 72
 ```
 
-In order to not lose the audit history and [immudb](https://github.com/codenotary/immudb) status file it's recommended to run the service with a volume mount using following flags:
+In order to keep the audit history and [immudb](https://github.com/codenotary/immudb) status file it's recommended to run the service with a mounted volume inside the docker container using following flags:
 
 ```shell
---audit-state-folder={my docker volume}
---state-history-file={my docker volume}
+--audit-state-folder={mountpoint inside container}
+--state-history-file={mountpoint inside container/filename}
 ```
 
 or environment variables:
 
 ```shell
-IMMUPROOF_AUDIT_STATE_FOLDER={my docker volume}
-IMMUPROOF_STATE_HISTORY_FILE={my docker volume}
+IMMUPROOF_AUDIT_STATE_FOLDER={mountpoint inside container}
+IMMUPROOF_STATE_HISTORY_FILE={mountpoint inside container/filename}
 ```
 
 ## HTTPS
@@ -66,7 +65,7 @@ openssl req -new -x509 -sha256 -key server.key -out server.crt -days 3650
 Launch immuproof with the generated certificate:
 
 ```shell
-immuproof serve --api-key {your api key} --port 443 --host admin.cas.codenotary.com --audit-interval 1s --state-history-size 72 --web-cert-file server.crt --web-key-file server.key
+immuproof serve --api-key {your CAS api key} --port 443 --host admin.cas.codenotary.com --audit-interval 1s --state-history-size 72 --web-cert-file server.crt --web-key-file server.key
 
 ## Environment variables
 ```shell
@@ -105,9 +104,9 @@ Usage:
 
 Flags:
   --audit-interval duration         interval between audit runs (default 1h0m0s)
-  --audit-state-folder string       folder to store immudb immutable state (default "/root/.local/state/immuproof")
+  --audit-state-folder string       folder to store immudb immutable state (default "HOME/.local/state/immuproof")
   -h, --help                            help for serve
-  --state-history-file string       absolute file path to store history of immutable states. (JSON format) (default "/root/.local/state/immuproof/state-history.json")
+  --state-history-file string       absolute file path to store history of immutable states. (JSON format) (default "HOME/.local/state/immuproof/state-history.json")
   --state-history-size int          max size of the history of immutable states. (default 90)
   --web-address string              rest server address (default "localhost")
   --web-cert-file string            certificate file absolute path
