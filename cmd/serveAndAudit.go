@@ -64,7 +64,7 @@ func init() {
 	serveCmd.Flags().String("web-key-file", "", "key file absolute path")
 	serveCmd.Flags().String("web-hosted-by-logo-url", "", "URL to hosted by logo")
 	serveCmd.Flags().String("web-hosted-by-text", "Hosted by:", "displayed subtitle for hosted by logo")
-	serveCmd.Flags().String("web-title-text", "COMMUNITY ATTESTATION SERVICE STATUS PAGE", "displayed title text")
+	serveCmd.Flags().String("web-title-text", "COMMUNITY ATTESTATION SERVICE VALIDATOR", "displayed title text")
 	serveCmd.Flags().Duration("audit-interval", meta.DefaultAuditInterval, "interval between audit runs")
 	serveCmd.Flags().String("audit-state-folder", meta.DefaultStateFolder, "folder to store immudb immutable state")
 	serveCmd.Flags().Int("state-history-size", 90, "max size of the history of immutable states.")
