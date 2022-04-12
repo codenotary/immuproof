@@ -1,5 +1,6 @@
 FROM debian:bullseye-slim
 LABEL org.opencontainers.image.authors="CodeNotary, Inc. <info@codenotary.com>"
+RUN apt-get update && apt-get install ca-certificates -y
 
 # Note: this requires running `make immuproof-release` before building the image
 COPY immuproof /usr/sbin/immuproof
