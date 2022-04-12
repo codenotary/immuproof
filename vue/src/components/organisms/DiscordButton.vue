@@ -22,15 +22,10 @@ export default {
         };
     },
     async mounted() {
-        try {
-            const { data } = await this.$axios.get('https://discordapp.com/api/v9/invites/4wuHaewsxp?with_counts=true');
+        const { data } = await this.$axios.get('https://discordapp.com/api/v9/invites/4wuHaewsxp?with_counts=true');
 
-            if (data) {
-                this.count = data.approximate_member_count || '';
-            }
-        }
-        catch (err) {
-            console.error(err);
+        if (data) {
+            this.count = data.approximate_member_count || '';
         }
     },
 };
