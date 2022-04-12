@@ -36,7 +36,7 @@
 </template>
 
 <script>
-import { formattedDateLocaleString } from '@/helpers/helpers.js';
+import { formattedDateLocaleString } from '@/helpers/helpers';
 
 export default {
     props: {

@@ -15,7 +15,7 @@
 </template>
 
 <script>
-import { formattedDateLocaleString } from '@/helpers/helpers.js';
+import { formattedDateLocaleString } from '@/helpers/helpers';
 import MainPage from '@/components/templates/MainPage.vue';
 
 const MAX_STATUS_NUMBER = 45;
