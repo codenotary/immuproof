@@ -18,6 +18,7 @@ package cmd
 
 import (
 	"fmt"
+	"log"
 
 	"github.com/codenotary/immuproof/audit"
 	"github.com/codenotary/immuproof/cnc"
@@ -29,27 +30,31 @@ import (
 )
 
 // serveCmd represents the serve command
-var serveCmd = &cobra.Command{
-	Use:   "serve",
-	Short: "Audit a ledger and launch an HTTP rest server to show audit results",
-	Long: `Audit a ledger and launch an HTTP rest server to show audit results.
+var serveCmd = NewServeAndAuditCmd()
+
+func NewServeAndAuditCmd() *cobra.Command {
+	return &cobra.Command{
+		Use:   "serve",
+		Short: "Audit a ledger and launch an HTTP rest server to show audit results",
+		Long: `Audit a ledger and launch an HTTP rest server to show audit results.
 
 Eg:
 # Collect 3 days of status checks (1 per hour) from CAS server
 immuproof serve --api-key {your api-key} --port 443 --host admin.cas.codenotary.com --skip-tls-verify --audit-interval 1h --state-history-size 72
 `,
-	RunE: func(cmd *cobra.Command, args []string) error {
-		return ServeAndAudit()
-	},
-	Args: func(cmd *cobra.Command, args []string) error {
-		if viper.GetBool("skip-tls-verify") && viper.GetBool("no-tls") {
-			return fmt.Errorf("--skip-tls-verify and --no-tls are mutually exclusive")
-		}
-		if (viper.IsSet("web-cert-file") || viper.IsSet("web-key-file")) && (!(viper.IsSet("web-cert-file") && viper.IsSet("web-key-file"))) {
-			return fmt.Errorf("--web-cert-file and --web-key-file must be used together")
-		}
-		return nil
-	},
+		RunE: func(cmd *cobra.Command, args []string) error {
+			return ServeAndAudit()
+		},
+		Args: func(cmd *cobra.Command, args []string) error {
+			if viper.GetBool("skip-tls-verify") && viper.GetBool("no-tls") {
+				return fmt.Errorf("--skip-tls-verify and --no-tls are mutually exclusive")
+			}
+			if (viper.IsSet("web-cert-file") || viper.IsSet("web-key-file")) && (!(viper.IsSet("web-cert-file") && viper.IsSet("web-key-file"))) {
+				return fmt.Errorf("--web-cert-file and --web-key-file must be used together")
+			}
+			return nil
+		},
+	}
 }
 
 func init() {
@@ -69,7 +74,6 @@ func init() {
 }
 
 func ServeAndAudit() error {
-
 	done := make(chan bool)
 
 	aks := viper.GetStringSlice("api-key")
@@ -84,15 +88,20 @@ func ServeAndAudit() error {
 		viper.GetBool("skip-tls-verify"),
 		viper.GetBool("no-tls"),
 	)
-	cobra.CheckErr(err)
-	cobra.CheckErr(client.Connect())
+	if err != nil {
+		return err
+	}
+	if err = client.Connect(); err != nil {
+		return err
+	}
 
-	statusReportMap := status.NewStatusReportMap()
+	statusReportMap := status.NewStatusReportMap(viper.GetInt("state-history-size"))
 	simpleAuditor := audit.NewSimpleAuditor(client, statusReportMap, viper.GetDuration("audit-interval"))
 	for _, a := range aks {
 		simpleAuditor.AddApiKey(a)
 	}
-	restServer := rest.NewRestServer(statusReportMap,
+
+	restServer, err := rest.NewRestServer(statusReportMap,
 		viper.GetString("web-port"),
 		viper.GetString("web-address"),
 		viper.GetString("web-cert-file"),
@@ -100,12 +109,19 @@ func ServeAndAudit() error {
 		viper.GetString("web-hosted-by-logo-url"),
 		viper.GetString("web-hosted-by-text"),
 		viper.GetString("web-title-text"))
+	if err != nil {
+		return err
+	}
 
 	go func() {
-		cobra.CheckErr(restServer.Serve())
+		if err := restServer.Serve(); err != nil {
+			log.Printf("rest server error: %v\n", err)
+		}
 	}()
 	go func() {
-		cobra.CheckErr(simpleAuditor.Start())
+		if err := simpleAuditor.Start(); err != nil {
+			log.Printf("auditor error: %v\n", err)
+		}
 	}()
 
 	<-done

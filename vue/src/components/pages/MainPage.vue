@@ -7,6 +7,8 @@
         :notarizations="notarizationData"
         :data="statusData"
         :logo-url="logoUrl"
+        :hosted-by-text="hostedByText"
+        :title-text="titleText"
         :notarization-categories-count="notarizationCategoriesCount"
         :notarization-count-data="notarizationCountData">
     </main-page>
@@ -28,6 +30,8 @@ export default {
             statusData: [],
             notarizationData: [],
             logoUrl: '',
+            hostedByText: '',
+            titleText: '',
             portValue: '',
             address: ''
         };
@@ -37,6 +41,8 @@ export default {
     },
     async beforeMount() {
         this.checkLogoUrl();
+        this.checkHostedByText();
+        this.checkTitleText();
 
         await Promise.all([
             this.fetchStatus(),
@@ -153,6 +159,24 @@ export default {
             }
 
             this.logoUrl = hostedByLogoUrl;
+        },
+        checkHostedByText() {
+            if (hostedByText?.includes('{{')) {
+                this.hostedByText = 'Hosted by:';
+
+                return;
+            }
+
+            this.hostedByText = hostedByText;
+        },
+        checkTitleText() {
+            if (titleText?.includes('{{')) {
+                this.titleText = 'Community Attestation Service Status Page';
+
+                return;
+            }
+
+            this.titleText = titleText;
         }
     }
 }

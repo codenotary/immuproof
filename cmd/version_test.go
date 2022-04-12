@@ -13,30 +13,24 @@ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 See the License for the specific language governing permissions and
 limitations under the License.
 */
+
 package cmd
 
 import (
-	"fmt"
+	"bytes"
+	"testing"
 
-	"github.com/codenotary/immuproof/meta"
-	"github.com/spf13/cobra"
+	"github.com/stretchr/testify/require"
 )
 
-// versionCmd represents the version command
-var versionCmd = NewVersionCmd()
+func TestVersion(t *testing.T) {
+	buf := new(bytes.Buffer)
+	rootCmd.SetOut(buf)
+	rootCmd.SetErr(buf)
+	rootCmd.SetArgs([]string{"version"})
 
-func NewVersionCmd() *cobra.Command {
-	return &cobra.Command{
-		Use:   "version",
-		Short: "Show Immuproof version",
-		Run: func(cmd *cobra.Command, args []string) {
-			fmt.Printf("static %t\n", meta.StaticBuild())
-			println(meta.Version())
-			println(meta.GitRevision())
-		},
-	}
-}
-
-func init() {
-	rootCmd.AddCommand(versionCmd)
+	v := NewVersionCmd()
+	rootCmd.AddCommand(v)
+	err := rootCmd.Execute()
+	require.NoError(t, err)
 }

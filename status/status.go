@@ -18,8 +18,6 @@ import (
 	"sort"
 	"sync"
 	"time"
-
-	"github.com/spf13/viper"
 )
 
 const Status_CORRUPTED_DATA = "CORRUPTED_DATA"
@@ -38,12 +36,14 @@ type StatusReport struct {
 }
 
 type StatusReportMap struct {
+	s int
 	l sync.Mutex                 `json:"-"`
 	M map[string]*statusReportPQ `json:"status"`
 }
 
-func NewStatusReportMap() *StatusReportMap {
+func NewStatusReportMap(size int) *StatusReportMap {
 	srm := &StatusReportMap{
+		s: size,
 		M: make(map[string]*statusReportPQ),
 	}
 	return srm
@@ -59,7 +59,7 @@ func (m *StatusReportMap) Add(report StatusReport) {
 		pq = NewStatusReportPQ()
 		m.M[report.SignerID] = pq
 	}
-	for pq.Len() >= viper.GetInt("state-history-size") {
+	for pq.Len() >= m.s {
 		heap.Pop(pq)
 	}
 	heap.Push(pq, &report)
@@ -75,16 +75,6 @@ func (m *StatusReportMap) GetAllByLedger() map[string][]*StatusReport {
 			return all[i].Time.Before(all[j].Time)
 		})
 		reports[id] = append(reports[id], all...)
-	}
-	return reports
-}
-
-func (m *StatusReportMap) GetAll() []*StatusReport {
-	m.l.Lock()
-	defer m.l.Unlock()
-	reports := make([]*StatusReport, 0)
-	for _, report := range m.M {
-		reports = append(reports, report.GetAll()...)
 	}
 	return reports
 }
