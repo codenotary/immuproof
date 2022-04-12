@@ -24,7 +24,7 @@
                 <div class="tampering-history-wrapper__last-check d-flex justify-space-between align-center full-width col-12 mt-3">
                     <div>Last check</div>
                     <span class="tampering-history-wrapper__last-check-line"></span>
-                    <div>Today</div>
+                    <div>{{ lastCheckDateFormatted }}</div>
                 </div>
             </v-row>
         </v-container>
@@ -32,6 +32,7 @@
 </template>
 
 <script>
+import { formattedDateLocaleString } from '@/helpers/helpers';
 import HoverBox from '@/components/organisms/HoverBox.vue';
 
 export default {
@@ -39,6 +40,14 @@ export default {
     props: {
         lastCheckDate: { type: String, required: true },
         historyData: { type: Array, default: () => ([]) }
+    },
+    computed: {
+        lastCheckDateFormatted() {
+            return formattedDateLocaleString(this.lastCheckDate, {
+                month: 'short',
+                timeZoneName: 'short'
+            });
+        }
     },
     methods: {
         getClass({ status }) {
