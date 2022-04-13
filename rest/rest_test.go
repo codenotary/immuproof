@@ -11,14 +11,14 @@ import (
 
 func TestRest(t *testing.T) {
 	srm := status.NewStatusReportMap(2)
-	rs, err := NewRestServer(srm, "0", "", "", "", "", "", "")
+	rs, err := NewRestServer(srm, "0", "", "", "", "", "", "", "")
 	require.NoError(t, err)
 	require.IsType(t, &restServer{}, rs)
 }
 
 func TestStatusHandler_ServeHTTP(t *testing.T) {
 	srm := status.NewStatusReportMap(2)
-	rs, err := NewRestServer(srm, "0", "", "", "", "", "", "")
+	rs, err := NewRestServer(srm, "0", "", "", "", "", "", "", "")
 	require.NoError(t, err)
 	require.IsType(t, &restServer{}, rs)
 	req := httptest.NewRequest("GET", "/", nil)
@@ -42,7 +42,7 @@ func TestCountHandler_ServeHTTP(t *testing.T) {
 	srm.Add(sr1)
 	srm.Add(sr2)
 
-	rs, err := NewRestServer(srm, "0", "", "", "", "", "", "")
+	rs, err := NewRestServer(srm, "0", "", "", "", "", "", "", "")
 	require.NoError(t, err)
 	require.IsType(t, &restServer{}, rs)
 	req := httptest.NewRequest("GET", "/", nil)
@@ -56,7 +56,7 @@ func TestCountHandler_ServeHTTP(t *testing.T) {
 
 func TestWebHandler_ServeHTTP(t *testing.T) {
 	srm := status.NewStatusReportMap(2)
-	rs, err := NewRestServer(srm, "0", "", "", "", "", "", "")
+	rs, err := NewRestServer(srm, "0", "", "", "", "", "", "", "")
 	require.NoError(t, err)
 	require.IsType(t, &restServer{}, rs)
 	req := httptest.NewRequest("GET", "/", nil)
@@ -75,7 +75,7 @@ func TestWebHandler_ServeHTTP(t *testing.T) {
 
 func TestServer_ServeAndStop(t *testing.T) {
 	srm := status.NewStatusReportMap(2)
-	rs, err := NewRestServer(srm, "0", "", "", "", "", "", "")
+	rs, err := NewRestServer(srm, "0", "", "", "", "", "", "", "")
 	require.NoError(t, err)
 	require.IsType(t, &restServer{}, rs)
 	go func() {

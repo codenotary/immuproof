@@ -96,6 +96,7 @@ immuproof serve --api-key {your CAS api key} --port 443 --host cas.codenotary.co
   IMMUPROOF_WEB_CERT_FILE=
   IMMUPROOF_WEB_TITLE_TEXT=
   IMMUPROOF_WEB_HOSTED_BY_LOGO_URL=
+  IMMUPROOF_WEB_HOSTED_BY_LOGO_LINK=
   IMMUPROOF_WEB_HOSTED_BY_TEXT=
 ```
 
@@ -112,18 +113,19 @@ Usage:
   immuproof serve [flags]
 
 Flags:
-  --audit-interval duration         interval between audit runs (default 1h0m0s)
-  --audit-state-folder string       folder to store immudb immutable state (default "HOME/.local/state/immuproof")
-  -h, --help                            help for serve
-  --state-history-file string       absolute file path to store history of immutable states. (JSON format) (default "HOME/.local/state/immuproof/state-history.json")
-  --state-history-size int          max size of the history of immutable states. (default 90)
-  --web-address string              rest server address (default "localhost")
-  --web-cert-file string            certificate file absolute path
-  --web-hosted-by-logo-url string   URL to hosted by logo
-  --web-hosted-by-text string       displayed subtitle for hosted by logo (default "Hosted by:")
-  --web-key-file string             key file absolute path
-  --web-port string                 rest server port (default "8091")
-  --web-title-text string           displayed title text (default "COMMUNITY ATTESTATION SERVICE VALIDATOR")
+  --audit-interval duration          interval between audit runs (default 1h0m0s)
+  --audit-state-folder string        folder to store immudb immutable state (default "HOME/.local/state/immuproof")
+  -h, --help                         help for serve
+  --state-history-file string        absolute file path to store history of immutable states. (JSON format) (default "HOME/.local/state/immuproof/state-history.json")
+  --state-history-size int           max size of the history of immutable states. (default 90)
+  --web-address string               rest server address (default "localhost")
+  --web-cert-file string             certificate file absolute path
+  --web-hosted-by-logo-link string   link for hosted by logo
+  --web-hosted-by-logo-url string    URL to hosted by logo
+  --web-hosted-by-text string        displayed subtitle for hosted by logo (default "Hosted by:")
+  --web-key-file string              key file absolute path
+  --web-port string                  rest server port (default "8091")
+  --web-title-text string            displayed title text (default "COMMUNITY ATTESTATION SERVICE VALIDATOR")
 
 Global Flags:
   --api-key strings   CAS api-keys. Can be specified multiple times. First key is used for signing. For each key provided related ledger is audit. If no key is provided, no audit is performed
