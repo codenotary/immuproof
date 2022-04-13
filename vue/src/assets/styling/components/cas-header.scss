@@ -22,9 +22,13 @@
     }
   }
 
+  @media only screen and (max-width: 2200px) {
+    max-width: 1400px;
+    margin: 0 auto;
+  }
+
   @media only screen and (max-width: 1500px) {
     max-width: 700px;
-    margin: 0 auto;
 
     &__stamp {
       height: 85px !important;

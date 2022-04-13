@@ -1,0 +1,15 @@
+.histogram-line {
+  grid-gap: 10px;
+
+  &__line {
+    background-color: #C1C1C1;
+    width: 80%;
+    height: 1px;
+    flex: 1;
+  }
+
+  div {
+    color: $grey;
+    font-size: 12px;
+  }
+}

@@ -7,6 +7,7 @@
         :notarizations="notarizationData"
         :data="statusData"
         :logo-url="logoUrl"
+        :logo-link="logoLink"
         :hosted-by-text="hostedByText"
         :title-text="titleText"
         :notarization-categories-count="notarizationCategoriesCount"
@@ -30,6 +31,7 @@ export default {
             statusData: [],
             notarizationData: [],
             logoUrl: '',
+            logoLink: '',
             hostedByText: '',
             titleText: '',
             portValue: '',
@@ -43,6 +45,7 @@ export default {
         this.checkLogoUrl();
         this.checkHostedByText();
         this.checkTitleText();
+        this.checkHostedByLogoLink();
 
         await Promise.all([
             this.fetchStatus(),
@@ -152,31 +155,16 @@ export default {
             return '';
         },
         checkLogoUrl() {
-            if (hostedByLogoUrl?.includes('{{')) {
-                this.logoUrl = '';
-
-                return;
-            }
-
-            this.logoUrl = hostedByLogoUrl;
+            this.logoUrl = hostedByLogoUrl?.includes('{{') ? '' : hostedByLogoUrl;
         },
         checkHostedByText() {
-            if (hostedByText?.includes('{{')) {
-                this.hostedByText = 'Hosted by:';
-
-                return;
-            }
-
-            this.hostedByText = hostedByText;
+            this.hostedByText = hostedByText?.includes('{{') ? 'Hosted by:' : hostedByText;
         },
         checkTitleText() {
-            if (titleText?.includes('{{')) {
-                this.titleText = 'Community Attestation Service Validator';
-
-                return;
-            }
-
-            this.titleText = titleText;
+            this.titleText = titleText?.includes('{{') ? 'Community Attestation Service Validator' : titleText;
+        },
+        checkHostedByLogoLink() {
+            this.logoLink = hostedByLogoLink?.includes('{{') ?'https://cas.codenotary.com/' : hostedByLogoLink;
         }
     }
 }

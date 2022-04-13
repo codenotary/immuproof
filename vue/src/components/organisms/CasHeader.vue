@@ -9,22 +9,26 @@
         />
         <div class="cas-header__hosted-by d-flex justify-center align-center mt-4">
             <p class="cas-header__hosted-by-text ma-0 mr-2 font-weight-bold">{{ hostedByText }}</p>
-            <v-img
-                v-if="showInternalLogo"
-                :src="require('@/assets/images/logo-only-small.svg')"
-                :max-height="30"
-                :max-width="50"
-                :contain="true"
-                height="auto">
-            </v-img>
-            <v-img
-                v-else
-                :src="logoUrl"
-                :max-height="30"
-                :max-width="50"
-                :contain="true"
-                height="auto">
-            </v-img>
+            <a
+                :href="logoLink"
+                target="_blank">
+                <v-img
+                    v-if="showInternalLogo"
+                    :src="require('@/assets/images/logo-only-small.svg')"
+                    :max-height="30"
+                    :max-width="50"
+                    :contain="true"
+                    height="auto">
+                </v-img>
+                <v-img
+                    v-else
+                    :src="logoUrl"
+                    :max-height="30"
+                    :max-width="50"
+                    :contain="true"
+                    height="auto">
+                </v-img>
+            </a>
         </div>
     </div>
 </template>
@@ -33,6 +37,7 @@
 export default {
     props: {
         logoUrl: { type: String, default: '' },
+        logoLink: { type: String, default: '' },
         hostedByText: { type: String, default: 'Hosted by:' },
         titleText: { type: String, default: 'Community Attestation Service Status Page' }
     },

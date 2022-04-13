@@ -6,7 +6,8 @@
                 <cas-header
                     :hosted-by-text="hostedByText"
                     :title-text="titleText"
-                    :logo-url="logoUrl">
+                    :logo-url="logoUrl"
+                    :logo-link="logoLink">
                 </cas-header>
                 <div class="main-page__content full-width">
                     <tampering-status
@@ -16,10 +17,12 @@
                     </tampering-status>
                     <tampering-history
                         :last-check-date="lastCheckDate"
+                        :first-check-date="firstCheckDate"
                         :history-data="data">
                     </tampering-history>
                     <notarizations
                         :first-check-date="firstCheckDate"
+                        :last-check-date="lastCheckDate"
                         :notarizations="notarizations"
                         :notarization-categories-count="notarizationCategoriesCount"
                         :notarization-count-data="notarizationCountData">
@@ -58,6 +61,7 @@ export default {
         notarizationCountData: { type: Array, default: () => ([]) },
         lastTxId: { type: Number, default: 0 },
         logoUrl: { type: String, default: '' },
+        logoLink: { type: String, default: '' },
         hostedByText: { type: String, default: '' },
         titleText: { type: String, default: '' },
     }

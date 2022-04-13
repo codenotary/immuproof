@@ -12,7 +12,8 @@ module.exports = {
     'portValue': true,
     'hostedByLogoUrl': true,
     'hostedByText': true,
-    'titleText': true
+    'titleText': true,
+    'hostedByLogoLink': true
   },
   parserOptions: {
     parser: '@babel/eslint-parser'

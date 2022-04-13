@@ -6,7 +6,7 @@
                     <div class="text-left font-weight-bold">State Check History</div>
                     <div class="text-left">{{ lastCheckDate }}</div>
                 </div>
-                <div class="tampering-history-wrapper__check col-12 flex justify-center mt-3">
+                <div class="tampering-history-wrapper__check col-12 flex justify-end mt-3">
                     <span
                         v-for="(item, index) in historyData"
                         :key="index"
@@ -21,33 +21,26 @@
                         </hover-box>
                     </span>
                 </div>
-                <div class="tampering-history-wrapper__last-check d-flex justify-space-between align-center full-width col-12 mt-3">
-                    <div>Last check</div>
-                    <span class="tampering-history-wrapper__last-check-line"></span>
-                    <div>{{ lastCheckDateFormatted }}</div>
-                </div>
+                <histogram-line
+                    class="mt-3"
+                    :first-check-date="firstCheckDate"
+                    :last-check-date="lastCheckDate">
+                </histogram-line>
             </v-row>
         </v-container>
     </div>
 </template>
 
 <script>
-import { formattedDateLocaleString } from '@/helpers/helpers';
 import HoverBox from '@/components/organisms/HoverBox.vue';
+import HistogramLine from '@/components/organisms/HistogramLine.vue';
 
 export default {
-    components: { HoverBox },
+    components: { HistogramLine, HoverBox },
     props: {
         lastCheckDate: { type: String, required: true },
+        firstCheckDate: { type: String, required: true },
         historyData: { type: Array, default: () => ([]) }
-    },
-    computed: {
-        lastCheckDateFormatted() {
-            return formattedDateLocaleString(this.lastCheckDate, {
-                month: 'short',
-                timeZoneName: 'short'
-            });
-        }
     },
     methods: {
         getClass({ status }) {
