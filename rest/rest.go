@@ -52,14 +52,15 @@ type countHandler struct {
 }
 
 type webHandler struct {
-	address         string
-	port            string
-	hostedByLogoURL string
-	hostedByText    string
-	titleText       string
+	address          string
+	port             string
+	hostedByLogoURL  string
+	hostedByLogoLink string
+	hostedByText     string
+	titleText        string
 }
 
-func NewRestServer(statusMap *status.StatusReportMap, port, address, webCertFile, webKeyFile, webHostedByLogoURL, webHostedByText, webTitleText string) (*restServer, error) {
+func NewRestServer(statusMap *status.StatusReportMap, port, address, webCertFile, webKeyFile, webHostedByLogoURL, webHostedByLogoLink, webHostedByText, webTitleText string) (*restServer, error) {
 	mux := http.NewServeMux()
 	muxCors := cors.Default().Handler(mux)
 
@@ -74,11 +75,12 @@ func NewRestServer(statusMap *status.StatusReportMap, port, address, webCertFile
 			statusMap: statusMap,
 		},
 		webHandler: &webHandler{
-			address:         address,
-			port:            port,
-			hostedByLogoURL: webHostedByLogoURL,
-			hostedByText:    webHostedByText,
-			titleText:       webTitleText,
+			address:          address,
+			port:             port,
+			hostedByLogoURL:  webHostedByLogoURL,
+			hostedByLogoLink: webHostedByLogoLink,
+			hostedByText:     webHostedByText,
+			titleText:        webTitleText,
 		},
 		httpServer: &http.Server{Addr: fmt.Sprintf(":%s", port), Handler: muxCors},
 	}
@@ -121,15 +123,16 @@ func (s *webHandler) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 		view := template.Must(template.New("").Delims("{{{", "}}}").ParseFS(index, "js/"+file))
 
 		type env struct {
-			PORT, ADDRESS, HOSTED_BY_LOGO_URL, HOSTED_BY_TEXT, TITLE_TEXT string
+			PORT, ADDRESS, HOSTED_BY_LOGO_URL, HOSTED_BY_LOGO_LINK, HOSTED_BY_TEXT, TITLE_TEXT string
 		}
 
 		e := env{
-			PORT:               s.port,
-			ADDRESS:            s.address,
-			HOSTED_BY_LOGO_URL: s.hostedByLogoURL,
-			HOSTED_BY_TEXT:     s.hostedByText,
-			TITLE_TEXT:         s.titleText,
+			PORT:                s.port,
+			ADDRESS:             s.address,
+			HOSTED_BY_LOGO_URL:  s.hostedByLogoURL,
+			HOSTED_BY_LOGO_LINK: s.hostedByLogoLink,
+			HOSTED_BY_TEXT:      s.hostedByText,
+			TITLE_TEXT:          s.titleText,
 		}
 
 		if err := view.ExecuteTemplate(w, file, e); err != nil {
