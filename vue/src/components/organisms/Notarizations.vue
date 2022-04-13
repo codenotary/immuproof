@@ -4,7 +4,7 @@
             <v-row>
                 <div class="col-12 notarizations-wrapper__texts">
                     <div class="text-left font-weight-bold">Notarizations</div>
-                    <div class="text-left">{{ firstCheckDate }}</div>
+                    <div class="text-left">From; {{ firstCheckDate }}</div>
                 </div>
                 <apex-chart
                     class="mt-3"

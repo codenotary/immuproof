@@ -11,7 +11,7 @@
                     <p class="font-weight-bold text-left">Last Check</p>
                     <p class="tampering-status__last-check-date text-left">{{ lastCheckDate }}</p>
                     <p class="tampering-status__last-check-id text-left">
-                        <span>TxID</span>
+                        <span>Current Transaction ID</span>
                         {{ lastTxId }}
                     </p>
                 </div>

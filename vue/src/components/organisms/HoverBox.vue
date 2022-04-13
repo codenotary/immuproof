@@ -8,7 +8,7 @@
         </div>
         <div class="hover-box__information">
             <div class="hover-box__subtitle">
-                Previous TxID
+                Previous Transaction ID
             </div>
             <div class="hover-box__content">
                 {{ historyData.prev_tx_id }}
@@ -20,7 +20,7 @@
                 {{ historyData.prev_state_hash }}
             </div>
             <div class="hover-box__subtitle">
-                New TxID
+                New Transaction ID
             </div>
             <div class="hover-box__content">
                 {{ historyData.new_tx_id }}

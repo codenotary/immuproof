@@ -37,7 +37,7 @@ export default {
         };
     },
     beforeCreate() {
-        document.title = 'Immuproof';
+        document.title = 'CAS Validator';
     },
     async beforeMount() {
         this.checkLogoUrl();
@@ -52,12 +52,12 @@ export default {
     computed: {
         tampering() {
             if (this.statusData.some(item => item.status === 'CORRUPTED_DATA')) {
-                return 'Tampering Detected';
+                return 'Validation not successful';
             }
 
             return this.statusData[this.statusData.length - 1]?.status === 'NORMAL'
-                ? 'No Tampering Detected'
-                : 'Status Unknown';
+                ? 'Validation successful'
+                : 'Validation not successful';
         },
         firstCheckDate() {
             const firstCheckTime = this.statusData[0]?.time;
