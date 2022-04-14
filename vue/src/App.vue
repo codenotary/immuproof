@@ -1,27 +1,27 @@
 <template>
-    <v-app>
-        <v-main>
-            <main-page></main-page>
-        </v-main>
-    </v-app>
+	<v-app>
+		<v-main>
+			<main-page></main-page>
+		</v-main>
+	</v-app>
 </template>
 
 <script>
 import MainPage from '@/components/pages/MainPage.vue';
 
 export default {
-    components: {
-        MainPage
-    },
-    beforeCreate() {
-        // Creates script tag that contains values to be populated by BE
-        let serverScript = document.createElement('script');
-        serverScript.innerHTML = 'window.portValue = "{{{ .PORT }}}"; window.address = "{{{ .ADDRESS }}}"; \
+	components: {
+		MainPage,
+	},
+	beforeCreate() {
+		// Creates script tag that contains values to be populated by BE
+		let serverScript = document.createElement('script');
+		serverScript.innerHTML = 'window.portValue = "{{{ .PORT }}}"; window.address = "{{{ .ADDRESS }}}"; \
         window.hostedByLogoUrl = "{{{ .HOSTED_BY_LOGO_URL }}}"; window.hostedByLogoLink = "{{{ .HOSTED_BY_LOGO_LINK }}}"; \
-        window.hostedByText = "{{{ .HOSTED_BY_TEXT }}}"; window.titleText = "{{{ .TITLE_TEXT }}}";'
+        window.hostedByText = "{{{ .HOSTED_BY_TEXT }}}"; window.titleText = "{{{ .TITLE_TEXT }}}";';
 
-        document.body.appendChild(serverScript);
-    }
+		document.body.appendChild(serverScript);
+	},
 };
 </script>
 
