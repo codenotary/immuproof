@@ -1,42 +1,43 @@
 <template>
-    <div class="notarizations full-width mt-10">
-        <v-container class="notarizations-wrapper">
-            <v-row>
-                <div class="col-12 notarizations-wrapper__texts">
-                    <div class="text-left font-weight-bold">Notarizations</div>
-                    <div class="text-left">{{ lastCheckDate }}</div>
-                </div>
-                <apex-chart
-                    class="mt-3"
-                    type="line"
-                    :categories="notarizationCategoriesCount"
-                    :data="notarizationCountData">
-                </apex-chart>
-                <histogram-line
-                    class="notarizations__histogram-line"
-                    :first-check-date="firstCheckDate"
-                    :last-check-date="lastCheckDate">
-                </histogram-line>
-            </v-row>
-        </v-container>
-    </div>
+	<div class="notarizations full-width mt-10">
+		<v-container class="notarizations-wrapper">
+			<v-row>
+				<div class="col-12 notarizations-wrapper__texts">
+					<div class="text-left font-weight-bold">Notarizations</div>
+					<div class="text-left">{{ lastCheckDate }}</div>
+				</div>
+				<apex-chart
+					class="mt-3"
+					type="line"
+					:categories="notarizationCategoriesCount"
+					:data="notarizationCountData"
+				>
+				</apex-chart>
+				<histogram-line
+					class="notarizations__histogram-line"
+					:first="firstCheckDate"
+					:last="lastCheckDate"
+				>
+				</histogram-line>
+			</v-row>
+		</v-container>
+	</div>
 </template>
 
 <script>
 import ApexChart from '@/components/organisms/ApexChart.vue';
-import HistogramLine from "@/components/organisms/HistogramLine";
-
+import HistogramLine from '@/components/organisms/HistogramLine';
 export default {
-    components: {
-        HistogramLine,
-        ApexChart
-    },
-    props: {
-        notarizations: { type: Array, default: () => ([]) },
-        notarizationCategoriesCount: { type: Array, default: () => ([]) },
-        notarizationCountData: { type: Array, default: () => ([]) },
-        firstCheckDate: { type: String, required: true },
-        lastCheckDate: { type: String, required: true }
-    }
-}
+	components: {
+		HistogramLine,
+		ApexChart,
+	},
+	props: {
+		notarizations: { type: Array, default: () => ([]) },
+		notarizationCategoriesCount: { type: Array, default: () => ([]) },
+		notarizationCountData: { type: Array, default: () => ([]) },
+		firstCheckDate: { type: String, required: true },
+		lastCheckDate: { type: String, required: true },
+	},
+};
 </script>
