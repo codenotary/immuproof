@@ -1,8 +1,8 @@
 <template>
     <div class="histogram-line d-flex justify-space-between align-center full-width col-12">
-        <div>{{ firstCheckDateFormatted }}</div>
+        <div>{{ firstFormatted }}</div>
         <span class="histogram-line__line"></span>
-        <div>{{ lastCheckDateFormatted }}</div>
+        <div>{{ lastFormatted }}</div>
     </div>
 </template>
 
@@ -11,18 +11,18 @@ import { formattedDateLocaleString } from '@/helpers/helpers';
 
 export default {
     props: {
-        lastCheckDate: { type: String, required: true },
-        firstCheckDate: { type: String, required: true }
+        last: { type: String, required: true },
+        first: { type: String, required: true }
     },
     computed: {
-        lastCheckDateFormatted() {
-            return formattedDateLocaleString(this.lastCheckDate, {
+        lastFormatted() {
+            return formattedDateLocaleString(this.last, {
                 month: 'short',
                 timeZoneName: 'short'
             });
         },
-        firstCheckDateFormatted() {
-            return formattedDateLocaleString(this.firstCheckDate, {
+        firstFormatted() {
+            return formattedDateLocaleString(this.first, {
                 month: 'short',
                 timeZoneName: 'short'
             });
