@@ -56,21 +56,5 @@
         }
       }
     }
-
-    &__last-check {
-      grid-gap: 10px;
-
-      div {
-        color: $grey;
-        font-size: 12px;
-      }
-
-      &-line {
-        background-color: #C1C1C1;
-        width: 80%;
-        height: 1px;
-        flex: 1;
-      }
-    }
   }
 }

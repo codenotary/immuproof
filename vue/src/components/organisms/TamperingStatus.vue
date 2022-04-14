@@ -23,18 +23,9 @@
 <script>
 export default {
     props: {
-        tamperingMessage: {
-            type: String,
-            required: true
-        },
-        lastCheckDate: {
-            type: String,
-            required: true
-        },
-        lastTxId: {
-            type: Number,
-            required: true
-        }
+        tamperingMessage: { type: String, required: true },
+        lastCheckDate: { type: String, required: true },
+        lastTxId: { type: Number, required: true }
     },
 
     computed: {
