@@ -4,6 +4,8 @@
 		:last-check-date="lastCheckDate"
 		:last-tx-id="lastTXId"
 		:first-check-date="firstCheckDate"
+		:first-check-utc-time="firstCheckUtcTime"
+		:last-check-utc-time="lastCheckUtcTime"
 		:notarizations="notarizationData"
 		:data="statusData"
 		:logo-url="logoUrl"
@@ -63,10 +65,11 @@ export default {
 				? 'Validation successful'
 				: 'Validation not successful';
 		},
+		firstCheckUtcTime() {
+			return this.statusData[0]?.time;
+		},
 		firstCheckDate() {
-			const firstCheckTime = this.statusData[0]?.time;
-
-			return formattedDateLocaleString(firstCheckTime,
+			return formattedDateLocaleString(this.firstCheckUtcTime,
 				{
 					year: 'numeric',
 					weekday: 'long',
@@ -80,10 +83,11 @@ export default {
 		lastData() {
 			return this.statusData[this.statusData.length - 1];
 		},
+		lastCheckUtcTime() {
+			return this.lastData?.time;
+		},
 		lastCheckDate() {
-			const lastCheckTime = this.lastData?.time;
-
-			return formattedDateLocaleString(lastCheckTime,
+			return formattedDateLocaleString(this.lastCheckUtcTime,
 				{
 					year: 'numeric',
 					weekday: 'long',
@@ -111,8 +115,9 @@ export default {
 	},
 	methods: {
 		async fetchStatus() {
-			const prefix = this.getAddressPrefix();
-			const { data } = await this.$axios.get(`${prefix}/api/status`);
+			// const prefix = this.getAddressPrefix();
+			// const { data } = await this.$axios.get(`${prefix}/api/status`);
+			const data = {'dG9tYXN6QGNvZGVub3RhcnkuY29t':[{'signer_id':'dG9tYXN6QGNvZGVub3RhcnkuY29t','time':'2022-04-15T10:59:22.58493365+02:00','time_zone':'CEST','status':'NORMAL','prev_tx_id':101293,'prev_state_hash':'0505d88fee902d1cf8e29a95218835763d115dde173d23a62f8dff95d9a9087a','new_tx_id':101293,'new_state_hash':'0505d88fee902d1cf8e29a95218835763d115dde173d23a62f8dff95d9a9087a'}]};
 
 			if (!data) {
 				return;
@@ -129,8 +134,9 @@ export default {
 			this.statusData = data[hash];
 		},
 		async fetchNotarizationCount() {
-			const prefix = this.getAddressPrefix();
-			const { data } = await this.$axios.get(`${prefix}/api/notarization/count`);
+			// const prefix = this.getAddressPrefix();
+			// const { data } = await this.$axios.get(`${prefix}/api/notarization/count`);
+			const data = {'dG9tYXN6QGNvZGVub3RhcnkuY29t':[{'newNotarizationsCount':0,'collectTime':'2022-04-15T10:59:22.58493365+02:00','collectTimeZone':'CEST'}]};
 
 			if (!data) {
 				return;

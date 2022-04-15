@@ -20,12 +20,16 @@
 					<tampering-history
 						:last-check-date="lastCheckDate"
 						:first-check-date="firstCheckDate"
+						:first-check-utc-time="firstCheckUtcTime"
+						:last-check-utc-time="lastCheckUtcTime"
 						:history-data="data"
 					>
 					</tampering-history>
 					<notarizations
 						:first-check-date="firstCheckDate"
 						:last-check-date="lastCheckDate"
+						:first-check-utc-time="firstCheckUtcTime"
+						:last-check-utc-time="lastCheckUtcTime"
 						:notarizations="notarizations"
 						:notarization-categories-count="notarizationCategoriesCount"
 						:notarization-count-data="notarizationCountData"
@@ -68,6 +72,8 @@ export default {
 		logoLink: { type: String, default: '' },
 		hostedByText: { type: String, default: '' },
 		titleText: { type: String, default: '' },
+		firstCheckUtcTime: { type: String, default: '' },
+		lastCheckUtcTime: { type: String, default: '' },
 	},
 };
 </script>

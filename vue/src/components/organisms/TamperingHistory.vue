@@ -25,8 +25,8 @@
 				</div>
 				<histogram-line
 					class="mt-3"
-					:first="firstCheckDate"
-					:last="lastCheckDate"
+					:first="firstCheckUtcTime"
+					:last="lastCheckUtcTime"
 				>
 				</histogram-line>
 			</v-row>
@@ -44,6 +44,8 @@ export default {
 		lastCheckDate: { type: String, required: true },
 		firstCheckDate: { type: String, required: true },
 		historyData: { type: Array, default: () => ([]) },
+		firstCheckUtcTime: { type: String, default: '' },
+		lastCheckUtcTime: { type: String, default: '' },
 	},
 	methods: {
 		getClass({ status }) {
