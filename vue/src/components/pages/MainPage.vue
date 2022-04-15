@@ -115,9 +115,8 @@ export default {
 	},
 	methods: {
 		async fetchStatus() {
-			// const prefix = this.getAddressPrefix();
-			// const { data } = await this.$axios.get(`${prefix}/api/status`);
-			const data = {'dG9tYXN6QGNvZGVub3RhcnkuY29t':[{'signer_id':'dG9tYXN6QGNvZGVub3RhcnkuY29t','time':'2022-04-15T10:59:22.58493365+02:00','time_zone':'CEST','status':'NORMAL','prev_tx_id':101293,'prev_state_hash':'0505d88fee902d1cf8e29a95218835763d115dde173d23a62f8dff95d9a9087a','new_tx_id':101293,'new_state_hash':'0505d88fee902d1cf8e29a95218835763d115dde173d23a62f8dff95d9a9087a'}]};
+			const prefix = this.getAddressPrefix();
+			const { data } = await this.$axios.get(`${prefix}/api/status`);
 
 			if (!data) {
 				return;
@@ -134,9 +133,8 @@ export default {
 			this.statusData = data[hash];
 		},
 		async fetchNotarizationCount() {
-			// const prefix = this.getAddressPrefix();
-			// const { data } = await this.$axios.get(`${prefix}/api/notarization/count`);
-			const data = {'dG9tYXN6QGNvZGVub3RhcnkuY29t':[{'newNotarizationsCount':0,'collectTime':'2022-04-15T10:59:22.58493365+02:00','collectTimeZone':'CEST'}]};
+			const prefix = this.getAddressPrefix();
+			const { data } = await this.$axios.get(`${prefix}/api/notarization/count`);
 
 			if (!data) {
 				return;

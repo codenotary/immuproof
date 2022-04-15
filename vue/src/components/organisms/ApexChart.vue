@@ -4,6 +4,7 @@
 			:type="type"
 			:options="chartOptions"
 			:series="series"
+			:height="'100px'"
 		>
 		</apexchart>
 	</div>
@@ -32,7 +33,6 @@ export default {
 				chart: {
 					zoom: { enabled: false },
 					toolbar: { show: false },
-					height: '100px',
 				},
 				stroke: { curve: 'smooth', width: 2 },
 				tooltip: { enabled: false },
