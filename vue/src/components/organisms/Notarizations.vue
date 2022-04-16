@@ -15,8 +15,8 @@
 				</apex-chart>
 				<histogram-line
 					class="notarizations__histogram-line"
-					:first="firstCheckDate"
-					:last="lastCheckDate"
+					:first="utcCheckFirst"
+					:last="utcCheckLast"
 				>
 				</histogram-line>
 			</v-row>
@@ -27,6 +27,7 @@
 <script>
 import ApexChart from '@/components/organisms/ApexChart.vue';
 import HistogramLine from '@/components/organisms/HistogramLine';
+
 export default {
 	components: {
 		HistogramLine,
@@ -36,8 +37,9 @@ export default {
 		notarizations: { type: Array, default: () => ([]) },
 		notarizationCategoriesCount: { type: Array, default: () => ([]) },
 		notarizationCountData: { type: Array, default: () => ([]) },
-		firstCheckDate: { type: String, required: true },
 		lastCheckDate: { type: String, required: true },
+		utcCheckFirst: { type: String, default: '' },
+		utcCheckLast: { type: String, default: '' },
 	},
 };
 </script>

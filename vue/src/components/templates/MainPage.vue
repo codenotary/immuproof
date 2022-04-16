@@ -19,13 +19,15 @@
 					</tampering-status>
 					<tampering-history
 						:last-check-date="lastCheckDate"
-						:first-check-date="firstCheckDate"
+						:utc-check-first="utcCheckFirst"
+						:utc-check-last="utcCheckLast"
 						:history-data="data"
 					>
 					</tampering-history>
 					<notarizations
-						:first-check-date="firstCheckDate"
 						:last-check-date="lastCheckDate"
+						:utc-check-first="utcCheckFirst"
+						:utc-check-last="utcCheckLast"
 						:notarizations="notarizations"
 						:notarization-categories-count="notarizationCategoriesCount"
 						:notarization-count-data="notarizationCountData"
@@ -58,7 +60,6 @@ export default {
 	props: {
 		tamperingMessage: { type: String, required: true },
 		lastCheckDate: { type: String, required: true },
-		firstCheckDate: { type: String, required: true },
 		data: { type: Array, default: () => ([]) },
 		notarizations: { type: Array, default: () => ([]) },
 		notarizationCategoriesCount: { type: Array, default: () => ([]) },
@@ -68,6 +69,8 @@ export default {
 		logoLink: { type: String, default: '' },
 		hostedByText: { type: String, default: '' },
 		titleText: { type: String, default: '' },
+		utcCheckFirst: { type: String, default: '' },
+		utcCheckLast: { type: String, default: '' },
 	},
 };
 </script>
