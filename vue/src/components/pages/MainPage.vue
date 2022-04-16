@@ -3,9 +3,8 @@
 		:tampering-message="tampering"
 		:last-check-date="lastCheckDate"
 		:last-tx-id="lastTXId"
-		:first-check-date="firstCheckDate"
-		:first-check-utc-time="firstCheckUtcTime"
-		:last-check-utc-time="lastCheckUtcTime"
+		:utc-check-first="utcCheckFirst"
+		:utc-check-last="utcCheckLast"
 		:notarizations="notarizationData"
 		:data="statusData"
 		:logo-url="logoUrl"
@@ -65,29 +64,17 @@ export default {
 				? 'Validation successful'
 				: 'Validation not successful';
 		},
-		firstCheckUtcTime() {
+		utcCheckFirst() {
 			return this.statusData[0]?.time;
-		},
-		firstCheckDate() {
-			return formattedDateLocaleString(this.firstCheckUtcTime,
-				{
-					year: 'numeric',
-					weekday: 'long',
-					month: 'long',
-					day: '2-digit',
-					hour: 'numeric',
-					minute: 'numeric',
-					timeZoneName: 'short',
-				});
 		},
 		lastData() {
 			return this.statusData[this.statusData.length - 1];
 		},
-		lastCheckUtcTime() {
+		utcCheckLast() {
 			return this.lastData?.time;
 		},
 		lastCheckDate() {
-			return formattedDateLocaleString(this.lastCheckUtcTime,
+			return formattedDateLocaleString(this.utcCheckLast,
 				{
 					year: 'numeric',
 					weekday: 'long',

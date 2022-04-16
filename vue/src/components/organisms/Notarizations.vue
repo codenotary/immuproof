@@ -15,8 +15,8 @@
 				</apex-chart>
 				<histogram-line
 					class="notarizations__histogram-line"
-					:first="firstCheckUtcTime"
-					:last="lastCheckUtcTime"
+					:first="utcCheckFirst"
+					:last="utcCheckLast"
 				>
 				</histogram-line>
 			</v-row>
@@ -37,10 +37,9 @@ export default {
 		notarizations: { type: Array, default: () => ([]) },
 		notarizationCategoriesCount: { type: Array, default: () => ([]) },
 		notarizationCountData: { type: Array, default: () => ([]) },
-		firstCheckDate: { type: String, required: true },
 		lastCheckDate: { type: String, required: true },
-		firstCheckUtcTime: { type: String, default: '' },
-		lastCheckUtcTime: { type: String, default: '' },
+		utcCheckFirst: { type: String, default: '' },
+		utcCheckLast: { type: String, default: '' },
 	},
 };
 </script>

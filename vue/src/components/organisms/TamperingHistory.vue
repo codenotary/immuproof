@@ -25,8 +25,8 @@
 				</div>
 				<histogram-line
 					class="mt-3"
-					:first="firstCheckUtcTime"
-					:last="lastCheckUtcTime"
+					:first="utcCheckFirst"
+					:last="utcCheckLast"
 				>
 				</histogram-line>
 			</v-row>
@@ -42,10 +42,9 @@ export default {
 	components: { HistogramLine, HoverBox },
 	props: {
 		lastCheckDate: { type: String, required: true },
-		firstCheckDate: { type: String, required: true },
 		historyData: { type: Array, default: () => ([]) },
-		firstCheckUtcTime: { type: String, default: '' },
-		lastCheckUtcTime: { type: String, default: '' },
+		utcCheckFirst: { type: String, default: '' },
+		utcCheckLast: { type: String, default: '' },
 	},
 	methods: {
 		getClass({ status }) {
