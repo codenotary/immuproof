@@ -18,14 +18,12 @@
 					>
 					</tampering-status>
 					<tampering-history
-						:last-check-date="lastCheckDate"
 						:utc-check-first="utcCheckFirst"
 						:utc-check-last="utcCheckLast"
 						:history-data="data"
 					>
 					</tampering-history>
 					<notarizations
-						:last-check-date="lastCheckDate"
 						:utc-check-first="utcCheckFirst"
 						:utc-check-last="utcCheckLast"
 						:notarizations="notarizations"
