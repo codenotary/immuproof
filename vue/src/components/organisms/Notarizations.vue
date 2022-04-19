@@ -4,7 +4,6 @@
 			<v-row>
 				<div class="col-12 notarizations-wrapper__texts">
 					<div class="text-left font-weight-bold">Notarizations</div>
-					<div class="text-left">{{ lastCheckDate }}</div>
 				</div>
 				<apex-chart
 					class="mt-3"
@@ -37,7 +36,6 @@ export default {
 		notarizations: { type: Array, default: () => ([]) },
 		notarizationCategoriesCount: { type: Array, default: () => ([]) },
 		notarizationCountData: { type: Array, default: () => ([]) },
-		lastCheckDate: { type: String, required: true },
 		utcCheckFirst: { type: String, default: '' },
 		utcCheckLast: { type: String, default: '' },
 	},

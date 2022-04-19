@@ -6,7 +6,9 @@
   position: relative;
   z-index: 2;
   border-radius: 30px;
-  top: 10px;
+  top: 20px;
+  left: -50%;
+  transform: translateX(-50%);
 
   &__title {
     width: 100%;

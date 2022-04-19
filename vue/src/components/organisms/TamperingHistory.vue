@@ -4,7 +4,6 @@
 			<v-row>
 				<div class="tampering-history-wrapper__texts col-12">
 					<div class="text-left font-weight-bold">State Check History</div>
-					<div class="text-left">{{ lastCheckDate }}</div>
 				</div>
 				<div class="tampering-history-wrapper__check col-12 flex justify-end mt-3">
 					<span
@@ -41,7 +40,6 @@ import HistogramLine from '@/components/organisms/HistogramLine.vue';
 export default {
 	components: { HistogramLine, HoverBox },
 	props: {
-		lastCheckDate: { type: String, required: true },
 		historyData: { type: Array, default: () => ([]) },
 		utcCheckFirst: { type: String, default: '' },
 		utcCheckLast: { type: String, default: '' },
