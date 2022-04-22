@@ -6,7 +6,7 @@
 					<div class="text-left font-weight-bold">Notarizations</div>
 				</div>
 				<apex-chart
-					class="mt-3"
+					class="notarizations__line-chart"
 					type="line"
 					:categories="notarizationCategoriesCount"
 					:data="notarizationCountData"

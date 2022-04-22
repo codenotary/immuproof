@@ -22,8 +22,12 @@
     }
   }
 
+  &__line-chart {
+    margin-top: -15px;
+  }
+
   &__histogram-line {
-    margin-top: -10px;
+    margin-top: -25px;
     margin-bottom: 10px;
   }
 }
