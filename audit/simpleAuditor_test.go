@@ -82,16 +82,38 @@ func TestSimpleAuditor(t *testing.T) {
 }
 
 func TestSimpleAuditorCorruptedData(t *testing.T) {
-	for _, errMessage := range []string{"corrupted data", "data is corrupted"} {
+	type testData struct {
+		errorMsg      string
+		expectedError string
+	}
+
+	tds := []testData{
+		{
+			errorMsg:      "corrupted data",
+			expectedError: status.Status_CORRUPTED_DATA,
+		},
+		{
+			errorMsg:      "data is corrupted",
+			expectedError: status.Status_CORRUPTED_DATA,
+		},
+		{
+			errorMsg:      "other error",
+			expectedError: status.Status_UNKNOWN,
+		},
+	}
+
+	defer os.Remove("tmpStateCache.json")
+
+	for _, td := range tds {
+		os.Remove("tmpStateCache.json")
 		viper.Set("audit-interval", "1s")
 		viper.Set("state-history-file", "tmpStateCache.json")
 		historySize := 2
-		defer os.Remove("tmpStateCache.json")
 
 		aks := []string{"signerID1.ak1", "signerID2.ak2"}
 		cMock := &cnctest.LcClientMock{
 			ConsistencyCheckF: func(ctx context.Context) (*sdk.ConsistencyCheckResponse, error) {
-				return nil, fmt.Errorf(errMessage)
+				return nil, fmt.Errorf(td.errorMsg)
 			},
 			IsConnectedF: func() bool {
 				return true
@@ -124,7 +146,7 @@ func TestSimpleAuditorCorruptedData(t *testing.T) {
 		allByLed := tmpStatusReportMap.GetAllByLedger()
 		for _, led := range allByLed {
 			for _, s := range led {
-				require.True(t, s.Status == status.Status_CORRUPTED_DATA)
+				require.True(t, s.Status == td.expectedError)
 				break
 			}
 		}
