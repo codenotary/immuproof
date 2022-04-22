@@ -140,13 +140,14 @@ func (a *simpleAuditor) collectOne(ak, signerID string) {
 	ctx := metadata.AppendToOutgoingContext(context.TODO(), "lc-api-key", ak)
 	cResp, err := a.client.ConsistencyCheck(ctx)
 	if err != nil {
-		if strings.Contains(err.Error(), "corrupted data") {
+		if strings.Contains(err.Error(), "corrupted data") || strings.Contains(err.Error(), "data is corrupted") {
 			statusReport.Status = status.Status_CORRUPTED_DATA
 			a.statusMap.Add(statusReport)
+		} else {
+			statusReport.Status = status.Status_UNKNOWN
+			a.statusMap.Add(statusReport)
+			log.Printf("error checking consistency: %v", err)
 		}
-		statusReport.Status = status.Status_UNKNOWN
-		a.statusMap.Add(statusReport)
-		log.Printf("error checking consistency: %v", err)
 	} else {
 		statusReport.Status = status.Status_NORMAL
 		statusReport.NewTxID = cResp.NewTxID
