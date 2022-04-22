@@ -82,50 +82,73 @@ func TestSimpleAuditor(t *testing.T) {
 }
 
 func TestSimpleAuditorCorruptedData(t *testing.T) {
+	type testData struct {
+		errorMsg      string
+		expectedError string
+	}
 
-	viper.Set("audit-interval", "1s")
-	viper.Set("state-history-file", "tmpStateCache.json")
-	historySize := 2
+	tds := []testData{
+		{
+			errorMsg:      "corrupted data",
+			expectedError: status.Status_CORRUPTED_DATA,
+		},
+		{
+			errorMsg:      "data is corrupted",
+			expectedError: status.Status_CORRUPTED_DATA,
+		},
+		{
+			errorMsg:      "other error",
+			expectedError: status.Status_UNKNOWN,
+		},
+	}
+
 	defer os.Remove("tmpStateCache.json")
 
-	aks := []string{"signerID1.ak1", "signerID2.ak2"}
-	cMock := &cnctest.LcClientMock{
-		ConsistencyCheckF: func(ctx context.Context) (*sdk.ConsistencyCheckResponse, error) {
-			return nil, fmt.Errorf("corrupted data")
-		},
-		IsConnectedF: func() bool {
-			return true
-		},
-		FeatsF: func(ctx context.Context) (*schema.Features, error) {
-			return &schema.Features{
-				Feat: []string{"immuproof"},
-			}, nil
-		},
-	}
-	statusReportMap := status.NewStatusReportMap(historySize)
-	simpleAuditor := NewSimpleAuditor(cMock, statusReportMap, viper.GetDuration("audit-interval"))
-	for _, a := range aks {
-		simpleAuditor.AddApiKey(a)
-	}
-	go func() {
-		err := simpleAuditor.Start()
+	for _, td := range tds {
+		os.Remove("tmpStateCache.json")
+		viper.Set("audit-interval", "1s")
+		viper.Set("state-history-file", "tmpStateCache.json")
+		historySize := 2
+
+		aks := []string{"signerID1.ak1", "signerID2.ak2"}
+		cMock := &cnctest.LcClientMock{
+			ConsistencyCheckF: func(ctx context.Context) (*sdk.ConsistencyCheckResponse, error) {
+				return nil, fmt.Errorf(td.errorMsg)
+			},
+			IsConnectedF: func() bool {
+				return true
+			},
+			FeatsF: func(ctx context.Context) (*schema.Features, error) {
+				return &schema.Features{
+					Feat: []string{"immuproof"},
+				}, nil
+			},
+		}
+		statusReportMap := status.NewStatusReportMap(historySize)
+		simpleAuditor := NewSimpleAuditor(cMock, statusReportMap, viper.GetDuration("audit-interval"))
+		for _, a := range aks {
+			simpleAuditor.AddApiKey(a)
+		}
+		go func() {
+			err := simpleAuditor.Start()
+			require.NoError(t, err)
+		}()
+
+		time.Sleep(time.Second * 4)
+		simpleAuditor.Stop()
+
+		tmpStatusReportMap := status.NewStatusReportMap(historySize)
+		j, err := ioutil.ReadFile("tmpStateCache.json")
 		require.NoError(t, err)
-	}()
-
-	time.Sleep(time.Second * 4)
-	simpleAuditor.Stop()
-
-	tmpStatusReportMap := status.NewStatusReportMap(historySize)
-	j, err := ioutil.ReadFile("tmpStateCache.json")
-	require.NoError(t, err)
-	err = json.Unmarshal(j, &tmpStatusReportMap)
-	require.NoError(t, err)
-	require.True(t, len(tmpStatusReportMap.M) == historySize)
-	allByLed := tmpStatusReportMap.GetAllByLedger()
-	for _, led := range allByLed {
-		for _, s := range led {
-			require.True(t, s.Status == status.Status_CORRUPTED_DATA)
-			break
+		err = json.Unmarshal(j, &tmpStatusReportMap)
+		require.NoError(t, err)
+		require.True(t, len(tmpStatusReportMap.M) == historySize)
+		allByLed := tmpStatusReportMap.GetAllByLedger()
+		for _, led := range allByLed {
+			for _, s := range led {
+				require.True(t, s.Status == td.expectedError)
+				break
+			}
 		}
 	}
 }
