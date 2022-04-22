@@ -6,7 +6,7 @@ require (
 	github.com/adrg/xdg v0.4.0
 	github.com/spf13/cobra v1.4.0
 	github.com/spf13/viper v1.10.1
-	github.com/vchain-us/ledger-compliance-go v0.9.3-0.20220422101429-028e58fd32ca
+	github.com/vchain-us/ledger-compliance-go v0.9.3-0.20220422130017-a87026d02db2
 	google.golang.org/grpc v1.43.0
 )
 
