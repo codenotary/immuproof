@@ -16,6 +16,10 @@ Here you can find the public CAS validators:
 
 [Codenotary](https://cas-validator.codenotary.com)
 
+[AlmaLinux](https://cas-validator.almalinux.org)
+
+[Home Assistant](https://cas-validator.home-assistant.io)
+
 
 ## Golang version
 
