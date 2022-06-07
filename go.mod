@@ -4,7 +4,7 @@ go 1.17
 
 require (
 	github.com/adrg/xdg v0.4.0
-	github.com/codenotary/immudb v1.2.2
+	github.com/codenotary/immudb v1.3.0
 	github.com/rs/cors v1.8.2
 	github.com/spf13/cobra v1.4.0
 	github.com/spf13/viper v1.10.1
